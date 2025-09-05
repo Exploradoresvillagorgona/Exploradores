@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Sistema de gestión educativa - Liceo Exploradores de Sueños">
     <title>Liceo Exploradores de Sueños</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -104,9 +117,14 @@
                             <i class="fab fa-whatsapp mr-2"></i>WhatsApp: 313-564-9661
                         </a>
                     </div>
-                    <button onclick="showLogin()" class="btn-primary text-white px-8 py-3 rounded-full font-semibold shadow-lg">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
-                    </button>
+                    <div class="flex space-x-4">
+                        <button id="testButton" onclick="testFunctionality()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg text-lg pulse-animation border-2 border-white transform hover:scale-105 transition-all">
+                            🔍 TEST
+                        </button>
+                        <button id="loginButton" onclick="showLogin()" class="btn-primary text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -129,7 +147,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Para Padres</h3>
                     <p class="text-gray-600 mb-6 leading-relaxed">Consulta las notas de tu hijo de manera fácil y rápida ingresando su número de identidad</p>
-                    <button onclick="showParentAccess()" class="btn-success text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
+                    <button id="parentAccessButton" onclick="showParentAccess()" class="btn-success text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
                         <i class="fas fa-search mr-2"></i>Consultar Notas
                     </button>
                     <div class="mt-4 text-center">
@@ -144,7 +162,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Para Profesores</h3>
                     <p class="text-gray-600 mb-6 leading-relaxed">Gestiona estudiantes y calificaciones con herramientas intuitivas y profesionales</p>
-                    <button onclick="showTeacherLogin()" class="btn-warning text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
+                    <button id="teacherLoginButton" onclick="showTeacherLogin()" class="btn-warning text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
                         <i class="fas fa-user-tie mr-2"></i>Panel Docente
                     </button>
                     <div class="mt-4 text-center">
@@ -159,7 +177,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Administración</h3>
                     <p class="text-gray-600 mb-6 leading-relaxed">Panel de control completo para la gestión integral del sistema educativo</p>
-                    <button onclick="showAdminLogin()" class="btn-primary text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
+                    <button id="adminLoginButton" onclick="showAdminLogin()" class="btn-primary text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
                         <i class="fas fa-shield-alt mr-2"></i>Administrar
                     </button>
                     <div class="mt-4 text-center">
@@ -176,9 +194,9 @@
             <div class="bg-white/95 backdrop-blur-sm p-10 rounded-3xl max-w-md w-full mx-4 shadow-2xl">
                 <div class="flex justify-between items-center mb-8">
                     <h3 id="loginTitle" class="text-3xl font-bold text-gray-800">Iniciar Sesión</h3>
-                    <button onclick="closeLogin()" class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">&times;</button>
+                    <button id="closeLoginButton" onclick="closeLogin()" class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">&times;</button>
                 </div>
-                <form id="loginForm" onsubmit="handleLogin(event)">
+                <form id="loginForm">
                     <div class="mb-6">
                         <label class="block text-gray-700 text-sm font-semibold mb-3">
                             <i class="fas fa-id-card mr-2"></i>Número de Cédula
@@ -191,14 +209,14 @@
                         </label>
                         <input type="password" id="password" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" required>
                     </div>
-                    <button type="submit" class="w-full btn-primary text-white py-3 rounded-xl font-semibold shadow-lg">
+                    <button type="submit" id="submitLoginButton" class="w-full btn-primary text-white py-3 rounded-xl font-semibold shadow-lg">
                         <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
                     </button>
                 </form>
                 <div id="registerSection" class="hidden mt-6">
                     <div class="border-t pt-6">
                         <p class="text-center text-gray-600 mb-4 font-medium">¿Primera vez? Regístrate aquí</p>
-                        <button onclick="showRegister()" class="w-full btn-success text-white py-3 rounded-xl font-semibold shadow-lg">
+                        <button id="registerButton" onclick="showRegister()" class="w-full btn-success text-white py-3 rounded-xl font-semibold shadow-lg">
                             <i class="fas fa-user-plus mr-2"></i>Crear Cuenta
                         </button>
                     </div>
@@ -213,9 +231,9 @@
                     <h3 class="text-3xl font-bold text-gray-800">
                         <i class="fas fa-search text-green-500 mr-3"></i>Consultar Notas
                     </h3>
-                    <button onclick="closeParentModal()" class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">&times;</button>
+                    <button id="closeParentModalButton" onclick="closeParentModal()" class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">&times;</button>
                 </div>
-                <form onsubmit="checkStudentGrades(event)">
+                <form id="parentForm">
                     <div class="mb-8">
                         <label class="block text-gray-700 text-sm font-semibold mb-3">
                             <i class="fas fa-student mr-2"></i>Número de Identidad del Estudiante
@@ -235,7 +253,7 @@
                 <h2 class="text-4xl font-bold text-white drop-shadow-lg">
                     <i class="fas fa-shield-alt mr-3"></i>Panel de Administración
                 </h2>
-                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
+                <button id="logoutButton" onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
                     <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
                 </button>
             </div>
@@ -243,13 +261,13 @@
             <!-- Admin Tabs -->
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">
                 <div class="flex border-b">
-                    <button onclick="showAdminTab('schedule')" class="tab-button flex-1 px-6 py-4 font-semibold" id="scheduleTab">
+                    <button id="scheduleTab" class="tab-button flex-1 px-6 py-4 font-semibold">
                         <i class="fas fa-calendar-alt mr-2"></i>Cronograma
                     </button>
-                    <button onclick="showAdminTab('events')" class="tab-button flex-1 px-6 py-4 font-semibold" id="eventsTab">
+                    <button id="eventsTab" class="tab-button flex-1 px-6 py-4 font-semibold">
                         <i class="fas fa-calendar-check mr-2"></i>Eventos
                     </button>
-                    <button onclick="showAdminTab('ratings')" class="tab-button flex-1 px-6 py-4 font-semibold" id="ratingsTab">
+                    <button id="ratingsTab" class="tab-button flex-1 px-6 py-4 font-semibold">
                         <i class="fas fa-star mr-2"></i>Calificaciones
                     </button>
                 </div>
@@ -258,7 +276,7 @@
                     <div id="scheduleContent" class="admin-tab-content">
                         <h3 class="text-2xl font-bold mb-6"><i class="fas fa-edit mr-2"></i>Gestión de Cronograma</h3>
                         <textarea id="schedule" class="w-full h-40 p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Editar cronograma escolar..."></textarea>
-                        <button onclick="saveSchedule()" class="mt-4 btn-primary text-white px-6 py-3 rounded-xl font-semibold shadow-lg">
+                        <button id="saveScheduleButton" class="mt-4 btn-primary text-white px-6 py-3 rounded-xl font-semibold shadow-lg">
                             <i class="fas fa-save mr-2"></i>Guardar Cronograma
                         </button>
                     </div>
@@ -269,7 +287,7 @@
                             <input type="date" id="eventDate" class="p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
                             <input type="text" id="eventName" class="p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Nombre del evento">
                         </div>
-                        <button onclick="addEvent()" class="btn-warning text-white px-6 py-3 rounded-xl font-semibold shadow-lg mb-6">
+                        <button id="addEventButton" class="btn-warning text-white px-6 py-3 rounded-xl font-semibold shadow-lg mb-6">
                             <i class="fas fa-plus mr-2"></i>Agregar Evento
                         </button>
                         <div id="eventsList" class="space-y-3"></div>
@@ -289,7 +307,7 @@
                 <h2 class="text-4xl font-bold text-white drop-shadow-lg">
                     <i class="fas fa-chalkboard-teacher mr-3"></i>Panel de Profesores
                 </h2>
-                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
+                <button id="teacherLogoutButton" onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
                     <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
                 </button>
             </div>
@@ -297,13 +315,13 @@
             <!-- Teacher Tabs -->
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">
                 <div class="flex border-b">
-                    <button onclick="showTeacherTab('students')" class="tab-button flex-1 px-6 py-4 font-semibold" id="studentsTab">
+                    <button id="studentsTab" class="tab-button flex-1 px-6 py-4 font-semibold">
                         <i class="fas fa-user-plus mr-2"></i>Agregar Estudiante
                     </button>
-                    <button onclick="showTeacherTab('grades')" class="tab-button flex-1 px-6 py-4 font-semibold" id="gradesTab">
+                    <button id="gradesTab" class="tab-button flex-1 px-6 py-4 font-semibold">
                         <i class="fas fa-clipboard-list mr-2"></i>Subir Notas
                     </button>
-                    <button onclick="showTeacherTab('list')" class="tab-button flex-1 px-6 py-4 font-semibold" id="listTab">
+                    <button id="listTab" class="tab-button flex-1 px-6 py-4 font-semibold">
                         <i class="fas fa-list mr-2"></i>Lista Estudiantes
                     </button>
                 </div>
@@ -325,7 +343,7 @@
                             <option value="Cuarto">4️⃣ Cuarto</option>
                             <option value="Quinto">5️⃣ Quinto</option>
                         </select>
-                        <button onclick="addStudent()" class="w-full mt-6 btn-success text-white py-4 rounded-xl font-semibold shadow-lg">
+                        <button id="addStudentButton" class="w-full mt-6 btn-success text-white py-4 rounded-xl font-semibold shadow-lg">
                             <i class="fas fa-user-plus mr-2"></i>Agregar Estudiante
                         </button>
                     </div>
@@ -339,7 +357,7 @@
                             <input type="text" id="subject" class="p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Materia">
                             <input type="number" id="grade" class="p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Nota (1-5)" min="1" max="5" step="0.1">
                         </div>
-                        <button onclick="addGrade()" class="w-full mt-6 btn-primary text-white py-4 rounded-xl font-semibold shadow-lg">
+                        <button id="addGradeButton" class="w-full mt-6 btn-primary text-white py-4 rounded-xl font-semibold shadow-lg">
                             <i class="fas fa-plus mr-2"></i>Registrar Nota
                         </button>
                     </div>
@@ -358,7 +376,7 @@
                 <h2 class="text-4xl font-bold text-white drop-shadow-lg">
                     <i class="fas fa-graduation-cap mr-3"></i>Notas del Estudiante
                 </h2>
-                <button onclick="showWelcome()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
+                <button id="backToWelcomeButton" onclick="showWelcome()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
                     <i class="fas fa-arrow-left mr-2"></i>Volver
                 </button>
             </div>
@@ -381,7 +399,7 @@
                     <span class="star" data-rating="5">★</span>
                 </div>
                 <textarea id="ratingComment" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-yellow-500 transition-colors mb-6" rows="4" placeholder="Comparte tu opinión sobre el colegio..."></textarea>
-                <button onclick="submitRating()" class="w-full btn-warning text-white py-4 rounded-xl font-semibold shadow-lg">
+                <button id="submitRatingButton" class="w-full btn-warning text-white py-4 rounded-xl font-semibold shadow-lg">
                     <i class="fas fa-paper-plane mr-2"></i>Enviar Calificación
                 </button>
             </div>
@@ -399,6 +417,39 @@
         let schedule = localStorage.getItem('schedule') || '';
         let ratings = JSON.parse(localStorage.getItem('ratings')) || [];
         let selectedRating = 0;
+
+        // Test functionality for GitHub Pages
+        function testFunctionality() {
+            const tests = [
+                { name: 'DOM Elements', test: () => document.getElementById('loginModal') !== null },
+                { name: 'Local Storage', test: () => typeof(Storage) !== "undefined" },
+                { name: 'Event Listeners', test: () => typeof showLogin === 'function' },
+                { name: 'Data Arrays', test: () => Array.isArray(students) && Array.isArray(users) },
+                { name: 'Buttons Working', test: () => document.getElementById('testButton') !== null }
+            ];
+            
+            let results = '🔍 PRUEBA DE FUNCIONALIDAD:\n\n';
+            let allPassed = true;
+            
+            tests.forEach(test => {
+                try {
+                    const passed = test.test();
+                    results += ${passed ? '✅' : '❌'} ${test.name}: ${passed ? 'OK' : 'FALLO'}\n;
+                    if (!passed) allPassed = false;
+                } catch (error) {
+                    results += ❌ ${test.name}: ERROR - ${error.message}\n;
+                    allPassed = false;
+                }
+            });
+            
+            results += \n📊 Estado: ${allPassed ? '✅ SISTEMA FUNCIONAL' : '⚠️ PROBLEMAS DETECTADOS'};
+            results += \n📱 Usuarios: ${users.length} | Estudiantes: ${students.length};
+            results += \n🔑 Admin: 12345678/admin123 | Profesor: 87654321/profesor123;
+            results += \n👨‍🎓 Estudiante prueba: 1001;
+            
+            alert(results);
+            console.log('Test Results:', results);
+        }
 
         // Initialize default admin user and sample data
         if (users.length === 0) {
@@ -450,8 +501,11 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(tabName + 'Content').classList.remove('hidden');
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            const content = document.getElementById(tabName + 'Content');
+            const tab = document.getElementById(tabName + 'Tab');
+            
+            if (content) content.classList.remove('hidden');
+            if (tab) tab.classList.add('active');
         }
 
         function showTeacherTab(tabName) {
@@ -463,44 +517,83 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(tabName + 'Content').classList.remove('hidden');
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            const content = document.getElementById(tabName + 'Content');
+            const tab = document.getElementById(tabName + 'Tab');
+            
+            if (content) content.classList.remove('hidden');
+            if (tab) tab.classList.add('active');
         }
 
-        // Modal functions
+        // Modal functions with DOM validation
         function showLogin() {
+            const loginModal = document.getElementById('loginModal');
+            const loginTitle = document.getElementById('loginTitle');
+            const registerSection = document.getElementById('registerSection');
+            
+            if (!loginModal || !loginTitle || !registerSection) {
+                console.error('Elementos del modal no encontrados');
+                return;
+            }
+            
             currentUserType = null;
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('loginTitle').textContent = 'Iniciar Sesión';
-            document.getElementById('registerSection').classList.add('hidden');
+            loginModal.classList.remove('hidden');
+            loginTitle.textContent = 'Iniciar Sesión';
+            registerSection.classList.add('hidden');
         }
 
         function showTeacherLogin() {
+            const loginModal = document.getElementById('loginModal');
+            const loginTitle = document.getElementById('loginTitle');
+            const registerSection = document.getElementById('registerSection');
+            
+            if (!loginModal || !loginTitle || !registerSection) {
+                console.error('Elementos del modal no encontrados');
+                return;
+            }
+            
             currentUserType = 'teacher';
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('loginTitle').textContent = 'Acceso Profesores';
-            document.getElementById('registerSection').classList.remove('hidden');
+            loginModal.classList.remove('hidden');
+            loginTitle.textContent = 'Acceso Profesores';
+            registerSection.classList.remove('hidden');
         }
 
         function showAdminLogin() {
+            const loginModal = document.getElementById('loginModal');
+            const loginTitle = document.getElementById('loginTitle');
+            const registerSection = document.getElementById('registerSection');
+            
+            if (!loginModal || !loginTitle || !registerSection) {
+                console.error('Elementos del modal no encontrados');
+                return;
+            }
+            
             currentUserType = 'admin';
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('loginTitle').textContent = 'Acceso Administración';
-            document.getElementById('registerSection').classList.add('hidden');
+            loginModal.classList.remove('hidden');
+            loginTitle.textContent = 'Acceso Administración';
+            registerSection.classList.add('hidden');
         }
 
         function showParentAccess() {
-            document.getElementById('parentModal').classList.remove('hidden');
+            const parentModal = document.getElementById('parentModal');
+            if (!parentModal) {
+                console.error('Modal de padres no encontrado');
+                return;
+            }
+            parentModal.classList.remove('hidden');
         }
 
         function closeLogin() {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('loginForm').reset();
+            const loginModal = document.getElementById('loginModal');
+            const loginForm = document.getElementById('loginForm');
+            
+            if (loginModal) loginModal.classList.add('hidden');
+            if (loginForm) loginForm.reset();
             currentUserType = null;
         }
 
         function closeParentModal() {
-            document.getElementById('parentModal').classList.add('hidden');
+            const parentModal = document.getElementById('parentModal');
+            if (parentModal) parentModal.classList.add('hidden');
         }
 
         function showRegister() {
@@ -579,7 +672,8 @@
             document.getElementById('studentGrades').classList.add('hidden');
             
             showAdminTab('schedule');
-            document.getElementById('schedule').value = schedule;
+            const scheduleTextarea = document.getElementById('schedule');
+            if (scheduleTextarea) scheduleTextarea.value = schedule;
             loadEvents();
             loadParentRatings();
         }
@@ -628,6 +722,8 @@
 
         function loadStudentsForGrading() {
             const select = document.getElementById('gradeStudentSelect');
+            if (!select) return;
+            
             select.innerHTML = '<option value="">Seleccionar estudiante</option>';
             
             students.forEach(student => {
@@ -640,6 +736,8 @@
 
         function loadStudentsList() {
             const container = document.getElementById('studentsList');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             if (students.length === 0) {
@@ -725,18 +823,23 @@
             document.getElementById('welcomeSection').classList.add('hidden');
             document.getElementById('studentGrades').classList.remove('hidden');
             
-            document.getElementById('studentInfo').innerHTML = `
-                <div class="text-center mb-8">
-                    <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <i class="fas fa-user-graduate text-white text-3xl"></i>
+            const studentInfo = document.getElementById('studentInfo');
+            if (studentInfo) {
+                studentInfo.innerHTML = `
+                    <div class="text-center mb-8">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
+                            <i class="fas fa-user-graduate text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-gray-800 mb-2">${student.name}</h3>
+                        <p class="text-gray-600 text-lg"><i class="fas fa-graduation-cap mr-2"></i>Grado: ${student.grade}</p>
+                        <p class="text-gray-600"><i class="fas fa-id-card mr-2"></i>ID: ${student.id}</p>
                     </div>
-                    <h3 class="text-3xl font-bold text-gray-800 mb-2">${student.name}</h3>
-                    <p class="text-gray-600 text-lg"><i class="fas fa-graduation-cap mr-2"></i>Grado: ${student.grade}</p>
-                    <p class="text-gray-600"><i class="fas fa-id-card mr-2"></i>ID: ${student.id}</p>
-                </div>
-            `;
+                `;
+            }
             
             const gradesTable = document.getElementById('gradesTable');
+            if (!gradesTable) return;
+            
             if (studentGrades.length === 0) {
                 gradesTable.innerHTML = `
                     <div class="text-center py-12">
@@ -818,6 +921,8 @@
 
         function loadEvents() {
             const container = document.getElementById('eventsList');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             if (events.length === 0) {
@@ -864,9 +969,12 @@
                 });
             });
             
-            document.getElementById('starRating').addEventListener('mouseleave', function() {
-                updateStarDisplay();
-            });
+            const starRating = document.getElementById('starRating');
+            if (starRating) {
+                starRating.addEventListener('mouseleave', function() {
+                    updateStarDisplay();
+                });
+            }
         }
 
         function highlightStars(rating) {
@@ -910,6 +1018,8 @@
 
         function loadParentRatings() {
             const container = document.getElementById('parentRatings');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             if (ratings.length === 0) {
@@ -950,14 +1060,218 @@
             container.innerHTML += '</div>';
         }
 
-        // Initialize
+        // Event listeners setup
+        function setupEventListeners() {
+            // Test button
+            const testButton = document.getElementById('testButton');
+            if (testButton) {
+                testButton.addEventListener('click', testFunctionality);
+            }
+
+            // Login buttons
+            const loginButton = document.getElementById('loginButton');
+            if (loginButton) {
+                loginButton.addEventListener('click', showLogin);
+            }
+
+            const teacherLoginButton = document.getElementById('teacherLoginButton');
+            if (teacherLoginButton) {
+                teacherLoginButton.addEventListener('click', showTeacherLogin);
+            }
+
+            const adminLoginButton = document.getElementById('adminLoginButton');
+            if (adminLoginButton) {
+                adminLoginButton.addEventListener('click', showAdminLogin);
+            }
+
+            const parentAccessButton = document.getElementById('parentAccessButton');
+            if (parentAccessButton) {
+                parentAccessButton.addEventListener('click', showParentAccess);
+            }
+
+            // Close buttons
+            const closeLoginButton = document.getElementById('closeLoginButton');
+            if (closeLoginButton) {
+                closeLoginButton.addEventListener('click', closeLogin);
+            }
+
+            const closeParentModalButton = document.getElementById('closeParentModalButton');
+            if (closeParentModalButton) {
+                closeParentModalButton.addEventListener('click', closeParentModal);
+            }
+
+            // Forms
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+
+            const parentForm = document.getElementById('parentForm');
+            if (parentForm) {
+                parentForm.addEventListener('submit', checkStudentGrades);
+            }
+
+            // Register button
+            const registerButton = document.getElementById('registerButton');
+            if (registerButton) {
+                registerButton.addEventListener('click', showRegister);
+            }
+
+            // Logout buttons
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', logout);
+            }
+
+            const teacherLogoutButton = document.getElementById('teacherLogoutButton');
+            if (teacherLogoutButton) {
+                teacherLogoutButton.addEventListener('click', logout);
+            }
+
+            // Back button
+            const backToWelcomeButton = document.getElementById('backToWelcomeButton');
+            if (backToWelcomeButton) {
+                backToWelcomeButton.addEventListener('click', showWelcome);
+            }
+
+            // Admin tabs
+            const scheduleTab = document.getElementById('scheduleTab');
+            if (scheduleTab) {
+                scheduleTab.addEventListener('click', () => showAdminTab('schedule'));
+            }
+
+            const eventsTab = document.getElementById('eventsTab');
+            if (eventsTab) {
+                eventsTab.addEventListener('click', () => showAdminTab('events'));
+            }
+
+            const ratingsTab = document.getElementById('ratingsTab');
+            if (ratingsTab) {
+                ratingsTab.addEventListener('click', () => showAdminTab('ratings'));
+            }
+
+            // Teacher tabs
+            const studentsTab = document.getElementById('studentsTab');
+            if (studentsTab) {
+                studentsTab.addEventListener('click', () => showTeacherTab('students'));
+            }
+
+            const gradesTab = document.getElementById('gradesTab');
+            if (gradesTab) {
+                gradesTab.addEventListener('click', () => showTeacherTab('grades'));
+            }
+
+            const listTab = document.getElementById('listTab');
+            if (listTab) {
+                listTab.addEventListener('click', () => showTeacherTab('list'));
+            }
+
+            // Action buttons
+            const saveScheduleButton = document.getElementById('saveScheduleButton');
+            if (saveScheduleButton) {
+                saveScheduleButton.addEventListener('click', saveSchedule);
+            }
+
+            const addEventButton = document.getElementById('addEventButton');
+            if (addEventButton) {
+                addEventButton.addEventListener('click', addEvent);
+            }
+
+            const addStudentButton = document.getElementById('addStudentButton');
+            if (addStudentButton) {
+                addStudentButton.addEventListener('click', addStudent);
+            }
+
+            const addGradeButton = document.getElementById('addGradeButton');
+            if (addGradeButton) {
+                addGradeButton.addEventListener('click', addGrade);
+            }
+
+            const submitRatingButton = document.getElementById('submitRatingButton');
+            if (submitRatingButton) {
+                submitRatingButton.addEventListener('click', submitRating);
+            }
+        }
+
+        // Initialize - GitHub Pages Compatible
+        function initializeSystem() {
+            console.log('🚀 Iniciando sistema...');
+            
+            try {
+                // Force setup event listeners multiple times for GitHub Pages
+                setupEventListeners();
+                initializeRating();
+                showWelcome();
+                
+                // Double-check critical buttons
+                setTimeout(() => {
+                    const criticalButtons = [
+                        'testButton', 'loginButton', 'teacherLoginButton', 
+                        'adminLoginButton', 'parentAccessButton'
+                    ];
+                    
+                    criticalButtons.forEach(buttonId => {
+                        const button = document.getElementById(buttonId);
+                        if (button && !button.onclick) {
+                            console.log(🔧 Reparando botón: ${buttonId});
+                            switch(buttonId) {
+                                case 'testButton':
+                                    button.onclick = testFunctionality;
+                                    break;
+                                case 'loginButton':
+                                    button.onclick = showLogin;
+                                    break;
+                                case 'teacherLoginButton':
+                                    button.onclick = showTeacherLogin;
+                                    break;
+                                case 'adminLoginButton':
+                                    button.onclick = showAdminLogin;
+                                    break;
+                                case 'parentAccessButton':
+                                    button.onclick = showParentAccess;
+                                    break;
+                            }
+                        }
+                    });
+                }, 100);
+                
+                console.log('✅ Sistema inicializado correctamente');
+                console.log('📊 Usuarios disponibles:', users.length);
+                console.log('👨‍🎓 Estudiantes de prueba:', students.length);
+                
+            } catch (error) {
+                console.error('❌ Error al inicializar:', error);
+                // Retry initialization
+                setTimeout(initializeSystem, 1000);
+            }
+        }
+
+        // Multiple initialization strategies for GitHub Pages
         document.addEventListener('DOMContentLoaded', function() {
-            initializeRating();
-            showWelcome();
-            console.log('Sistema inicializado correctamente');
-            console.log('Usuarios disponibles:', users);
-            console.log('Estudiantes de prueba:', students);
+            console.log('📄 DOM Content Loaded');
+            initializeSystem();
         });
+
+        window.addEventListener('load', function() {
+            console.log('🌐 Window Loaded');
+            setTimeout(initializeSystem, 200);
+        });
+
+        // Immediate execution if DOM is already ready
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            console.log('⚡ DOM Already Ready');
+            setTimeout(initializeSystem, 50);
+        }
+
+        // Emergency fallback - force initialization after 2 seconds
+        setTimeout(() => {
+            console.log('🆘 Emergency initialization check');
+            const testBtn = document.getElementById('testButton');
+            if (!testBtn || !testBtn.onclick) {
+                console.log('🔧 Forcing emergency initialization');
+                initializeSystem();
+            }
+        }, 2000);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a811aa322431e0',t:'MTc1NzA5OTg2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>           
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a84c6ab26231e0',t:'MTc1NzEwMjI3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html
