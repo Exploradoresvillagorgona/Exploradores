@@ -1,1 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institución Educativa Villa Girgona</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'colegio-azul': '#1e3a8a',
+                        'colegio-verde': '#bbf7d0',
+                        'colegio-amarillo': '#fde047',
+                        'colegio-azul-claro': '#3b82f6',
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        'elegant': '0 8px 30px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #bbf7d0 100%);
+        }
+        
+        .card-elegant {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-elegant {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+        
+        .btn-elegant:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-padding {
+                padding: 1rem;
+            }
+            
+            .mobile-text {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-poppins">
+    <!-- Header -->
+    <header class="card-elegant shadow-elegant">
+        <div class="container mx-auto px-4 py-8 mobile-padding">
+            <div class="flex flex-col lg:flex-row justify-between items-center">
+                <div class="text-center lg:text-left mb-6 lg:mb-0">
+                    <h1 class="text-4xl lg:text-5xl font-bold text-colegio-azul text-shadow mb-2">
+                        Liceo Exploradores de Sueños
+                    </h1>
+                    <p class="text-lg text-gray-700 font-medium mb-2">
+                        ✨ 17 años formando el futuro • Jardín a 5° Primaria ✨
+                    </p>
+                    <p class="text-sm text-gray-600 cursor-pointer hover:text-colegio-azul-claro transition-all duration-300 transform hover:scale-105" onclick="abrirUbicacion()">
+                        📍 Carrera 13 # 8-48, Villa Girgona, Candelaria - Ver en mapa
+                    </p>
+                </div>
+                <button onclick="contactarWhatsApp()" class="btn-elegant bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-4 rounded-2xl font-semibold flex items-center gap-3 shadow-soft">
+                    <span class="text-xl">📱</span>
+                    <span>WhatsApp Colegio</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
+    <!-- Navigation -->
+    <nav class="glass-effect backdrop-blur-lg border-b border-white/20">
+        <div class="container mx-auto px-4 mobile-padding">
+            <div class="flex flex-wrap justify-center gap-3 py-6">
+                <button onclick="mostrarSeccion('inicio')" class="nav-btn btn-elegant bg-gradient-to-r from-colegio-verde to-green-200 text-colegio-azul px-6 py-3 rounded-xl font-semibold hover:from-colegio-amarillo hover:to-yellow-200 shadow-soft">
+                    <span class="text-lg mr-2">🏠</span>Inicio
+                </button>
+                <button onclick="mostrarSeccion('docentes')" class="nav-btn btn-elegant bg-gradient-to-r from-colegio-verde to-green-200 text-colegio-azul px-6 py-3 rounded-xl font-semibold hover:from-colegio-amarillo hover:to-yellow-200 shadow-soft">
+                    <span class="text-lg mr-2">👨‍🏫</span>Docentes
+                </button>
+                <button onclick="mostrarSeccion('padres')" class="nav-btn btn-elegant bg-gradient-to-r from-colegio-verde to-green-200 text-colegio-azul px-6 py-3 rounded-xl font-semibold hover:from-colegio-amarillo hover:to-yellow-200 shadow-soft">
+                    <span class="text-lg mr-2">👨‍👩‍👧‍👦</span><span class="hidden sm:inline">Padres</span><span class="sm:hidden">Familia</span>
+                </button>
+                <button onclick="mostrarSeccion('cronogramas')" class="nav-btn btn-elegant bg-gradient-to-r from-colegio-verde to-green-200 text-colegio-azul px-6 py-3 rounded-xl font-semibold hover:from-colegio-amarillo hover:to-yellow-200 shadow-soft">
+                    <span class="text-lg mr-2">📅</span><span class="hidden sm:inline">Cronogramas</span><span class="sm:hidden">Eventos</span>
+                </button>
+                <button onclick="mostrarSeccion('opiniones')" class="nav-btn btn-elegant bg-gradient-to-r from-colegio-verde to-green-200 text-colegio-azul px-6 py-3 rounded-xl font-semibold hover:from-colegio-amarillo hover:to-yellow-200 shadow-soft">
+                    <span class="text-lg mr-2">💬</span>Opiniones
+                </button>
+                <button onclick="mostrarSeccion('admin')" class="nav-btn btn-elegant bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 shadow-soft">
+                    <span class="text-lg mr-2">⚙️</span>Admin
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 mobile-padding">
+        <!-- Sección Inicio -->
+        <div id="inicio" class="seccion card-elegant rounded-3xl shadow-elegant p-8 mb-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl lg:text-5xl font-bold text-colegio-azul mb-6 text-shadow">
+                    ¡Bienvenidos al Liceo Exploradores de Sueños! ✨
+                </h2>
+                <p class="text-xl lg:text-2xl text-gray-700 mb-8 font-medium">
+                    Donde cada niño es una estrella brillante 🌟
+                </p>
+                <div class="bg-gradient-to-r from-colegio-verde via-colegio-amarillo to-green-200 p-8 rounded-2xl shadow-soft">
+                    <h3 class="text-2xl lg:text-3xl font-bold text-colegio-azul mb-6 text-shadow">🎯 Próximos Eventos</h3>
+                    <div id="proximosEventos" class="space-y-3">
+                        <!-- Los eventos se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="btn-elegant bg-gradient-to-br from-colegio-verde to-green-200 p-8 rounded-2xl text-center shadow-soft border border-white/50">
+                    <div class="text-4xl mb-4">📚</div>
+                    <h3 class="text-xl font-bold text-colegio-azul mb-4">Educación Integral</h3>
+                    <p class="text-gray-700 font-medium">Formamos estudiantes con valores y conocimientos sólidos para el futuro</p>
+                </div>
+                <div class="btn-elegant bg-gradient-to-br from-colegio-amarillo to-yellow-200 p-8 rounded-2xl text-center shadow-soft border border-white/50">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold text-colegio-azul mb-4">Arte y Creatividad</h3>
+                    <p class="text-gray-700 font-medium">Desarrollamos el potencial artístico y creativo de cada niño</p>
+                </div>
+                <div class="btn-elegant bg-gradient-to-br from-colegio-verde to-green-200 p-8 rounded-2xl text-center shadow-soft border border-white/50">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h3 class="text-xl font-bold text-colegio-azul mb-4">Comunidad Unida</h3>
+                    <p class="text-gray-700 font-medium">Trabajamos juntos: familia, estudiantes y docentes en armonía</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Docentes -->
+        <div id="docentes" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">👨‍🏫 Nuestro Equipo Docente</h2>
+            
+            <!-- Acceso para Docentes -->
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold text-colegio-azul mb-4">🔐 Acceso Docentes</h3>
+                <div class="flex gap-4 items-end">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Acceso:</label>
+                        <input type="password" id="passwordDocente" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-colegio-azul" placeholder="Ingrese su contraseña">
+                    </div>
+                    <button onclick="verificarAccesoDocente()" class="bg-colegio-azul text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Acceder</button>
+                </div>
+                <div id="errorDocente" class="text-red-600 mt-2 hidden"></div>
+            </div>
+
+            <!-- Panel de Docentes (oculto inicialmente) -->
+            <div id="panelDocentes" class="hidden">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-colegio-verde p-6 rounded-lg">
+                        <h4 class="text-lg font-bold text-colegio-azul mb-4">📋 Mis Clases</h4>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded">Matemáticas - 3° Grado</div>
+                            <div class="bg-white p-3 rounded">Ciencias - 4° Grado</div>
+                        </div>
+                    </div>
+                    <div class="bg-colegio-amarillo p-6 rounded-lg">
+                        <h4 class="text-lg font-bold text-colegio-azul mb-4">📝 Notas Pendientes</h4>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded">Evaluación Matemáticas</div>
+                            <div class="bg-white p-3 rounded">Proyecto Ciencias</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Docentes -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-colegio-azul mb-4">👥 Nuestros Profesores</h3>
+                <div id="listaDocentes" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Los docentes se cargarán aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Padres -->
+        <div id="padres" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">👨‍👩‍👧‍👦 Portal de Padres</h2>
+            
+            <!-- Acceso para Padres -->
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold text-colegio-azul mb-4">🔐 Acceso Padres de Familia</h3>
+                <div class="flex gap-4 items-end">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Acceso:</label>
+                        <input type="password" id="passwordPadre" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-colegio-azul" placeholder="Ingrese su contraseña">
+                    </div>
+                    <button onclick="verificarAccesoPadre()" class="bg-colegio-azul text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Acceder</button>
+                </div>
+                <div id="errorPadre" class="text-red-600 mt-2 hidden"></div>
+            </div>
+
+            <!-- Panel de Padres (oculto inicialmente) -->
+            <div id="panelPadres" class="hidden">
+                <!-- Consulta de Notas por ID -->
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-colegio-azul mb-4">🔍 Consultar Notas por Identificación</h3>
+                    <div class="flex gap-4 items-end">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Número de Identificación del Estudiante:</label>
+                            <input type="text" id="idEstudiante" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-colegio-azul" placeholder="Ej: 1234567890">
+                        </div>
+                        <button onclick="consultarNotas()" class="bg-colegio-azul text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Consultar</button>
+                    </div>
+                    <div id="resultadoNotas" class="mt-4 hidden">
+                        <!-- Aquí se mostrarán las notas -->
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-colegio-verde p-6 rounded-lg">
+                        <h4 class="text-lg font-bold text-colegio-azul mb-4">📊 Información del Grado</h4>
+                        <div id="infoGrado" class="space-y-2">
+                            <div class="bg-white p-3 rounded">Seleccione un estudiante para ver información del grado</div>
+                        </div>
+                    </div>
+                    <div class="bg-colegio-amarillo p-6 rounded-lg">
+                        <h4 class="text-lg font-bold text-colegio-azul mb-4">📅 Próximas Actividades</h4>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded">Reunión de Padres - 15 Nov</div>
+                            <div class="bg-white p-3 rounded">Entrega de Boletines - 20 Nov</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas por Grado -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-colegio-azul mb-4">📊 Estadísticas por Grado</h3>
+                <div id="estadisticasGrados" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <!-- Las estadísticas se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Información de Estudiantes -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-colegio-azul mb-4">👦👧 Estudiantes Registrados</h3>
+                <div class="bg-gradient-to-r from-colegio-verde to-colegio-amarillo p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-colegio-azul mb-2" id="totalEstudiantes">0</div>
+                    <p class="text-gray-700">Estudiantes registrados en el sistema</p>
+                    <p class="text-sm text-gray-600 mt-2">Para consultar información específica, use el número de identificación arriba</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Cronogramas -->
+        <div id="cronogramas" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">📅 Calendario y Cronogramas</h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Calendario -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-colegio-azul mb-4">📆 Calendario Escolar</h3>
+                    <div id="calendario" class="bg-white p-4 rounded-lg">
+                        <div class="text-center mb-4">
+                            <button onclick="cambiarMes(-1)" class="bg-colegio-azul text-white px-3 py-1 rounded">←</button>
+                            <span id="mesActual" class="mx-4 font-bold text-lg"></span>
+                            <button onclick="cambiarMes(1)" class="bg-colegio-azul text-white px-3 py-1 rounded">→</button>
+                        </div>
+                        <div id="diasCalendario" class="grid grid-cols-7 gap-1 text-center">
+                            <!-- Los días se generarán aquí -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Eventos -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-colegio-azul mb-4">🎯 Eventos Programados</h3>
+                    <div id="listaEventos" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Los eventos se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horarios de Clase -->
+            <div class="mt-8 bg-gray-50 p-6 rounded-lg">
+                <h3 class="text-xl font-bold text-colegio-azul mb-4">⏰ Horarios de Clase</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-white rounded-lg overflow-hidden">
+                        <thead class="bg-colegio-azul text-white">
+                            <tr>
+                                <th class="p-3">Hora</th>
+                                <th class="p-3">Lunes</th>
+                                <th class="p-3">Martes</th>
+                                <th class="p-3">Miércoles</th>
+                                <th class="p-3">Jueves</th>
+                                <th class="p-3">Viernes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-3 font-bold">7:00-8:00</td>
+                                <td class="p-3 bg-colegio-verde">Matemáticas</td>
+                                <td class="p-3 bg-colegio-amarillo">Español</td>
+                                <td class="p-3 bg-colegio-verde">Ciencias</td>
+                                <td class="p-3 bg-colegio-amarillo">Sociales</td>
+                                <td class="p-3 bg-colegio-verde">Arte</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-3 font-bold">8:00-9:00</td>
+                                <td class="p-3 bg-colegio-amarillo">Español</td>
+                                <td class="p-3 bg-colegio-verde">Matemáticas</td>
+                                <td class="p-3 bg-colegio-amarillo">Educación Física</td>
+                                <td class="p-3 bg-colegio-verde">Inglés</td>
+                                <td class="p-3 bg-colegio-amarillo">Música</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Opiniones -->
+        <div id="opiniones" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">💬 Opiniones y Sugerencias</h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Formulario de Opiniones -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+              
