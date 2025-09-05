@@ -3,559 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institución Educativa Villa Girgona</title>
+    <title>Liceo Exploradores de Sueños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'colegio-azul': '#1e40af',
-                        'colegio-verde': '#86efac',
-                        'colegio-amarillo': '#fbbf24',
+                        'institucional-amarillo': '#FFD700',
+                        'institucional-verde': '#90EE90',
+                        'institucional-azul': '#4169E1',
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #FFD700 0%, #90EE90 50%, #4169E1 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-colegio-azul to-blue-800 min-h-screen">
+<body class="bg-gray-50 font-poppins">
     <!-- Header -->
-    <header class="bg-white shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h1 class="text-3xl font-bold text-colegio-azul">Institución Educativa Villa Girgona</h1>
-                    <p class="text-gray-600">17 años formando el futuro • Jardín a 5° Primaria</p>
-                    <p class="text-sm text-gray-500">Carrera 13 # 8-48, Villa Girgona, Candelaria</p>
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-institucional-azul">🎓</span>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold">Liceo Exploradores de Sueños</h1>
+                        <p class="text-lg opacity-90">Formando el futuro con excelencia</p>
+                        <p class="text-sm opacity-80">✨ 17 años sirviendo a la comunidad ✨</p>
+                    </div>
                 </div>
-                <button onclick="contactarWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold flex items-center gap-2 transition-all">
-                    📱 WhatsApp Colegio
-                </button>
+                <div class="flex space-x-4">
+                    <button onclick="openWhatsApp('general')" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                        <span>📱</span>
+                        <span>WhatsApp</span>
+                    </button>
+                    <button onclick="showLocation()" class="bg-institucional-azul hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                        <span>📍</span>
+                        <span>Ubicación</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Navigation -->
-    <nav class="bg-colegio-azul text-white">
+    <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4">
-            <div class="flex flex-wrap justify-center gap-4 py-4">
-                <button onclick="mostrarSeccion('inicio')" class="nav-btn bg-colegio-verde text-colegio-azul px-4 py-2 rounded-lg font-semibold hover:bg-colegio-amarillo transition-all">🏠 Inicio</button>
-                <button onclick="mostrarSeccion('docentes')" class="nav-btn bg-colegio-verde text-colegio-azul px-4 py-2 rounded-lg font-semibold hover:bg-colegio-amarillo transition-all">👨‍🏫 Docentes</button>
-                <button onclick="mostrarSeccion('padres')" class="nav-btn bg-colegio-verde text-colegio-azul px-4 py-2 rounded-lg font-semibold hover:bg-colegio-amarillo transition-all">👨‍👩‍👧‍👦 Padres</button>
-                <button onclick="mostrarSeccion('cronogramas')" class="nav-btn bg-colegio-verde text-colegio-azul px-4 py-2 rounded-lg font-semibold hover:bg-colegio-amarillo transition-all">📅 Cronogramas</button>
-                <button onclick="mostrarSeccion('opiniones')" class="nav-btn bg-colegio-verde text-colegio-azul px-4 py-2 rounded-lg font-semibold hover:bg-colegio-amarillo transition-all">💬 Opiniones</button>
+            <div class="flex justify-center space-x-8 py-4">
+                <button onclick="showSection('inicio')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors bg-institucional-amarillo text-gray-800">Inicio</button>
+                <button onclick="showSection('profesores')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Profesores</button>
+                <button onclick="showSection('padres')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Padres</button>
+                <button onclick="showSection('admin')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Administración</button>
+                <button onclick="showSection('calificacion')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Calificar</button>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Sección Inicio -->
-        <div id="inicio" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8">
-            <div class="text-center mb-8">
-                <h2 class="text-4xl font-bold text-colegio-azul mb-4">¡Bienvenidos a Nuestra Institución!</h2>
-                <div class="bg-gradient-to-r from-colegio-verde to-colegio-amarillo p-6 rounded-lg">
-                    <p class="text-lg text-colegio-azul font-semibold">17 años formando estudiantes integrales desde Jardín hasta 5° de Primaria</p>
+        <!-- Inicio Section -->
+        <section id="inicio" class="section">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-shadow bg-white rounded-xl p-6 border-l-4 border-institucional-amarillo">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Nuestra Misión</h3>
+                    <p class="text-gray-600">Formar estudiantes íntegros, creativos y comprometidos con su comunidad, explorando sus sueños y potenciando sus talentos.</p>
                 </div>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-colegio-azul text-white p-6 rounded-lg text-center">
-                    <div class="text-4xl mb-4">🎓</div>
-                    <h3 class="text-xl font-bold mb-2">Educación de Calidad</h3>
-                    <p>Formación integral desde los primeros años</p>
+                <div class="card-shadow bg-white rounded-xl p-6 border-l-4 border-institucional-verde">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">👁️ Nuestra Visión</h3>
+                    <p class="text-gray-600">Ser reconocidos como una institución líder en educación integral, donde cada estudiante alcance su máximo potencial.</p>
                 </div>
-                <div class="bg-colegio-verde text-colegio-azul p-6 rounded-lg text-center">
-                    <div class="text-4xl mb-4">🌟</div>
-                    <h3 class="text-xl font-bold mb-2">17 Años de Experiencia</h3>
-                    <p>Trayectoria sólida en educación primaria</p>
-                </div>
-                <div class="bg-colegio-amarillo text-colegio-azul p-6 rounded-lg text-center">
-                    <div class="text-4xl mb-4">📍</div>
-                    <h3 class="text-xl font-bold mb-2">Villa Girgona</h3>
-                    <p>Carrera 13 # 8-48, Candelaria</p>
+                <div class="card-shadow bg-white rounded-xl p-6 border-l-4 border-institucional-azul">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">💎 Nuestros Valores</h3>
+                    <p class="text-gray-600">Respeto, responsabilidad, creatividad, excelencia académica y compromiso social.</p>
                 </div>
             </div>
 
-            <div class="mt-8 text-center">
-                <button onclick="contactarWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-xl font-bold transition-all transform hover:scale-105">
-                    📱 Contáctanos por WhatsApp
-                </button>
-            </div>
-        </div>
-
-        <!-- Sección Docentes -->
-        <div id="docentes" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">Panel de Docentes</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Subir Calificaciones -->
-                <div class="bg-colegio-verde p-6 rounded-lg">
-                    <h3 class="text-2xl font-bold text-colegio-azul mb-4">📊 Subir Calificaciones</h3>
-                    <form id="formCalificaciones" class="space-y-4">
-                        <select id="gradoCalif" class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="">Seleccionar Grado</option>
-                            <option value="jardin">Jardín</option>
-                            <option value="transicion">Transición</option>
-                            <option value="primero">1° Primaria</option>
-                            <option value="segundo">2° Primaria</option>
-                            <option value="tercero">3° Primaria</option>
-                            <option value="cuarto">4° Primaria</option>
-                            <option value="quinto">5° Primaria</option>
-                        </select>
-                        <input type="text" id="documentoEstudiante" placeholder="Documento del Estudiante" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <input type="text" id="nombreEstudiante" placeholder="Nombre del Estudiante" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <select id="materia" class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="">Seleccionar Materia</option>
-                            <option value="matematicas">Matemáticas</option>
-                            <option value="espanol">Español</option>
-                            <option value="ciencias">Ciencias Naturales</option>
-                            <option value="sociales">Ciencias Sociales</option>
-                            <option value="ingles">Inglés</option>
-                            <option value="educacion_fisica">Educación Física</option>
-                            <option value="artes">Artes</option>
-                        </select>
-                        <input type="number" id="calificacion" placeholder="Calificación (1-5)" min="1" max="5" step="0.1" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <select id="periodo" class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="">Seleccionar Período</option>
-                            <option value="1">Primer Período</option>
-                            <option value="2">Segundo Período</option>
-                            <option value="3">Tercer Período</option>
-                            <option value="4">Cuarto Período</option>
-                        </select>
-                        <button type="submit" class="w-full bg-colegio-azul text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-all">
-                            Guardar Calificación
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Subir Cronogramas -->
-                <div class="bg-colegio-amarillo p-6 rounded-lg">
-                    <h3 class="text-2xl font-bold text-colegio-azul mb-4">📅 Subir Cronogramas</h3>
-                    <form id="formCronograma" class="space-y-4">
-                        <input type="text" id="tituloCronograma" placeholder="Título del Cronograma" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <select id="tipoCronograma" class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="">Tipo de Cronograma</option>
-                            <option value="academico">Cronograma Académico</option>
-                            <option value="evaluaciones">Cronograma de Evaluaciones</option>
-                            <option value="eventos">Cronograma de Eventos</option>
-                            <option value="reuniones">Cronograma de Reuniones</option>
-                        </select>
-                        <input type="date" id="fechaInicio" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <input type="date" id="fechaFin" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <textarea id="descripcionCronograma" placeholder="Descripción del cronograma" rows="4" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
-                        <button type="submit" class="w-full bg-colegio-azul text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-all">
-                            Publicar Cronograma
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="mt-8 text-center">
-                <button onclick="contactarWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold">
-                    📱 Soporte WhatsApp
-                </button>
-            </div>
-        </div>
-
-        <!-- Sección Padres -->
-        <div id="padres" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">Portal de Padres de Familia</h2>
-            
-            <div class="bg-colegio-verde p-6 rounded-lg mb-6">
-                <h3 class="text-2xl font-bold text-colegio-azul mb-4">🔍 Consultar Calificaciones</h3>
-                <div class="flex flex-col md:flex-row gap-4">
-                    <input type="text" id="documentoConsulta" placeholder="Documento del Estudiante" class="flex-1 p-3 border border-gray-300 rounded-lg">
-                    <button onclick="consultarNotas()" class="bg-colegio-azul text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-800 transition-all">
-                        Consultar Notas
+            <div class="mt-12 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Contacto Rápido</h2>
+                <div class="flex justify-center space-x-6">
+                    <button onclick="openWhatsApp('academico')" class="bg-institucional-azul hover:bg-blue-600 text-white px-8 py-4 rounded-xl flex items-center space-x-3 transition-colors card-shadow">
+                        <span class="text-2xl">📚</span>
+                        <div class="text-left">
+                            <div class="font-semibold">Área Académica</div>
+                            <div class="text-sm opacity-90">Consultas académicas</div>
+                        </div>
+                    </button>
+                    <button onclick="openWhatsApp('administrativo')" class="bg-institucional-verde hover:bg-green-400 text-gray-800 px-8 py-4 rounded-xl flex items-center space-x-3 transition-colors card-shadow">
+                        <span class="text-2xl">🏢</span>
+                        <div class="text-left">
+                            <div class="font-semibold">Área Administrativa</div>
+                            <div class="text-sm opacity-90">Pagos y documentos</div>
+                        </div>
                     </button>
                 </div>
             </div>
+        </section>
 
-            <!-- Resultados de Consulta -->
-            <div id="resultadosNotas" class="hidden bg-white border-2 border-colegio-azul rounded-lg p-6 mb-6">
-                <h4 class="text-xl font-bold text-colegio-azul mb-4">Calificaciones del Estudiante</h4>
-                <div id="tablaNotas"></div>
-            </div>
+        <!-- Profesores Section -->
+        <section id="profesores" class="section hidden">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Portal de Profesores</h2>
+                
+                <div id="profesor-login" class="card-shadow bg-white rounded-xl p-8 max-w-md mx-auto">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Iniciar Sesión</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Número de Cédula</label>
+                            <input type="text" id="profesor-cedula" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Ingrese su cédula">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Contraseña</label>
+                            <input type="password" id="profesor-contraseña" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Ingrese su contraseña">
+                        </div>
+                        <button onclick="loginProfesor()" class="w-full bg-institucional-azul hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition-colors">Ingresar</button>
+                    </div>
+                </div>
 
-            <div class="mt-8 text-center">
-                <button onclick="contactarWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold">
-                    📱 Contactar Colegio
-                </button>
-            </div>
-        </div>
-
-        <!-- Sección Cronogramas -->
-        <div id="cronogramas" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">📅 Cronogramas y Calendarios</h2>
-            
-            <div id="listaCronogramas" class="space-y-4">
-                <!-- Los cronogramas se mostrarán aquí dinámicamente -->
-            </div>
-
-            <div class="mt-8 text-center">
-                <button onclick="contactarWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold">
-                    📱 Más Información WhatsApp
-                </button>
-            </div>
-        </div>
-
-        <!-- Sección Opiniones -->
-        <div id="opiniones" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold text-colegio-azul mb-6 text-center">💬 Opiniones de Padres</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Formulario de Opiniones -->
-                <div class="bg-colegio-amarillo p-6 rounded-lg">
-                    <h3 class="text-2xl font-bold text-colegio-azul mb-4">✍️ Deja tu Opinión</h3>
-                    <form id="formOpinion" class="space-y-4">
-                        <input type="text" id="nombrePadre" placeholder="Tu Nombre" class="w-full p-3 border border-gray-300 rounded-lg">
-                        <select id="gradoHijo" class="w-full p-3 border border-gray-300 rounded-lg">
-                            <option value="">Grado de tu Hijo/a</option>
-                            <option value="jardin">Jardín</option>
-                            <option value="transicion">Transición</option>
-                            <option value="primero">1° Primaria</option>
-                            <option value="segundo">2° Primaria</option>
-                            <option value="tercero">3° Primaria</option>
-                            <option value="cuarto">4° Primaria</option>
-                            <option value="quinto">5° Primaria</option>
-                        </select>
-                        <div class="mb-4">
-                            <label class="block text-colegio-azul font-bold mb-2">Calificación del Colegio:</label>
-                            <div class="flex gap-2">
-                                <button type="button" onclick="seleccionarEstrellas(1)" class="estrella text-3xl text-gray-300 hover:text-colegio-amarillo">⭐</button>
-                                <button type="button" onclick="seleccionarEstrellas(2)" class="estrella text-3xl text-gray-300 hover:text-colegio-amarillo">⭐</button>
-                                <button type="button" onclick="seleccionarEstrellas(3)" class="estrella text-3xl text-gray-300 hover:text-colegio-amarillo">⭐</button>
-                                <button type="button" onclick="seleccionarEstrellas(4)" class="estrella text-3xl text-gray-300 hover:text-colegio-amarillo">⭐</button>
-                                <button type="button" onclick="seleccionarEstrellas(5)" class="estrella text-3xl text-gray-300 hover:text-colegio-amarillo">⭐</button>
+                <div id="profesor-panel" class="hidden space-y-8">
+                    <!-- Barra de navegación del profesor -->
+                    <div class="bg-white rounded-xl p-4 card-shadow">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold text-gray-800">Panel de Profesor</h3>
+                            <div class="flex space-x-4">
+                                <button onclick="mostrarSeccionProfesor('estudiantes')" id="btn-estudiantes" class="px-4 py-2 bg-institucional-azul text-white rounded-lg font-semibold transition-colors">👥 Estudiantes</button>
+                                <button onclick="mostrarSeccionProfesor('notas')" id="btn-notas" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">📝 Notas</button>
+                                <button onclick="mostrarSeccionProfesor('asistencia')" id="btn-asistencia" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors hover:bg-institucional-amarillo">📋 Asistencia</button>
+                                <button onclick="logoutProfesor()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors">Cerrar Sesión</button>
                             </div>
                         </div>
-                        <textarea id="comentario" placeholder="Comparte tu experiencia con el colegio..." rows="4" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
-                        <button type="submit" class="w-full bg-colegio-azul text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-all">
-                            Enviar Opinión
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Lista de Opiniones -->
-                <div class="bg-colegio-verde p-6 rounded-lg">
-                    <h3 class="text-2xl font-bold text-colegio-azul mb-4">📝 Opiniones Recientes</h3>
-                    <div id="listaOpiniones" class="space-y-4 max-h-96 overflow-y-auto">
-                        <!-- Las opiniones se mostrarán aquí -->
                     </div>
-                </div>
-            </div>
 
-            <div class="mt-8 text-center">
-                <button onclick="contactarWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold">
-                    📱 Contactar Directamente
-                </button>
-            </div>
-        </div>
-    </main>
+                    <!-- Sección de Gestión de Estudiantes -->
+                    <div id="seccion-estudiantes" class="profesor-seccion">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <!-- Agregar Estudiante -->
+                            <div class="card-shadow bg-white rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4">👤 Agregar Nuevo Estudiante</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-gray-700 font-semibold mb-2">Cédula del Estudiante</label>
+                                        <input type="text" id="nuevo-estudiante-cedula" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Número de cédula">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 font-semibold mb-2">Nombre Completo</label>
+                                        <input type="text" id="nuevo-estudiante-nombre" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Nombre completo del estudiante">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 font-semibold mb-2">Grado</label>
+                                        <select id="nuevo-estudiante-grado" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent">
+                                            <option value="">Seleccionar grado</option>
+                                            <option value="jardin">Jardín</option>
+                                            <option value="transicion">Transición</option>
+                                            <option value="1">Primero</option>
+                                            <option value="2">Segundo</option>
+                                            <option value="3">Tercero</option>
+                                            <option value="4">Cuarto</option>
+                                            <option value="5">Quinto</option>
+                                        </select>
+                                    </div>
+                                    <button onclick="agregarEstudiante()" class="w-full bg-institucional-verde hover:bg-green-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">Agregar Estudiante</button>
+                                </div>
+                            </div>
 
-    <!-- Footer -->
-    <footer class="bg-colegio-azul text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <h3 class="text-2xl font-bold mb-4">Institución Educativa Villa Girgona</h3>
-            <p class="mb-2">📍 Carrera 13 # 8-48, Villa Girgona, Candelaria</p>
-            <p class="mb-4">📱 WhatsApp: 313 5649661</p>
-            <p class="text-colegio-verde">17 años formando el futuro • Jardín a 5° Primaria</p>
-            <button onclick="contactarWhatsApp()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold transition-all">
-                📱 WhatsApp Institucional
-            </button>
-        </div>
-    </footer>
-
-    <script>
-        // Variables globales para almacenar datos
-        let calificaciones = JSON.parse(localStorage.getItem('calificaciones')) || [];
-        let cronogramas = JSON.parse(localStorage.getItem('cronogramas')) || [];
-        let opiniones = JSON.parse(localStorage.getItem('opiniones')) || [];
-        let calificacionSeleccionada = 0;
-
-        // Función para mostrar secciones
-        function mostrarSeccion(seccion) {
-            // Ocultar todas las secciones
-            document.querySelectorAll('.seccion').forEach(s => s.classList.add('hidden'));
-            // Mostrar la sección seleccionada
-            document.getElementById(seccion).classList.remove('hidden');
-            
-            // Actualizar botones de navegación
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-colegio-amarillo');
-                btn.classList.add('bg-colegio-verde');
-            });
-            event.target.classList.remove('bg-colegio-verde');
-            event.target.classList.add('bg-colegio-amarillo');
-
-            // Cargar datos específicos de la sección
-            if (seccion === 'cronogramas') {
-                mostrarCronogramas();
-            } else if (seccion === 'opiniones') {
-                mostrarOpiniones();
-            }
-        }
-
-        // Función para contactar por WhatsApp
-        function contactarWhatsApp() {
-            const numero = '573135649661';
-            const mensaje = 'Hola, me comunico desde la página web de la Institución Educativa Villa Girgona. Me gustaría obtener más información.';
-            const url = https://wa.me/${numero}?text=${encodeURIComponent(mensaje)};
-            window.open(url, '_blank');
-        }
-
-        // Manejar formulario de calificaciones
-        document.getElementById('formCalificaciones').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const grado = document.getElementById('gradoCalif').value;
-            const documento = document.getElementById('documentoEstudiante').value;
-            const nombre = document.getElementById('nombreEstudiante').value;
-            const materia = document.getElementById('materia').value;
-            const calificacion = document.getElementById('calificacion').value;
-            const periodo = document.getElementById('periodo').value;
-
-            if (!grado || !documento || !nombre || !materia || !calificacion || !periodo) {
-                alert('Por favor complete todos los campos');
-                return;
-            }
-
-            const nuevaCalificacion = {
-                id: Date.now(),
-                grado,
-                documento,
-                nombre,
-                materia,
-                calificacion: parseFloat(calificacion),
-                periodo,
-                fecha: new Date().toLocaleDateString()
-            };
-
-            calificaciones.push(nuevaCalificacion);
-            localStorage.setItem('calificaciones', JSON.stringify(calificaciones));
-            
-            alert('Calificación guardada exitosamente');
-            this.reset();
-        });
-
-        // Manejar formulario de cronogramas
-        document.getElementById('formCronograma').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const titulo = document.getElementById('tituloCronograma').value;
-            const tipo = document.getElementById('tipoCronograma').value;
-            const fechaInicio = document.getElementById('fechaInicio').value;
-            const fechaFin = document.getElementById('fechaFin').value;
-            const descripcion = document.getElementById('descripcionCronograma').value;
-
-            if (!titulo || !tipo || !fechaInicio || !fechaFin || !descripcion) {
-                alert('Por favor complete todos los campos');
-                return;
-            }
-
-            const nuevoCronograma = {
-                id: Date.now(),
-                titulo,
-                tipo,
-                fechaInicio,
-                fechaFin,
-                descripcion,
-                fechaCreacion: new Date().toLocaleDateString()
-            };
-
-            cronogramas.push(nuevoCronograma);
-            localStorage.setItem('cronogramas', JSON.stringify(cronogramas));
-            
-            alert('Cronograma publicado exitosamente');
-            this.reset();
-        });
-
-        // Función para consultar notas
-        function consultarNotas() {
-            const documento = document.getElementById('documentoConsulta').value;
-            
-            if (!documento) {
-                alert('Por favor ingrese el documento del estudiante');
-                return;
-            }
-
-            const notasEstudiante = calificaciones.filter(c => c.documento === documento);
-            
-            if (notasEstudiante.length === 0) {
-                alert('No se encontraron calificaciones para este documento');
-                return;
-            }
-
-            const resultadosDiv = document.getElementById('resultadosNotas');
-            const tablaDiv = document.getElementById('tablaNotas');
-            
-            let html = `
-                <div class="mb-4">
-                    <h5 class="text-lg font-bold text-colegio-azul">Estudiante: ${notasEstudiante[0].nombre}</h5>
-                    <p class="text-gray-600">Documento: ${documento}</p>
-                    <p class="text-gray-600">Grado: ${notasEstudiante[0].grado}</p>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-colegio-azul text-white">
-                                <th class="border border-gray-300 p-2">Materia</th>
-                                <th class="border border-gray-300 p-2">Período</th>
-                                <th class="border border-gray-300 p-2">Calificación</th>
-                                <th class="border border-gray-300 p-2">Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            notasEstudiante.forEach(nota => {
-                html += `
-                    <tr>
-                        <td class="border border-gray-300 p-2">${nota.materia}</td>
-                        <td class="border border-gray-300 p-2">Período ${nota.periodo}</td>
-                        <td class="border border-gray-300 p-2 text-center font-bold ${nota.calificacion >= 3.5 ? 'text-green-600' : 'text-red-600'}">${nota.calificacion}</td>
-                        <td class="border border-gray-300 p-2">${nota.fecha}</td>
-                    </tr>
-                `;
-            });
-
-            html += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
-
-            tablaDiv.innerHTML = html;
-            resultadosDiv.classList.remove('hidden');
-        }
-
-        // Función para mostrar cronogramas
-        function mostrarCronogramas() {
-            const listaDiv = document.getElementById('listaCronogramas');
-            
-            if (cronogramas.length === 0) {
-                listaDiv.innerHTML = `
-                    <div class="text-center py-8">
-                        <p class="text-gray-500 text-lg">No hay cronogramas publicados aún</p>
-                        <button onclick="contactarWhatsApp()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold">
-                            📱 Consultar por WhatsApp
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            cronogramas.forEach(cronograma => {
-                html += `
-                    <div class="bg-gradient-to-r from-colegio-verde to-colegio-amarillo p-6 rounded-lg">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-                            <h4 class="text-xl font-bold text-colegio-azul">${cronograma.titulo}</h4>
-                            <span class="bg-colegio-azul text-white px-3 py-1 rounded-full text-sm">${cronograma.tipo}</span>
+                            <!-- Agregar Materia -->
+                            <div class="card-shadow bg-white rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4">📚 Agregar Nueva Materia</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-gray-700 font-semibold mb-2">Nombre de la Materia</label>
+                                        <input type="text" id="nueva-materia-nombre" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" placeholder="Ej: Química, Historia, etc.">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 font-semibold mb-2">Código de la Materia</label>
+                                        <input type="text" id="nueva-materia-codigo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" placeholder="Ej: quimica, historia">
+                                    </div>
+                                    <button onclick="agregarMateria()" class="w-full bg-institucional-amarillo hover:bg-yellow-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">Agregar Materia</button>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-colegio-azul mb-4">${cronograma.descripcion}</p>
-                        <div class="flex flex-col md:flex-row gap-4 text-sm text-gray-700">
-                            <span><strong>Inicio:</strong> ${cronograma.fechaInicio}</span>
-                            <span><strong>Fin:</strong> ${cronograma.fechaFin}</span>
-                            <span><strong>Publicado:</strong> ${cronograma.fechaCreacion}</span>
+
+                        <!-- Lista de Estudiantes -->
+                        <div class="card-shadow bg-white rounded-xl p-6">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">📋 Lista de Estudiantes Registrados</h4>
+                            <div id="lista-estudiantes" class="space-y-3"></div>
+                        </div>
+
+                        <!-- Lista de Materias -->
+                        <div class="card-shadow bg-white rounded-xl p-6">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">📖 Materias Disponibles</h4>
+                            <div id="lista-materias" class="grid md:grid-cols-3 gap-3"></div>
                         </div>
                     </div>
-                `;
-            });
 
-            listaDiv.innerHTML = html;
-        }
+                    <!-- Sección de Notas -->
+                    <div id="seccion-notas" class="profesor-seccion hidden">
+                        <div class="card-shadow bg-white rounded-xl p-8">
+                            <h4 class="text-lg font-bold text-gray-800 mb-6">📝 Registrar Calificaciones</h4>
+                            
+                            <!-- Filtro por Grado -->
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-semibold mb-2">🎯 Filtrar por Grado</label>
+                                <select id="filtro-grado-notas" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" onchange="filtrarEstudiantesPorGrado()">
+                                    <option value="">Todos los grados</option>
+                                    <option value="jardin">Jardín</option>
+                                    <option value="transicion">Transición</option>
+                                    <option value="1">Primero</option>
+                                    <option value="2">Segundo</option>
+                                    <option value="3">Tercero</option>
+                                    <option value="4">Cuarto</option>
+                                    <option value="5">Quinto</option>
+                                </select>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Seleccionar Estudiante</label>
+                                    <select id="estudiante-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-verde focus:border-transparent" onchange="cargarDatosEstudiante()">
+                                        <option value="">Seleccionar estudiante</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Datos del Estudiante</label>
+                                    <div id="datos-estudiante-seleccionado" class="px-4 py-3 bg-gray-50 rounded-lg text-gray-600">
+                                        Seleccione un estudiante para ver sus datos
+                                    </div>
+                                </div>
+                            </div>
 
-        // Función para seleccionar estrellas
-        function seleccionarEstrellas(rating) {
-            calificacionSeleccionada = rating;
-            const estrellas = document.querySelectorAll('.estrella');
-            
-            estrellas.forEach((estrella, index) => {
-                if (index < rating) {
-                    estrella.classList.remove('text-gray-300');
-                    estrella.classList.add('text-yellow-400');
-                } else {
-                    estrella.classList.remove('text-yellow-400');
-                    estrella.classList.add('text-gray-300');
-                }
-            });
-        }
+                            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Materia</label>
+                                    <select id="materia-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent">
+                                        <option value="">Seleccionar materia</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Período</label>
+                                    <select id="periodo-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent">
+                                        <option value="">Seleccionar período</option>
+                                        <option value="1">Primer Período</option>
+                                        <option value="2">Segundo Período</option>
+                                        <option value="3">Tercer Período</option>
+                                        <option value="4">Cuarto Período</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Nota (1.0 - 5.0)</label>
+                                    <input type="number" id="nota-input" min="1" max="5" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" placeholder="Ej: 4.5">
+                                </div>
+                            </div>
 
-        // Manejar formulario de opiniones
-        document.getElementById('formOpinion').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nombre = document.getElementById('nombrePadre').value;
-            const grado = document.getElementById('gradoHijo').value;
-            const comentario = document.getElementById('comentario').value;
-
-            if (!nombre || !grado || !comentario || calificacionSeleccionada === 0) {
-                alert('Por favor complete todos los campos y seleccione una calificación');
-                return;
-            }
-
-            const nuevaOpinion = {
-                id: Date.now(),
-                nombre,
-                grado,
-                comentario,
-                calificacion: calificacionSeleccionada,
-                fecha: new Date().toLocaleDateString()
-            };
-
-            opiniones.push(nuevaOpinion);
-            localStorage.setItem('opiniones', JSON.stringify(opiniones));
-            
-            alert('¡Gracias por tu opinión! Ha sido enviada exitosamente.');
-            this.reset();
-            calificacionSeleccionada = 0;
-            seleccionarEstrellas(0);
-            mostrarOpiniones();
-        });
-
-        // Función para mostrar opiniones
-        function mostrarOpiniones() {
-            const listaDiv = document.getElementById('listaOpiniones');
-            
-            if (opiniones.length === 0) {
-                listaDiv.innerHTML = `
-                    <div class="text-center py-4">
-                        <p class="text-colegio-azul">Sé el primero en dejar una opinión</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            // Mostrar las últimas 5 opiniones
-            const opinionesRecientes = opiniones.slice(-5).reverse();
-            
-            opinionesRecientes.forEach(opinion => {
-                const estrellas = '⭐'.repeat(opinion.calificacion) + '☆'.repeat(5 - opinion.calificacion);
-                html += `
-                    <div class="bg-white p-4 rounded-lg border-2 border-colegio-azul">
-                        <div class="flex justify-between items-start mb-2">
-                            <h5 class="font-bold text-colegio-azul">${opinion.nombre}</h5>
-                            <span class="text-sm text-gray-500">${opinion.fecha}</span>
+                            <button onclick="guardarNotaCompleta()" class="w-full bg-institucional-verde hover:bg-green-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">💾 Guardar Calificación</button>
                         </div>
-                        <p class="text-sm text-gray-600 mb-2">Grado: ${opinion.grado}</p>
-                        <div class="text-yellow-400 mb-2">${estrellas}</div>
-                        <p class="text-gray-700">${opinion.comentario}</p>
-                    </div>
-                `;
-            });
 
-            listaDiv.innerHTML = html;
-        }
+                        <!-- Panel de Estadísticas por Grado -->
+                        <div class="card-shadow bg-white rounded-xl p-8">
+                            <h4 class="text-lg font-bold text-gray-800 mb-6">📊 Estadísticas por Grado</h4>
+                            <div id="estadisticas-grados" class="grid md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6"></div>
+                        </div>
 
-        // Inicializar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            mostrarOpiniones();
-            mostrarCronogramas();
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979fc72d87ae3eb8',t:'MTc1NzAxMjkzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+                        <!-- Panel de Gestión de Notas -->
+                        <div class="card-shadow bg-white rounded-xl p-8">
+                            <h4 class="text-lg font-bold text-gray-800 mb-6">📋 Gestión de Notas Registradas</h4>
