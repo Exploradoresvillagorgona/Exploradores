@@ -4,278 +4,907 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liceo Exploradores de Sueños</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'institucional-amarillo': '#FFD700',
-                        'institucional-verde': '#90EE90',
-                        'institucional-azul': '#4169E1',
-                    },
-                    fontFamily: {
-                        'poppins': ['Poppins', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #FFD700 0%, #90EE90 50%, #4169E1 100%);
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #90EE90 100%);
+            min-height: 100vh;
         }
-        .card-shadow {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #90EE90, #32cd32);
+        }
+        .btn-success:hover {
+            background: linear-gradient(135deg, #32cd32, #228b22);
+            transform: translateY(-2px);
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #FFA500, #FF8C00);
+            transform: translateY(-2px);
+        }
+        .star-rating { display: flex; gap: 5px; justify-content: center; }
+        .star { font-size: 28px; color: #e5e7eb; cursor: pointer; transition: all 0.2s; }
+        .star.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
+        .star:hover { color: #fbbf24; transform: scale(1.1); }
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            border-bottom-color: #FFD700;
+        }
+        .grade-excellent { background: linear-gradient(135deg, #90EE90, #32cd32); }
+        .grade-good { background: linear-gradient(135deg, #1e3a8a, #3b82f6); }
+        .grade-average { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .grade-poor { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
     </style>
 </head>
-<body class="bg-gray-50 font-poppins">
+<body>
     <!-- Header -->
-    <header class="gradient-bg text-white py-6 shadow-lg">
-        <div class="container mx-auto px-4">
+    <header class="glass-effect shadow-2xl sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                        <span class="text-2xl font-bold text-institucional-azul">🎓</span>
+                    <div class="w-16 h-16 bg-gradient-to-br from-FFD700 to-FFA500 rounded-full flex items-center justify-center shadow-lg floating-animation" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-3xl font-bold">Liceo Exploradores de Sueños</h1>
-                        <p class="text-lg opacity-90">Formando el futuro con excelencia</p>
-                        <p class="text-sm opacity-80">✨ 17 años sirviendo a la comunidad ✨</p>
+                        <h1 class="text-3xl font-bold text-white drop-shadow-lg">Liceo Exploradores de Sueños</h1>
+                        <p class="text-white/80 font-medium">✨ 17 años educando con excelencia ✨</p>
                     </div>
                 </div>
-                <div class="flex space-x-4">
-                    <button onclick="openWhatsApp('general')" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
-                        <span>📱</span>
-                        <span>WhatsApp</span>
-                    </button>
-                    <button onclick="showLocation()" class="bg-institucional-azul hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
-                        <span>📍</span>
-                        <span>Ubicación</span>
+                <div class="flex items-center space-x-6">
+                    <div class="text-right text-white space-y-2">
+                        <a href="https://maps.google.com/?q=Carrera+13+848+Villa+Gorgona+Candelaria" target="_blank" class="flex items-center text-sm font-medium hover:text-yellow-300 transition-colors cursor-pointer">
+                            <i class="fas fa-map-marker-alt mr-2"></i>Carrera 13 #848, Villa Gorgona, Candelaria
+                        </a>
+                        <a href="https://wa.me/573135649661?text=Hola,%20me%20interesa%20información%20sobre%20el%20Liceo%20Exploradores%20de%20Sueños" target="_blank" class="flex items-center text-sm font-medium hover:text-green-300 transition-colors cursor-pointer">
+                            <i class="fab fa-whatsapp mr-2"></i>WhatsApp: 313-564-9661
+                        </a>
+                    </div>
+                    <button onclick="showLogin()" class="btn-primary text-white px-8 py-3 rounded-full font-semibold shadow-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center space-x-8 py-4">
-                <button onclick="showSection('inicio')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors bg-institucional-amarillo text-gray-800">Inicio</button>
-                <button onclick="showSection('profesores')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Profesores</button>
-                <button onclick="showSection('padres')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Padres</button>
-                <button onclick="showSection('admin')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Administración</button>
-                <button onclick="showSection('calificacion')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">Calificar</button>
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <!-- Welcome Section -->
+        <div id="welcomeSection" class="text-center">
+            <div class="glass-effect p-12 rounded-3xl text-white mb-12 shadow-2xl">
+                <h2 class="text-5xl font-bold mb-6 pulse-animation">¡Bienvenidos a Nuestro Liceo!</h2>
+                <p class="text-2xl mb-4">🎓 Educación de calidad desde Jardín hasta Quinto Grado</p>
+                <p class="text-xl opacity-90">Formando el futuro de nuestra comunidad con amor y dedicación</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl card-hover">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg" style="background: linear-gradient(135deg, #90EE90, #32cd32);">
+                        <i class="fas fa-users text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Para Padres</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Consulta las notas de tu hijo de manera fácil y rápida ingresando su número de identidad</p>
+                    <button onclick="showParentAccess()" class="btn-success text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
+                        <i class="fas fa-search mr-2"></i>Consultar Notas
+                    </button>
+                    <div class="mt-4 text-center">
+                        <a href="https://wa.me/573135649661?text=Hola,%20necesito%20información%20sobre%20las%20notas%20de%20mi%20hijo" target="_blank" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                            <i class="fab fa-whatsapp mr-1"></i>Contactar por WhatsApp
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl card-hover">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                        <i class="fas fa-chalkboard-teacher text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Para Profesores</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Gestiona estudiantes y calificaciones con herramientas intuitivas y profesionales</p>
+                    <button onclick="showTeacherLogin()" class="btn-warning text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
+                        <i class="fas fa-user-tie mr-2"></i>Panel Docente
+                    </button>
+                    <div class="mt-4 text-center">
+                        <a href="https://wa.me/573135649661?text=Hola,%20soy%20profesor%20y%20necesito%20ayuda%20con%20el%20sistema" target="_blank" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">
+                            <i class="fab fa-whatsapp mr-1"></i>Soporte Técnico
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl card-hover">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
+                        <i class="fas fa-cog text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Administración</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Panel de control completo para la gestión integral del sistema educativo</p>
+                    <button onclick="showAdminLogin()" class="btn-primary text-white px-8 py-3 rounded-full font-semibold w-full shadow-lg">
+                        <i class="fas fa-shield-alt mr-2"></i>Administrar
+                    </button>
+                    <div class="mt-4 text-center">
+                        <a href="https://wa.me/573135649661?text=Hola,%20me%20interesa%20información%20sobre%20inscripciones%20y%20admisiones%20al%20Liceo%20Exploradores%20de%20Sueños" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            <i class="fab fa-whatsapp mr-1"></i>Inscripciones e Información
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Inicio Section -->
-        <section id="inicio" class="section">
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="card-shadow bg-white rounded-xl p-6 border-l-4 border-institucional-amarillo">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Nuestra Misión</h3>
-                    <p class="text-gray-600">Formar estudiantes íntegros, creativos y comprometidos con su comunidad, explorando sus sueños y potenciando sus talentos.</p>
+        <!-- Login Modal -->
+        <div id="loginModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div class="bg-white/95 backdrop-blur-sm p-10 rounded-3xl max-w-md w-full mx-4 shadow-2xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 id="loginTitle" class="text-3xl font-bold text-gray-800">Iniciar Sesión</h3>
+                    <button onclick="closeLogin()" class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">&times;</button>
                 </div>
-                <div class="card-shadow bg-white rounded-xl p-6 border-l-4 border-institucional-verde">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">👁️ Nuestra Visión</h3>
-                    <p class="text-gray-600">Ser reconocidos como una institución líder en educación integral, donde cada estudiante alcance su máximo potencial.</p>
-                </div>
-                <div class="card-shadow bg-white rounded-xl p-6 border-l-4 border-institucional-azul">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">💎 Nuestros Valores</h3>
-                    <p class="text-gray-600">Respeto, responsabilidad, creatividad, excelencia académica y compromiso social.</p>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-semibold mb-3">
+                            <i class="fas fa-id-card mr-2"></i>Número de Cédula
+                        </label>
+                        <input type="text" id="cedula" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" required>
+                    </div>
+                    <div class="mb-8">
+                        <label class="block text-gray-700 text-sm font-semibold mb-3">
+                            <i class="fas fa-lock mr-2"></i>Contraseña
+                        </label>
+                        <input type="password" id="password" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" required>
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-white py-3 rounded-xl font-semibold shadow-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
+                    </button>
+                </form>
+                <div id="registerSection" class="hidden mt-6">
+                    <div class="border-t pt-6">
+                        <p class="text-center text-gray-600 mb-4 font-medium">¿Primera vez? Regístrate aquí</p>
+                        <button onclick="showRegister()" class="w-full btn-success text-white py-3 rounded-xl font-semibold shadow-lg">
+                            <i class="fas fa-user-plus mr-2"></i>Crear Cuenta
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="mt-12 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-8">Contacto Rápido</h2>
-                <div class="flex justify-center space-x-6">
-                    <button onclick="openWhatsApp('academico')" class="bg-institucional-azul hover:bg-blue-600 text-white px-8 py-4 rounded-xl flex items-center space-x-3 transition-colors card-shadow">
-                        <span class="text-2xl">📚</span>
-                        <div class="text-left">
-                            <div class="font-semibold">Área Académica</div>
-                            <div class="text-sm opacity-90">Consultas académicas</div>
-                        </div>
+        <!-- Parent Access Modal -->
+        <div id="parentModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div class="bg-white/95 backdrop-blur-sm p-10 rounded-3xl max-w-md w-full mx-4 shadow-2xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold text-gray-800">
+                        <i class="fas fa-search text-green-500 mr-3"></i>Consultar Notas
+                    </h3>
+                    <button onclick="closeParentModal()" class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">&times;</button>
+                </div>
+                <form onsubmit="checkStudentGrades(event)">
+                    <div class="mb-8">
+                        <label class="block text-gray-700 text-sm font-semibold mb-3">
+                            <i class="fas fa-student mr-2"></i>Número de Identidad del Estudiante
+                        </label>
+                        <input type="text" id="studentId" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition-colors" required placeholder="Ingresa el número de identidad">
+                    </div>
+                    <button type="submit" class="w-full btn-success text-white py-3 rounded-xl font-semibold shadow-lg">
+                        <i class="fas fa-search mr-2"></i>Consultar Notas
                     </button>
-                    <button onclick="openWhatsApp('administrativo')" class="bg-institucional-verde hover:bg-green-400 text-gray-800 px-8 py-4 rounded-xl flex items-center space-x-3 transition-colors card-shadow">
-                        <span class="text-2xl">🏢</span>
-                        <div class="text-left">
-                            <div class="font-semibold">Área Administrativa</div>
-                            <div class="text-sm opacity-90">Pagos y documentos</div>
-                        </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-4xl font-bold text-white drop-shadow-lg">
+                    <i class="fas fa-shield-alt mr-3"></i>Panel de Administración
+                </h2>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                </button>
+            </div>
+            
+            <!-- Admin Tabs -->
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">
+                <div class="flex border-b">
+                    <button onclick="showAdminTab('schedule')" class="tab-button flex-1 px-6 py-4 font-semibold" id="scheduleTab">
+                        <i class="fas fa-calendar-alt mr-2"></i>Cronograma
+                    </button>
+                    <button onclick="showAdminTab('events')" class="tab-button flex-1 px-6 py-4 font-semibold" id="eventsTab">
+                        <i class="fas fa-calendar-check mr-2"></i>Eventos
+                    </button>
+                    <button onclick="showAdminTab('ratings')" class="tab-button flex-1 px-6 py-4 font-semibold" id="ratingsTab">
+                        <i class="fas fa-star mr-2"></i>Calificaciones
                     </button>
                 </div>
-            </div>
-        </section>
-
-        <!-- Profesores Section -->
-        <section id="profesores" class="section hidden">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Portal de Profesores</h2>
                 
-                <div id="profesor-login" class="card-shadow bg-white rounded-xl p-8 max-w-md mx-auto">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Iniciar Sesión</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Número de Cédula</label>
-                            <input type="text" id="profesor-cedula" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Ingrese su cédula">
+                <div class="p-8">
+                    <div id="scheduleContent" class="admin-tab-content">
+                        <h3 class="text-2xl font-bold mb-6"><i class="fas fa-edit mr-2"></i>Gestión de Cronograma</h3>
+                        <textarea id="schedule" class="w-full h-40 p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Editar cronograma escolar..."></textarea>
+                        <button onclick="saveSchedule()" class="mt-4 btn-primary text-white px-6 py-3 rounded-xl font-semibold shadow-lg">
+                            <i class="fas fa-save mr-2"></i>Guardar Cronograma
+                        </button>
+                    </div>
+                    
+                    <div id="eventsContent" class="admin-tab-content hidden">
+                        <h3 class="text-2xl font-bold mb-6"><i class="fas fa-plus mr-2"></i>Agregar Evento</h3>
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <input type="date" id="eventDate" class="p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+                            <input type="text" id="eventName" class="p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Nombre del evento">
                         </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Contraseña</label>
-                            <input type="password" id="profesor-contraseña" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Ingrese su contraseña">
-                        </div>
-                        <button onclick="loginProfesor()" class="w-full bg-institucional-azul hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition-colors">Ingresar</button>
+                        <button onclick="addEvent()" class="btn-warning text-white px-6 py-3 rounded-xl font-semibold shadow-lg mb-6">
+                            <i class="fas fa-plus mr-2"></i>Agregar Evento
+                        </button>
+                        <div id="eventsList" class="space-y-3"></div>
+                    </div>
+                    
+                    <div id="ratingsContent" class="admin-tab-content hidden">
+                        <h3 class="text-2xl font-bold mb-6"><i class="fas fa-chart-bar mr-2"></i>Calificaciones de Padres</h3>
+                        <div id="parentRatings"></div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div id="profesor-panel" class="hidden space-y-8">
-                    <!-- Barra de navegación del profesor -->
-                    <div class="bg-white rounded-xl p-4 card-shadow">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-gray-800">Panel de Profesor</h3>
-                            <div class="flex space-x-4">
-                                <button onclick="mostrarSeccionProfesor('estudiantes')" id="btn-estudiantes" class="px-4 py-2 bg-institucional-azul text-white rounded-lg font-semibold transition-colors">👥 Estudiantes</button>
-                                <button onclick="mostrarSeccionProfesor('notas')" id="btn-notas" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors hover:bg-institucional-verde">📝 Notas</button>
-                                <button onclick="mostrarSeccionProfesor('asistencia')" id="btn-asistencia" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors hover:bg-institucional-amarillo">📋 Asistencia</button>
-                                <button onclick="logoutProfesor()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors">Cerrar Sesión</button>
-                            </div>
+        <!-- Teacher Dashboard -->
+        <div id="teacherDashboard" class="hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-4xl font-bold text-white drop-shadow-lg">
+                    <i class="fas fa-chalkboard-teacher mr-3"></i>Panel de Profesores
+                </h2>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                </button>
+            </div>
+            
+            <!-- Teacher Tabs -->
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">
+                <div class="flex border-b">
+                    <button onclick="showTeacherTab('students')" class="tab-button flex-1 px-6 py-4 font-semibold" id="studentsTab">
+                        <i class="fas fa-user-plus mr-2"></i>Agregar Estudiante
+                    </button>
+                    <button onclick="showTeacherTab('grades')" class="tab-button flex-1 px-6 py-4 font-semibold" id="gradesTab">
+                        <i class="fas fa-clipboard-list mr-2"></i>Subir Notas
+                    </button>
+                    <button onclick="showTeacherTab('list')" class="tab-button flex-1 px-6 py-4 font-semibold" id="listTab">
+                        <i class="fas fa-list mr-2"></i>Lista Estudiantes
+                    </button>
+                </div>
+                
+                <div class="p-8">
+                    <div id="studentsContent" class="teacher-tab-content">
+                        <h3 class="text-2xl font-bold mb-6"><i class="fas fa-user-plus mr-2"></i>Agregar Nuevo Estudiante</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <input type="text" id="newStudentId" class="p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition-colors" placeholder="Número de identidad">
+                            <input type="text" id="newStudentName" class="p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition-colors" placeholder="Nombre completo">
+                        </div>
+                        <select id="newStudentGrade" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition-colors mt-4">
+                            <option value="">Seleccionar grado</option>
+                            <option value="Jardín">🌱 Jardín</option>
+                            <option value="Transición">🎨 Transición</option>
+                            <option value="Primero">1️⃣ Primero</option>
+                            <option value="Segundo">2️⃣ Segundo</option>
+                            <option value="Tercero">3️⃣ Tercero</option>
+                            <option value="Cuarto">4️⃣ Cuarto</option>
+                            <option value="Quinto">5️⃣ Quinto</option>
+                        </select>
+                        <button onclick="addStudent()" class="w-full mt-6 btn-success text-white py-4 rounded-xl font-semibold shadow-lg">
+                            <i class="fas fa-user-plus mr-2"></i>Agregar Estudiante
+                        </button>
+                    </div>
+                    
+                    <div id="gradesContent" class="teacher-tab-content hidden">
+                        <h3 class="text-2xl font-bold mb-6"><i class="fas fa-clipboard-list mr-2"></i>Registrar Calificación</h3>
+                        <select id="gradeStudentSelect" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors mb-4">
+                            <option value="">Seleccionar estudiante</option>
+                        </select>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <input type="text" id="subject" class="p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Materia">
+                            <input type="number" id="grade" class="p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="Nota (1-5)" min="1" max="5" step="0.1">
+                        </div>
+                        <button onclick="addGrade()" class="w-full mt-6 btn-primary text-white py-4 rounded-xl font-semibold shadow-lg">
+                            <i class="fas fa-plus mr-2"></i>Registrar Nota
+                        </button>
+                    </div>
+                    
+                    <div id="listContent" class="teacher-tab-content hidden">
+                        <h3 class="text-2xl font-bold mb-6"><i class="fas fa-list mr-2"></i>Estudiantes Registrados</h3>
+                        <div id="studentsList" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Grades View -->
+        <div id="studentGrades" class="hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-4xl font-bold text-white drop-shadow-lg">
+                    <i class="fas fa-graduation-cap mr-3"></i>Notas del Estudiante
+                </h2>
+                <button onclick="showWelcome()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all">
+                    <i class="fas fa-arrow-left mr-2"></i>Volver
+                </button>
+            </div>
+            
+            <div class="bg-white/95 backdrop-blur-sm p-8 rounded-3xl shadow-2xl mb-8">
+                <div id="studentInfo"></div>
+                <div id="gradesTable"></div>
+            </div>
+            
+            <div class="bg-white/95 backdrop-blur-sm p-8 rounded-3xl shadow-2xl">
+                <h3 class="text-2xl font-bold mb-6 text-center">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>Calificar el Colegio
+                </h3>
+                <p class="text-center mb-6 text-gray-600 text-lg">¿Qué tal ha sido tu experiencia con el Liceo Exploradores de Sueños?</p>
+                <div class="star-rating mb-6" id="starRating">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                </div>
+                <textarea id="ratingComment" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-yellow-500 transition-colors mb-6" rows="4" placeholder="Comparte tu opinión sobre el colegio..."></textarea>
+                <button onclick="submitRating()" class="w-full btn-warning text-white py-4 rounded-xl font-semibold shadow-lg">
+                    <i class="fas fa-paper-plane mr-2"></i>Enviar Calificación
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data storage
+        let currentUser = null;
+        let currentUserType = null;
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        let grades = JSON.parse(localStorage.getItem('grades')) || [];
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let events = JSON.parse(localStorage.getItem('events')) || [];
+        let schedule = localStorage.getItem('schedule') || '';
+        let ratings = JSON.parse(localStorage.getItem('ratings')) || [];
+        let selectedRating = 0;
+
+        // Initialize default admin user
+        if (users.length === 0) {
+            users.push({
+                cedula: '12345678',
+                password: 'admin123',
+                type: 'admin',
+                name: 'Administrador'
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Tab management
+        function showAdminTab(tabName) {
+            // Hide all admin tab contents
+            document.querySelectorAll('.admin-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all admin tabs
+            document.querySelectorAll('#adminDashboard .tab-button').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content and activate tab
+            document.getElementById(tabName + 'Content').classList.remove('hidden');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function showTeacherTab(tabName) {
+            // Hide all teacher tab contents
+            document.querySelectorAll('.teacher-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all teacher tabs
+            document.querySelectorAll('#teacherDashboard .tab-button').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content and activate tab
+            document.getElementById(tabName + 'Content').classList.remove('hidden');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        // Modal functions
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginTitle').textContent = 'Iniciar Sesión';
+            document.getElementById('registerSection').classList.add('hidden');
+        }
+
+        function showTeacherLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginTitle').textContent = 'Acceso Profesores';
+            document.getElementById('registerSection').classList.remove('hidden');
+            currentUserType = 'teacher';
+        }
+
+        function showAdminLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginTitle').textContent = 'Acceso Administración';
+            document.getElementById('registerSection').classList.add('hidden');
+            currentUserType = 'admin';
+        }
+
+        function showParentAccess() {
+            document.getElementById('parentModal').classList.remove('hidden');
+        }
+
+        function closeLogin() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        function closeParentModal() {
+            document.getElementById('parentModal').classList.add('hidden');
+        }
+
+        function showRegister() {
+            const cedula = document.getElementById('cedula').value;
+            const password = document.getElementById('password').value;
+            
+            if (!cedula || !password) {
+                alert('Por favor ingresa cédula y contraseña para registrarte');
+                return;
+            }
+
+            const newUser = {
+                cedula: cedula,
+                password: password,
+                type: 'teacher',
+                name: 'Profesor ' + cedula
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('✅ Usuario registrado exitosamente');
+            closeLogin();
+        }
+
+        // Authentication
+        function handleLogin(event) {
+            event.preventDefault();
+            const cedula = document.getElementById('cedula').value;
+            const password = document.getElementById('password').value;
+
+            const user = users.find(u => u.cedula === cedula && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                closeLogin();
+                
+                if (user.type === 'admin') {
+                    showAdminDashboard();
+                } else if (user.type === 'teacher') {
+                    showTeacherDashboard();
+                }
+            } else {
+                alert('❌ Credenciales incorrectas');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            showWelcome();
+        }
+
+        // Dashboard functions
+        function showWelcome() {
+            document.getElementById('welcomeSection').classList.remove('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('teacherDashboard').classList.add('hidden');
+            document.getElementById('studentGrades').classList.add('hidden');
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            document.getElementById('teacherDashboard').classList.add('hidden');
+            document.getElementById('studentGrades').classList.add('hidden');
+            
+            showAdminTab('schedule');
+            document.getElementById('schedule').value = schedule;
+            loadEvents();
+            loadParentRatings();
+        }
+
+        function showTeacherDashboard() {
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('teacherDashboard').classList.remove('hidden');
+            document.getElementById('studentGrades').classList.add('hidden');
+            
+            showTeacherTab('students');
+            loadStudentsForGrading();
+            loadStudentsList();
+        }
+
+        // Student management
+        function addStudent() {
+            const id = document.getElementById('newStudentId').value;
+            const name = document.getElementById('newStudentName').value;
+            const grade = document.getElementById('newStudentGrade').value;
+
+            if (!id || !name || !grade) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
+
+            if (students.find(s => s.id === id)) {
+                alert('❌ Ya existe un estudiante con ese número de identidad');
+                return;
+            }
+
+            const student = { id, name, grade };
+            students.push(student);
+            localStorage.setItem('students', JSON.stringify(students));
+            
+            document.getElementById('newStudentId').value = '';
+            document.getElementById('newStudentName').value = '';
+            document.getElementById('newStudentGrade').value = '';
+            
+            loadStudentsForGrading();
+            loadStudentsList();
+            alert('✅ Estudiante agregado exitosamente');
+        }
+
+        function loadStudentsForGrading() {
+            const select = document.getElementById('gradeStudentSelect');
+            select.innerHTML = '<option value="">Seleccionar estudiante</option>';
+            
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = ${student.name} (${student.grade});
+                select.appendChild(option);
+            });
+        }
+
+        function loadStudentsList() {
+            const container = document.getElementById('studentsList');
+            container.innerHTML = '';
+            
+            if (students.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No hay estudiantes registrados aún</p>';
+                return;
+            }
+            
+            students.forEach(student => {
+                const div = document.createElement('div');
+                div.className = 'bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-l-4 border-blue-500 shadow-sm';
+                div.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-lg text-gray-800">${student.name}</h4>
+                            <p class="text-gray-600"><i class="fas fa-id-card mr-2"></i>ID: ${student.id}</p>
+                            <p class="text-gray-600"><i class="fas fa-graduation-cap mr-2"></i>Grado: ${student.grade}</p>
+                        </div>
+                        <div class="text-blue-500 text-2xl">
+                            <i class="fas fa-user-graduate"></i>
                         </div>
                     </div>
+                `;
+                container.appendChild(div);
+            });
+        }
 
-                    <!-- Sección de Gestión de Estudiantes -->
-                    <div id="seccion-estudiantes" class="profesor-seccion">
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <!-- Agregar Estudiante -->
-                            <div class="card-shadow bg-white rounded-xl p-6">
-                                <h4 class="text-lg font-bold text-gray-800 mb-4">👤 Agregar Nuevo Estudiante</h4>
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-gray-700 font-semibold mb-2">Cédula del Estudiante</label>
-                                        <input type="text" id="nuevo-estudiante-cedula" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Número de cédula">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 font-semibold mb-2">Nombre Completo</label>
-                                        <input type="text" id="nuevo-estudiante-nombre" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent" placeholder="Nombre completo del estudiante">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 font-semibold mb-2">Grado</label>
-                                        <select id="nuevo-estudiante-grado" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-azul focus:border-transparent">
-                                            <option value="">Seleccionar grado</option>
-                                            <option value="jardin">Jardín</option>
-                                            <option value="transicion">Transición</option>
-                                            <option value="1">Primero</option>
-                                            <option value="2">Segundo</option>
-                                            <option value="3">Tercero</option>
-                                            <option value="4">Cuarto</option>
-                                            <option value="5">Quinto</option>
-                                        </select>
-                                    </div>
-                                    <button onclick="agregarEstudiante()" class="w-full bg-institucional-verde hover:bg-green-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">Agregar Estudiante</button>
-                                </div>
-                            </div>
+        // Grades management
+        function addGrade() {
+            const studentId = document.getElementById('gradeStudentSelect').value;
+            const subject = document.getElementById('subject').value;
+            const gradeValue = document.getElementById('grade').value;
 
-                            <!-- Agregar Materia -->
-                            <div class="card-shadow bg-white rounded-xl p-6">
-                                <h4 class="text-lg font-bold text-gray-800 mb-4">📚 Agregar Nueva Materia</h4>
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-gray-700 font-semibold mb-2">Nombre de la Materia</label>
-                                        <input type="text" id="nueva-materia-nombre" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" placeholder="Ej: Química, Historia, etc.">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 font-semibold mb-2">Código de la Materia</label>
-                                        <input type="text" id="nueva-materia-codigo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" placeholder="Ej: quimica, historia">
-                                    </div>
-                                    <button onclick="agregarMateria()" class="w-full bg-institucional-amarillo hover:bg-yellow-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">Agregar Materia</button>
-                                </div>
-                            </div>
-                        </div>
+            if (!studentId || !subject || !gradeValue) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
 
-                        <!-- Lista de Estudiantes -->
-                        <div class="card-shadow bg-white rounded-xl p-6">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4">📋 Lista de Estudiantes Registrados</h4>
-                            <div id="lista-estudiantes" class="space-y-3"></div>
-                        </div>
+            const grade = {
+                studentId,
+                subject,
+                grade: parseFloat(gradeValue),
+                date: new Date().toLocaleDateString()
+            };
 
-                        <!-- Lista de Materias -->
-                        <div class="card-shadow bg-white rounded-xl p-6">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4">📖 Materias Disponibles</h4>
-                            <div id="lista-materias" class="grid md:grid-cols-3 gap-3"></div>
-                        </div>
+            grades.push(grade);
+            localStorage.setItem('grades', JSON.stringify(grades));
+            
+            document.getElementById('subject').value = '';
+            document.getElementById('grade').value = '';
+            
+            alert('✅ Nota agregada exitosamente');
+        }
+
+        function checkStudentGrades(event) {
+            event.preventDefault();
+            const studentId = document.getElementById('studentId').value;
+            
+            const student = students.find(s => s.id === studentId);
+            if (!student) {
+                alert('❌ No se encontró un estudiante con ese número de identidad');
+                return;
+            }
+
+            const studentGrades = grades.filter(g => g.studentId === studentId);
+            
+            closeParentModal();
+            showStudentGrades(student, studentGrades);
+        }
+
+        function showStudentGrades(student, studentGrades) {
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('studentGrades').classList.remove('hidden');
+            
+            document.getElementById('studentInfo').innerHTML = `
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
+                        <i class="fas fa-user-graduate text-white text-3xl"></i>
                     </div>
-
-                    <!-- Sección de Notas -->
-                    <div id="seccion-notas" class="profesor-seccion hidden">
-                        <div class="card-shadow bg-white rounded-xl p-8">
-                            <h4 class="text-lg font-bold text-gray-800 mb-6">📝 Registrar Calificaciones</h4>
-                            
-                            <!-- Filtro por Grado -->
-                            <div class="mb-6">
-                                <label class="block text-gray-700 font-semibold mb-2">🎯 Filtrar por Grado</label>
-                                <select id="filtro-grado-notas" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" onchange="filtrarEstudiantesPorGrado()">
-                                    <option value="">Todos los grados</option>
-                                    <option value="jardin">Jardín</option>
-                                    <option value="transicion">Transición</option>
-                                    <option value="1">Primero</option>
-                                    <option value="2">Segundo</option>
-                                    <option value="3">Tercero</option>
-                                    <option value="4">Cuarto</option>
-                                    <option value="5">Quinto</option>
-                                </select>
-                            </div>
-                            
-                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-2">${student.name}</h3>
+                    <p class="text-gray-600 text-lg"><i class="fas fa-graduation-cap mr-2"></i>Grado: ${student.grade}</p>
+                    <p class="text-gray-600"><i class="fas fa-id-card mr-2"></i>ID: ${student.id}</p>
+                </div>
+            `;
+            
+            const gradesTable = document.getElementById('gradesTable');
+            if (studentGrades.length === 0) {
+                gradesTable.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fas fa-clipboard-list text-gray-300 text-6xl mb-4"></i>
+                        <p class="text-gray-500 text-xl">No hay notas registradas para este estudiante</p>
+                    </div>
+                `;
+            } else {
+                let tableHTML = `
+                    <h4 class="text-2xl font-bold mb-6 text-center">
+                        <i class="fas fa-chart-line mr-2"></i>Registro de Calificaciones
+                    </h4>
+                    <div class="grid gap-4">
+                `;
+                
+                studentGrades.forEach(grade => {
+                    let gradeClass = 'grade-poor';
+                    let gradeIcon = 'fas fa-times-circle';
+                    
+                    if (grade.grade >= 4.5) {
+                        gradeClass = 'grade-excellent';
+                        gradeIcon = 'fas fa-star';
+                    } else if (grade.grade >= 4.0) {
+                        gradeClass = 'grade-good';
+                        gradeIcon = 'fas fa-check-circle';
+                    } else if (grade.grade >= 3.0) {
+                        gradeClass = 'grade-average';
+                        gradeIcon = 'fas fa-exclamation-circle';
+                    }
+                    
+                    tableHTML += `
+                        <div class="${gradeClass} text-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center justify-between">
                                 <div>
-                                    <label class="block text-gray-700 font-semibold mb-2">Seleccionar Estudiante</label>
-                                    <select id="estudiante-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-verde focus:border-transparent" onchange="cargarDatosEstudiante()">
-                                        <option value="">Seleccionar estudiante</option>
-                                    </select>
+                                    <h5 class="text-xl font-bold mb-2">${grade.subject}</h5>
+                                    <p class="opacity-90">Fecha: ${grade.date}</p>
                                 </div>
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-2">Datos del Estudiante</label>
-                                    <div id="datos-estudiante-seleccionado" class="px-4 py-3 bg-gray-50 rounded-lg text-gray-600">
-                                        Seleccione un estudiante para ver sus datos
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="grid md:grid-cols-3 gap-4 mb-6">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-2">Materia</label>
-                                    <select id="materia-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent">
-                                        <option value="">Seleccionar materia</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-2">Período</label>
-                                    <select id="periodo-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent">
-                                        <option value="">Seleccionar período</option>
-                                        <option value="1">Primer Período</option>
-                                        <option value="2">Segundo Período</option>
-                                        <option value="3">Tercer Período</option>
-                                        <option value="4">Cuarto Período</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-2">Nota (1.0 - 5.0)</label>
-                                    <input type="number" id="nota-input" min="1" max="5" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-institucional-amarillo focus:border-transparent" placeholder="Ej: 4.5">
+                                <div class="text-right">
+                                    <div class="text-3xl font-bold mb-2">${grade.grade}</div>
+                                    <i class="${gradeIcon} text-2xl"></i>
                                 </div>
                             </div>
-
-                            <button onclick="guardarNotaCompleta()" class="w-full bg-institucional-verde hover:bg-green-400 text-gray-800 py-3 rounded-lg font-semibold transition-colors">💾 Guardar Calificación</button>
                         </div>
+                    `;
+                });
+                
+                tableHTML += '</div>';
+                gradesTable.innerHTML = tableHTML;
+            }
+        }
 
-                        <!-- Panel de Estadísticas por Grado -->
-                        <div class="card-shadow bg-white rounded-xl p-8">
-                            <h4 class="text-lg font-bold text-gray-800 mb-6">📊 Estadísticas por Grado</h4>
-                            <div id="estadisticas-grados" class="grid md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6"></div>
+        // Schedule and events
+        function saveSchedule() {
+            const scheduleText = document.getElementById('schedule').value;
+            localStorage.setItem('schedule', scheduleText);
+            schedule = scheduleText;
+            alert('✅ Cronograma guardado exitosamente');
+        }
+
+        function addEvent() {
+            const date = document.getElementById('eventDate').value;
+            const name = document.getElementById('eventName').value;
+
+            if (!date || !name) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
+
+            const event = { date, name, id: Date.now() };
+            events.push(event);
+            localStorage.setItem('events', JSON.stringify(events));
+            
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventName').value = '';
+            
+            loadEvents();
+            alert('✅ Evento agregado exitosamente');
+        }
+
+        function loadEvents() {
+            const container = document.getElementById('eventsList');
+            container.innerHTML = '';
+            
+            if (events.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No hay eventos programados</p>';
+                return;
+            }
+            
+            events.forEach(event => {
+                const div = document.createElement('div');
+                div.className = 'bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border-l-4 border-yellow-500 shadow-sm';
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h5 class="font-bold text-lg text-gray-800">${event.name}</h5>
+                            <p class="text-gray-600"><i class="fas fa-calendar mr-2"></i>${event.date}</p>
                         </div>
+                        <button onclick="deleteEvent(${event.id})" class="text-red-500 hover:text-red-700 transition-colors">
+                            <i class="fas fa-trash text-xl"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
 
-                        <!-- Panel de Gestión de Notas -->
-                        <div class="card-shadow bg-white rounded-xl p-8">
-                            <h4 class="text-lg font-bold text-gray-800 mb-6">📋 Gestión de Notas Registradas</h4>
+        function deleteEvent(eventId) {
+            events = events.filter(e => e.id !== eventId);
+            localStorage.setItem('events', JSON.stringify(events));
+            loadEvents();
+        }
+
+        // Rating system
+        function initializeRating() {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStarDisplay();
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            document.getElementById('starRating').addEventListener('mouseleave', function() {
+                updateStarDisplay();
+            });
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStarDisplay() {
+            highlightStars(selectedRating);
+        }
+
+        function submitRating() {
+            if (selectedRating === 0) {
+                alert('❌ Por favor selecciona una calificación');
+                return;
+            }
+
+            const comment = document.getElementById('ratingComment').value;
+            const rating = {
+                rating: selectedRating,
+                comment: comment,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            };
+
+            ratings.push(rating);
+            localStorage.setItem('ratings', JSON.stringify(ratings));
+            
+            selectedRating = 0;
+            document.getElementById('ratingComment').value = '';
+            updateStarDisplay();
+            
+            alert('✅ ¡Gracias por tu calificación!');
+        }
+
+        function loadParentRatings() {
+            const container = document.getElementById('parentRatings');
+            container.innerHTML = '';
+            
+            if (ratings.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fas fa-star text-gray-300 text-6xl mb-4"></i>
+                        <p class="text-gray-500 text-xl">No hay calificaciones aún</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const averageRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+            
+            container.innerHTML = `
+                <div class="text-white p-8 rounded-2xl mb-8 text-center shadow-lg" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                    <h4 class="text-3xl font-bold mb-2">Calificación Promedio</h4>
+                    <div class="text-5xl font-bold mb-2">${averageRating.toFixed(1)}/5</div>
+                    <div class="text-2xl mb-2">${'⭐'.repeat(Math.round(averageRating))}</div>
+                    <p class="text-xl opacity-90">Basado en ${ratings.length} calificaciones</p>
+                </div>
+                <div class="space-y-6">
+            `;
+            
+            ratings.forEach(rating => {
+                const ratingHTML = `
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4" style="border-left-color: #FFD700;">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-2xl">${'⭐'.repeat(rating.rating)}${'☆'.repeat(5-rating.rating)}</div>
+                            <span class="text-gray-500 text-sm">${rating.date}</span>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">${rating.comment || 'Sin comentarios'}</p>
+                    </div>
+                `;
+                container.innerHTML += ratingHTML;
+            });
+            
+            container.innerHTML += '</div>';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeRating();
+            showWelcome();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a7f554f40bf78a',t:'MTc1NzA5ODcwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
