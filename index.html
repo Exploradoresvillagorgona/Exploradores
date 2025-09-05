@@ -400,7 +400,7 @@
         let ratings = JSON.parse(localStorage.getItem('ratings')) || [];
         let selectedRating = 0;
 
-        // Initialize default admin user
+        // Initialize default admin user and sample data
         if (users.length === 0) {
             users.push({
                 cedula: '12345678',
@@ -408,61 +408,85 @@
                 type: 'admin',
                 name: 'Administrador'
             });
+            
+            // Add sample teacher for testing
+            users.push({
+                cedula: '87654321',
+                password: 'profesor123',
+                type: 'teacher',
+                name: 'Profesor de Prueba'
+            });
+            
             localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Add sample students for testing
+        if (students.length === 0) {
+            students = [
+                { id: '1001', name: 'Ana María García', grade: 'Tercero' },
+                { id: '1002', name: 'Carlos Rodríguez', grade: 'Quinto' },
+                { id: '1003', name: 'Sofía López', grade: 'Segundo' }
+            ];
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+
+        // Add sample grades for testing
+        if (grades.length === 0) {
+            grades = [
+                { studentId: '1001', subject: 'Matemáticas', grade: 4.5, date: '15/11/2024' },
+                { studentId: '1001', subject: 'Español', grade: 4.2, date: '15/11/2024' },
+                { studentId: '1002', subject: 'Ciencias', grade: 3.8, date: '15/11/2024' }
+            ];
+            localStorage.setItem('grades', JSON.stringify(grades));
         }
 
         // Tab management
         function showAdminTab(tabName) {
-            // Hide all admin tab contents
             document.querySelectorAll('.admin-tab-content').forEach(content => {
                 content.classList.add('hidden');
             });
             
-            // Remove active class from all admin tabs
             document.querySelectorAll('#adminDashboard .tab-button').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Show selected content and activate tab
             document.getElementById(tabName + 'Content').classList.remove('hidden');
             document.getElementById(tabName + 'Tab').classList.add('active');
         }
 
         function showTeacherTab(tabName) {
-            // Hide all teacher tab contents
             document.querySelectorAll('.teacher-tab-content').forEach(content => {
                 content.classList.add('hidden');
             });
             
-            // Remove active class from all teacher tabs
             document.querySelectorAll('#teacherDashboard .tab-button').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Show selected content and activate tab
             document.getElementById(tabName + 'Content').classList.remove('hidden');
             document.getElementById(tabName + 'Tab').classList.add('active');
         }
 
         // Modal functions
         function showLogin() {
+            currentUserType = null;
             document.getElementById('loginModal').classList.remove('hidden');
             document.getElementById('loginTitle').textContent = 'Iniciar Sesión';
             document.getElementById('registerSection').classList.add('hidden');
         }
 
         function showTeacherLogin() {
+            currentUserType = 'teacher';
             document.getElementById('loginModal').classList.remove('hidden');
             document.getElementById('loginTitle').textContent = 'Acceso Profesores';
             document.getElementById('registerSection').classList.remove('hidden');
-            currentUserType = 'teacher';
         }
 
         function showAdminLogin() {
+            currentUserType = 'admin';
             document.getElementById('loginModal').classList.remove('hidden');
             document.getElementById('loginTitle').textContent = 'Acceso Administración';
             document.getElementById('registerSection').classList.add('hidden');
-            currentUserType = 'admin';
         }
 
         function showParentAccess() {
@@ -472,6 +496,7 @@
         function closeLogin() {
             document.getElementById('loginModal').classList.add('hidden');
             document.getElementById('loginForm').reset();
+            currentUserType = null;
         }
 
         function closeParentModal() {
@@ -479,11 +504,17 @@
         }
 
         function showRegister() {
-            const cedula = document.getElementById('cedula').value;
-            const password = document.getElementById('password').value;
+            const cedula = document.getElementById('cedula').value.trim();
+            const password = document.getElementById('password').value.trim();
             
             if (!cedula || !password) {
-                alert('Por favor ingresa cédula y contraseña para registrarte');
+                alert('❌ Por favor ingresa cédula y contraseña para registrarte');
+                return;
+            }
+
+            // Check if user already exists
+            if (users.find(u => u.cedula === cedula)) {
+                alert('❌ Ya existe un usuario con esa cédula');
                 return;
             }
 
@@ -496,15 +527,20 @@
 
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
-            alert('✅ Usuario registrado exitosamente');
+            alert('✅ Usuario registrado exitosamente. Ahora puedes iniciar sesión.');
             closeLogin();
         }
 
         // Authentication
         function handleLogin(event) {
             event.preventDefault();
-            const cedula = document.getElementById('cedula').value;
-            const password = document.getElementById('password').value;
+            const cedula = document.getElementById('cedula').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!cedula || !password) {
+                alert('❌ Por favor ingresa cédula y contraseña');
+                return;
+            }
 
             const user = users.find(u => u.cedula === cedula && u.password === password);
             
@@ -518,7 +554,7 @@
                     showTeacherDashboard();
                 }
             } else {
-                alert('❌ Credenciales incorrectas');
+                alert('❌ Credenciales incorrectas. Verifica tu cédula y contraseña.');
             }
         }
 
@@ -561,8 +597,8 @@
 
         // Student management
         function addStudent() {
-            const id = document.getElementById('newStudentId').value;
-            const name = document.getElementById('newStudentName').value;
+            const id = document.getElementById('newStudentId').value.trim();
+            const name = document.getElementById('newStudentName').value.trim();
             const grade = document.getElementById('newStudentGrade').value;
 
             if (!id || !name || !grade) {
@@ -579,10 +615,12 @@
             students.push(student);
             localStorage.setItem('students', JSON.stringify(students));
             
+            // Clear form
             document.getElementById('newStudentId').value = '';
             document.getElementById('newStudentName').value = '';
             document.getElementById('newStudentGrade').value = '';
             
+            // Refresh lists
             loadStudentsForGrading();
             loadStudentsList();
             alert('✅ Estudiante agregado exitosamente');
@@ -631,7 +669,7 @@
         // Grades management
         function addGrade() {
             const studentId = document.getElementById('gradeStudentSelect').value;
-            const subject = document.getElementById('subject').value;
+            const subject = document.getElementById('subject').value.trim();
             const gradeValue = document.getElementById('grade').value;
 
             if (!studentId || !subject || !gradeValue) {
@@ -639,16 +677,23 @@
                 return;
             }
 
+            const gradeNum = parseFloat(gradeValue);
+            if (gradeNum < 1 || gradeNum > 5) {
+                alert('❌ La nota debe estar entre 1.0 y 5.0');
+                return;
+            }
+
             const grade = {
                 studentId,
                 subject,
-                grade: parseFloat(gradeValue),
+                grade: gradeNum,
                 date: new Date().toLocaleDateString()
             };
 
             grades.push(grade);
             localStorage.setItem('grades', JSON.stringify(grades));
             
+            // Clear form
             document.getElementById('subject').value = '';
             document.getElementById('grade').value = '';
             
@@ -657,7 +702,12 @@
 
         function checkStudentGrades(event) {
             event.preventDefault();
-            const studentId = document.getElementById('studentId').value;
+            const studentId = document.getElementById('studentId').value.trim();
+            
+            if (!studentId) {
+                alert('❌ Por favor ingresa el número de identidad');
+                return;
+            }
             
             const student = students.find(s => s.id === studentId);
             if (!student) {
@@ -748,7 +798,7 @@
 
         function addEvent() {
             const date = document.getElementById('eventDate').value;
-            const name = document.getElementById('eventName').value;
+            const name = document.getElementById('eventName').value.trim();
 
             if (!date || !name) {
                 alert('❌ Por favor completa todos los campos');
@@ -840,7 +890,7 @@
                 return;
             }
 
-            const comment = document.getElementById('ratingComment').value;
+            const comment = document.getElementById('ratingComment').value.trim();
             const rating = {
                 rating: selectedRating,
                 comment: comment,
@@ -904,7 +954,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeRating();
             showWelcome();
+            console.log('Sistema inicializado correctamente');
+            console.log('Usuarios disponibles:', users);
+            console.log('Estudiantes de prueba:', students);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a7f554f40bf78a',t:'MTc1NzA5ODcwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a811aa322431e0',t:'MTc1NzA5OTg2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>           
