@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exploradores De Sueños</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .gradient-bg {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #bbf7d0 100%);
+    }
+    .card-elegant {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-elegant { transition: all 0.3s ease; }
+    .btn-elegant:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+    .seccion { display: none; }
+    .seccion.activa { display: block; }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen">
+
+  <!-- Header -->
+  <header class="card-elegant shadow-lg">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-4xl font-bold text-blue-900">Liceo Exploradores de Sueños</h1>
+      <p class="text-lg">✨ 17 años formando el futuro • Jardín a 5° Primaria ✨</p>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="glass-effect backdrop-blur-lg border-b border-white/20">
+    <div class="container mx-auto px-4 py-4 flex flex-wrap gap-4 justify-center">
+      <button onclick="mostrarSeccion('inicio')" class="btn-elegant bg-green-200 px-4 py-2 rounded">🏠 Inicio</button>
+      <button onclick="mostrarSeccion('docentes')" class="btn-elegant bg-green-200 px-4 py-2 rounded">👨‍🏫 Docentes</button>
+      <button onclick="mostrarSeccion('padres')" class="btn-elegant bg-green-200 px-4 py-2 rounded">👨‍👩‍👧‍👦 Padres</button>
+      <button onclick="mostrarSeccion('cronogramas')" class="btn-elegant bg-green-200 px-4 py-2 rounded">📅 Cronogramas</button>
+      <button onclick="mostrarSeccion('opiniones')" class="btn-elegant bg-green-200 px-4 py-2 rounded">💬 Opiniones</button>
+      <button onclick="mostrarSeccion('admin')" class="btn-elegant bg-red-400 text-white px-4 py-2 rounded">⚙️ Admin</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- Inicio -->
+    <div id="inicio" class="seccion activa card-elegant p-6 rounded-xl">
+      <h2 class="text-3xl font-bold text-blue-900 mb-4">¡Bienvenidos al Liceo Exploradores de Sueños! ✨</h2>
+      <p class="text-xl">Donde cada niño es una estrella brillante 🌟</p>
+    </div>
+
+    <!-- Docentes -->
+    <div id="docentes" class="seccion card-elegant p-6 rounded-xl">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">👨‍🏫 Acceso Docentes</h2>
+      <input type="password" id="passwordDocente" class="border px-3 py-2 rounded" placeholder="Contraseña Docente">
+      <button onclick="verificarAccesoDocente()" class="bg-blue-600 text-white px-4 py-2 rounded ml-2">Acceder</button>
+      <div id="errorDocente" class="text-red-600 mt-2 hidden"></div>
+      <div id="panelDocentes" class="hidden mt-4 p-4 bg-green-100 rounded">✅ Bienvenido docente</div>
+    </div>
+
+    <!-- Padres -->
+    <div id="padres" class="seccion card-elegant p-6 rounded-xl">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">👨‍👩‍👧‍👦 Acceso Padres</h2>
+      <input type="password" id="passwordPadre" class="border px-3 py-2 rounded" placeholder="Contraseña Padres">
+      <button onclick="verificarAccesoPadre()" class="bg-blue-600 text-white px-4 py-2 rounded ml-2">Acceder</button>
+      <div id="errorPadre" class="text-red-600 mt-2 hidden"></div>
+      <div id="panelPadres" class="hidden mt-4 p-4 bg-yellow-100 rounded">✅ Bienvenido padre de familia</div>
+    </div>
+
+    <!-- Cronogramas -->
+    <div id="cronogramas" class="seccion card-elegant p-6 rounded-xl">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">📅 Cronogramas</h2>
+      <p>Aquí irá tu calendario y actividades escolares.</p>
+    </div>
+
+    <!-- Opiniones -->
+    <div id="opiniones" class="seccion card-elegant p-6 rounded-xl">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">💬 Opiniones y Sugerencias</h2>
+      <form onsubmit="enviarOpinion(event)" class="space-y-4">
+        <input type="text" id="nombreOpinion" placeholder="Tu nombre" class="border px-3 py-2 w-full rounded" required>
+        <textarea id="textoOpinion" placeholder="Escribe tu opinión..." class="border px-3 py-2 w-full rounded" required></textarea>
+        <button class="bg-green-600 text-white px-4 py-2 rounded">Enviar</button>
+      </form>
+    </div>
+
+    <!-- Admin -->
+    <div id="admin" class="seccion card-elegant p-6 rounded-xl">
+      <h2 class="text-2xl font-bold text-blue-900 mb-4">⚙️ Panel Administrativo</h2>
+      <p>Zona de gestión para administradores del sistema.</p>
+    </div>
+  </main>
+
+  <!-- Script -->
+  <script>
+    // Cambiar secciones
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+      document.getElementById(id).classList.add('activa');
+    }
+
+    // Acceso docentes
+    function verificarAccesoDocente() {
+      const pass = document.getElementById("passwordDocente").value;
+      const error = document.getElementById("errorDocente");
+      const panel = document.getElementById("panelDocentes");
+      if (pass === "Exploradores2025") {
+        panel.classList.remove("hidden");
+        error.classList.add("hidden");
+      } else {
+        error.textContent = "❌ Contraseña incorrecta";
+        error.classList.remove("hidden");
+      }
+    }
+
+    // Acceso padres
+    function verificarAccesoPadre() {
+      const pass = document.getElementById("passwordPadre").value;
+      const error = document.getElementById("errorPadre");
+      const panel = document.getElementById("panelPadres");
+      if (pass === "Familia2025") {
+        panel.classList.remove("hidden");
+        error.classList.add("hidden");
+      } else {
+        error.textContent = "❌ Contraseña incorrecta";
+        error.classList.remove("hidden");
+      }
+    }
+
+    // Opiniones
+    function enviarOpinion(e) {
+      e.preventDefault();
+      alert("✅ ¡Gracias por tu opinión!");
+      document.getElementById("nombreOpinion").value = "";
+      document.getElementById("textoOpinion").value = "";
+    }
+  </script>
+
+</body>
+  </html>
 
