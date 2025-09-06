@@ -1,361 +1,135 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exploradores De Sueños</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        * {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #bbf7d0 100%);
-        }
-        
-        .card-elegant {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .btn-elegant {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(0);
-        }
-        
-        .btn-elegant:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .text-shadow {
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .colegio-azul { color: #1e3a8a; }
-        .bg-colegio-azul { background-color: #1e3a8a; }
-        .colegio-verde { color: #bbf7d0; }
-        .bg-colegio-verde { background-color: #bbf7d0; }
-        .colegio-amarillo { color: #fde047; }
-        .bg-colegio-amarillo { background-color: #fde047; }
-        .colegio-azul-claro { color: #3b82f6; }
-        .bg-colegio-azul-claro { background-color: #3b82f6; }
-        
-        @media (max-width: 768px) {
-            .mobile-padding {
-                padding: 1rem;
-            }
-            
-            .mobile-text {
-                font-size: 0.875rem;
-            }
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        .seccion {
-            display: block;
-        }
-        
-        .seccion.hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exploradores De Sueños</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #bbf7d0 100%); }
+    .card-elegant { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .btn-elegant { transition: all 0.3s; transform: translateY(0); }
+    .btn-elegant:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+    .hidden { display: none !important; }
+    .seccion { display: block; }
+    .seccion.hidden { display: none; }
+  </style>
 </head>
 <body class="gradient-bg min-h-screen">
-    <!-- Header -->
-    <header class="card-elegant shadow-lg">
-        <div class="container mx-auto px-4 py-8 mobile-padding">
-            <div class="flex flex-col lg:flex-row justify-between items-center">
-                <div class="text-center lg:text-left mb-6 lg:mb-0">
-                    <h1 class="text-4xl lg:text-5xl font-bold colegio-azul text-shadow mb-2">
-                        Liceo Exploradores de Sueños
-                    </h1>
-                    <p class="text-lg text-gray-700 font-medium mb-2">
-                        ✨ 17 años formando el futuro • Jardín a 5° Primaria ✨
-                    </p>
-                    <p class="text-sm text-gray-600 cursor-pointer hover:text-blue-600 transition-all duration-300 transform hover:scale-105" onclick="abrirUbicacion()">
-                        📍 Carrera 13 # 8-48, Villa Gorgona, Candelaria - Ver en mapa
-                    </p>
-                </div>
-                <button onclick="contactarWhatsApp()" class="btn-elegant bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-4 rounded-2xl font-semibold flex items-center gap-3 shadow-lg">
-                    <span class="text-xl">📱</span>
-                    <span>WhatsApp Colegio</span>
-                </button>
-            </div>
+  <!-- Header -->
+  <header class="card-elegant shadow-lg">
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex flex-col lg:flex-row justify-between items-center">
+        <div class="text-center lg:text-left mb-6 lg:mb-0">
+          <h1 class="text-4xl lg:text-5xl font-bold text-blue-900 mb-2">Liceo Exploradores de Sueños</h1>
+          <p class="text-lg text-gray-700 font-medium mb-2">✨ 17 años formando el futuro • Jardín a 5° Primaria ✨</p>
         </div>
-    </header>
+        <button onclick="contactarWhatsApp()" class="btn-elegant bg-green-600 text-white px-8 py-4 rounded-2xl font-semibold flex items-center gap-3 shadow-lg">
+          📱 WhatsApp Colegio
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <!-- Navigation -->
-    <nav class="glass-effect backdrop-blur-lg border-b border-white/20">
-        <div class="container mx-auto px-4 mobile-padding">
-            <div class="flex flex-wrap justify-center gap-3 py-6">
-                <button onclick="mostrarSeccion('inicio')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
-                    <span class="text-lg mr-2">🏠</span>Inicio
-                </button>
-                <button onclick="mostrarSeccion('docentes')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
-                    <span class="text-lg mr-2">👨‍🏫</span>Docentes
-                </button>
-                <button onclick="mostrarSeccion('padres')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
-                    <span class="text-lg mr-2">👨‍👩‍👧‍👦</span><span class="hidden sm:inline">Padres</span><span class="sm:hidden">Familia</span>
-                </button>
-                <button onclick="mostrarSeccion('cronogramas')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
-                    <span class="text-lg mr-2">📅</span><span class="hidden sm:inline">Cronogramas</span><span class="sm:hidden">Eventos</span>
-                </button>
-                <button onclick="mostrarSeccion('opiniones')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
-                    <span class="text-lg mr-2">💬</span>Opiniones
-                </button>
-                <button onclick="mostrarSeccion('admin')" class="nav-btn btn-elegant bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 shadow-lg">
-                    <span class="text-lg mr-2">⚙️</span>Admin
-                </button>
-            </div>
-        </div>
-    </nav>
+  <!-- Navigation -->
+  <nav class="card-elegant border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap justify-center gap-3 py-6">
+        <button onclick="mostrarSeccion('inicio')" class="btn-elegant bg-green-200 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 shadow-lg">🏠 Inicio</button>
+        <button onclick="mostrarSeccion('docentes')" class="btn-elegant bg-green-200 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 shadow-lg">👨‍🏫 Docentes</button>
+        <button onclick="mostrarSeccion('padres')" class="btn-elegant bg-green-200 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 shadow-lg">👨‍👩‍👧‍👦 Padres</button>
+        <button onclick="mostrarSeccion('cronogramas')" class="btn-elegant bg-green-200 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 shadow-lg">📅 Cronogramas</button>
+        <button onclick="mostrarSeccion('opiniones')" class="btn-elegant bg-green-200 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 shadow-lg">💬 Opiniones</button>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 mobile-padding">
-        <!-- Sección Inicio -->
-        <div id="inicio" class="seccion card-elegant rounded-3xl shadow-lg p-8 mb-8">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl lg:text-5xl font-bold colegio-azul mb-6 text-shadow">
-                    ¡Bienvenidos al Liceo Exploradores de Sueños! ✨
-                </h2>
-                <p class="text-xl lg:text-2xl text-gray-700 mb-8 font-medium">
-                    Donde cada niño es una estrella brillante 🌟
-                </p>
-                <div class="bg-gradient-to-r from-green-200 via-yellow-200 to-green-200 p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-2xl lg:text-3xl font-bold colegio-azul mb-6 text-shadow">🎯 Próximos Eventos</h3>
-                    <div id="proximosEventos" class="space-y-3">
-                        <!-- Los eventos se cargarán aquí -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="btn-elegant bg-gradient-to-br from-green-200 to-green-300 p-8 rounded-2xl text-center shadow-lg border border-white/50">
-                    <div class="text-4xl mb-4">📚</div>
-                    <h3 class="text-xl font-bold colegio-azul mb-4">Educación Integral</h3>
-                    <p class="text-gray-700 font-medium">Formamos estudiantes con valores y conocimientos sólidos para el futuro</p>
-                </div>
-                <div class="btn-elegant bg-gradient-to-br from-yellow-200 to-yellow-300 p-8 rounded-2xl text-center shadow-lg border border-white/50">
-                    <div class="text-4xl mb-4">🎨</div>
-                    <h3 class="text-xl font-bold colegio-azul mb-4">Arte y Creatividad</h3>
-                    <p class="text-gray-700 font-medium">Desarrollamos el potencial artístico y creativo de cada niño</p>
-                </div>
-                <div class="btn-elegant bg-gradient-to-br from-green-200 to-green-300 p-8 rounded-2xl text-center shadow-lg border border-white/50">
-                    <div class="text-4xl mb-4">🤝</div>
-                    <h3 class="text-xl font-bold colegio-azul mb-4">Comunidad Unida</h3>
-                    <p class="text-gray-700 font-medium">Trabajamos juntos: familia, estudiantes y docentes en armonía</p>
-                </div>
-            </div>
-        </div>
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- Inicio -->
+    <div id="inicio" class="seccion card-elegant rounded-3xl shadow-lg p-8 mb-8">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6 text-center">¡Bienvenidos al Liceo Exploradores de Sueños! ✨</h2>
+      <p class="text-lg text-gray-700 text-center">Donde cada niño es una estrella brillante 🌟</p>
+    </div>
 
-        <!-- Sección Docentes -->
-        <div id="docentes" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">👨‍🏫 Nuestro Equipo Docente</h2>
-            
-            <!-- Acceso para Docentes -->
-            <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                <h3 class="text-xl font-bold colegio-azul mb-4">🔐 Acceso Docentes</h3>
-                <div class="flex gap-4 items-end">
-                    <div class="flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Acceso:</label>
-                        <input type="password" id="passwordDocente" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su contraseña">
-                    </div>
-                    <button onclick="verificarAccesoDocente()" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Acceder</button>
-                </div>
-                <div id="errorDocente" class="text-red-600 mt-2 hidden"></div>
-            </div>
+    <!-- Docentes -->
+    <div id="docentes" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6 text-center">👨‍🏫 Acceso Docentes</h2>
+      <input type="text" id="nombreDocente" placeholder="Ingrese su nombre" class="border p-2 rounded w-full mb-3">
+      <input type="password" id="passwordDocente" placeholder="Ingrese su contraseña" class="border p-2 rounded w-full mb-3">
+      <button onclick="verificarAccesoDocente()" class="bg-blue-800 text-white px-4 py-2 rounded">Acceder</button>
+      <div id="errorDocente" class="text-red-600 mt-2 hidden"></div>
+      <div id="panelDocentes" class="hidden mt-4 bg-green-100 p-4 rounded"></div>
+    </div>
 
-            <!-- Panel de Docentes (oculto inicialmente) -->
-            <div id="panelDocentes" class="hidden">
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-green-200 p-6 rounded-lg">
-                        <h4 class="text-lg font-bold colegio-azul mb-4">📋 Mis Clases</h4>
-                        <div class="space-y-2">
-                            <div class="bg-white p-3 rounded">Matemáticas - 3° Grado</div>
-                            <div class="bg-white p-3 rounded">Ciencias - 4° Grado</div>
-                        </div>
-                    </div>
-                    <div class="bg-yellow-200 p-6 rounded-lg">
-                        <h4 class="text-lg font-bold colegio-azul mb-4">📝 Notas Pendientes</h4>
-                        <div class="space-y-2">
-                            <div class="bg-white p-3 rounded">Evaluación Matemáticas</div>
-                            <div class="bg-white p-3 rounded">Proyecto Ciencias</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Padres -->
+    <div id="padres" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6 text-center">👨‍👩‍👧‍👦 Acceso Padres</h2>
+      <input type="text" id="nombrePadre" placeholder="Ingrese su nombre" class="border p-2 rounded w-full mb-3">
+      <input type="password" id="passwordPadre" placeholder="Ingrese su contraseña" class="border p-2 rounded w-full mb-3">
+      <button onclick="verificarAccesoPadre()" class="bg-blue-800 text-white px-4 py-2 rounded">Acceder</button>
+      <div id="errorPadre" class="text-red-600 mt-2 hidden"></div>
+      <div id="panelPadres" class="hidden mt-4 bg-yellow-100 p-4 rounded"></div>
+    </div>
 
-            <!-- Lista de Docentes -->
-            <div class="mt-8">
-                <h3 class="text-xl font-bold colegio-azul mb-4">👥 Nuestros Profesores</h3>
-                <div id="listaDocentes" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Los docentes se cargarán aquí -->
-                </div>
-            </div>
-        </div>
+    <!-- Cronogramas -->
+    <div id="cronogramas" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6 text-center">📅 Cronogramas</h2>
+      <p>Aquí irán los cronogramas escolares.</p>
+    </div>
 
-        <!-- Sección Padres -->
-        <div id="padres" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">👨‍👩‍👧‍👦 Portal de Padres</h2>
-            
-            <!-- Acceso para Padres -->
-            <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                <h3 class="text-xl font-bold colegio-azul mb-4">🔐 Acceso Padres de Familia</h3>
-                <div class="flex gap-4 items-end">
-                    <div class="flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Acceso:</label>
-                        <input type="password" id="passwordPadre" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su contraseña">
-                    </div>
-                    <button onclick="verificarAccesoPadre()" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Acceder</button>
-                </div>
-                <div id="errorPadre" class="text-red-600 mt-2 hidden"></div>
-            </div>
+    <!-- Opiniones -->
+    <div id="opiniones" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+      <h2 class="text-3xl font-bold text-blue-900 mb-6 text-center">💬 Opiniones</h2>
+      <p>Sección para sugerencias y comentarios.</p>
+    </div>
+  </main>
 
-            <!-- Panel de Padres (oculto inicialmente) -->
-            <div id="panelPadres" class="hidden">
-                <!-- Consulta de Notas por ID -->
-                <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h3 class="text-xl font-bold colegio-azul mb-4">🔍 Consultar Notas por Identificación</h3>
-                    <div class="flex gap-4 items-end">
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Número de Identificación del Estudiante:</label>
-                            <input type="text" id="idEstudiante" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ej: 1234567890">
-                        </div>
-                        <button onclick="consultarNotas()" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Consultar</button>
-                    </div>
-                    <div id="resultadoNotas" class="mt-4 hidden">
-                        <!-- Aquí se mostrarán las notas -->
-                    </div>
-                </div>
+  <!-- JavaScript -->
+  <script>
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.seccion').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-green-200 p-6 rounded-lg">
-                        <h4 class="text-lg font-bold colegio-azul mb-4">📊 Información del Grado</h4>
-                        <div id="infoGrado" class="space-y-2">
-                            <div class="bg-white p-3 rounded">Seleccione un estudiante para ver información del grado</div>
-                        </div>
-                    </div>
-                    <div class="bg-yellow-200 p-6 rounded-lg">
-                        <h4 class="text-lg font-bold colegio-azul mb-4">📅 Próximas Actividades</h4>
-                        <div class="space-y-2">
-                            <div class="bg-white p-3 rounded">Reunión de Padres - 15 Nov</div>
-                            <div class="bg-white p-3 rounded">Entrega de Boletines - 20 Nov</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    function verificarAccesoDocente() {
+      const nombre = document.getElementById("nombreDocente").value;
+      const pass = document.getElementById("passwordDocente").value;
+      const error = document.getElementById("errorDocente");
+      const panel = document.getElementById("panelDocentes");
 
-            <!-- Estadísticas por Grado -->
-            <div class="mt-8">
-                <h3 class="text-xl font-bold colegio-azul mb-4">📊 Estadísticas por Grado</h3>
-                <div id="estadisticasGrados" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <!-- Las estadísticas se cargarán aquí -->
-                </div>
-            </div>
+      if (pass === "Exploradores2025") {
+        panel.innerHTML = `✅ Bienvenido, Profesor <b>${nombre}</b>`;
+        panel.classList.remove("hidden");
+        error.classList.add("hidden");
+      } else {
+        error.textContent = "❌ Contraseña incorrecta";
+        error.classList.remove("hidden");
+        panel.classList.add("hidden");
+      }
+    }
 
-            <!-- Información de Estudiantes -->
-            <div class="mt-8">
-                <h3 class="text-xl font-bold colegio-azul mb-4">👦👧 Estudiantes Registrados</h3>
-                <div class="bg-gradient-to-r from-green-200 to-yellow-200 p-6 rounded-lg text-center">
-                    <div class="text-3xl font-bold colegio-azul mb-2" id="totalEstudiantes">0</div>
-                    <p class="text-gray-700">Estudiantes registrados en el sistema</p>
-                    <p class="text-sm text-gray-600 mt-2">Para consultar información específica, use el número de identificación arriba</p>
-                </div>
-            </div>
-        </div>
+    function verificarAccesoPadre() {
+      const nombre = document.getElementById("nombrePadre").value;
+      const pass = document.getElementById("passwordPadre").value;
+      const error = document.getElementById("errorPadre");
+      const panel = document.getElementById("panelPadres");
 
-        <!-- Sección Cronogramas -->
-        <div id="cronogramas" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">📅 Calendario y Cronogramas</h2>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Calendario -->
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold colegio-azul mb-4">📆 Calendario Escolar</h3>
-                    <div id="calendario" class="bg-white p-4 rounded-lg">
-                        <div class="text-center mb-4">
-                            <button onclick="cambiarMes(-1)" class="bg-blue-800 text-white px-3 py-1 rounded">←</button>
-                            <span id="mesActual" class="mx-4 font-bold text-lg"></span>
-                            <button onclick="cambiarMes(1)" class="bg-blue-800 text-white px-3 py-1 rounded">→</button>
-                        </div>
-                        <div id="diasCalendario" class="grid grid-cols-7 gap-1 text-center">
-                            <!-- Los días se generarán aquí -->
-                        </div>
-                    </div>
-                </div>
+      if (pass === "Familia2025") {
+        panel.innerHTML = `✅ Bienvenido, Sr./Sra. <b>${nombre}</b>`;
+        panel.classList.remove("hidden");
+        error.classList.add("hidden");
+      } else {
+        error.textContent = "❌ Contraseña incorrecta";
+        error.classList.remove("hidden");
+        panel.classList.add("hidden");
+      }
+    }
 
-                <!-- Eventos -->
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold colegio-azul mb-4">🎯 Eventos Programados</h3>
-                    <div id="listaEventos" class="space-y-3 max-h-96 overflow-y-auto">
-                        <!-- Los eventos se cargarán aquí -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Horarios de Clase -->
-            <div class="mt-8 bg-gray-50 p-6 rounded-lg">
-                <h3 class="text-xl font-bold colegio-azul mb-4">⏰ Horarios de Clase</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full bg-white rounded-lg overflow-hidden">
-                        <thead class="bg-blue-800 text-white">
-                            <tr>
-                                <th class="p-3">Hora</th>
-                                <th class="p-3">Lunes</th>
-                                <th class="p-3">Martes</th>
-                                <th class="p-3">Miércoles</th>
-                                <th class="p-3">Jueves</th>
-                                <th class="p-3">Viernes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b">
-                                <td class="p-3 font-bold">7:00-8:00</td>
-                                <td class="p-3 bg-green-200">Matemáticas</td>
-                                <td class="p-3 bg-yellow-200">Español</td>
-                                <td class="p-3 bg-green-200">Ciencias</td>
-                                <td class="p-3 bg-yellow-200">Sociales</td>
-                                <td class="p-3 bg-green-200">Arte</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-3 font-bold">8:00-9:00</td>
-                                <td class="p-3 bg-yellow-200">Español</td>
-                                <td class="p-3 bg-green-200">Matemáticas</td>
-                                <td class="p-3 bg-yellow-200">Educación Física</td>
-                                <td class="p-3 bg-green-200">Inglés</td>
-                                <td class="p-3 bg-yellow-200">Música</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sección Opiniones -->
-        <div id="opiniones" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
-            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">💬 Opiniones y Sugerencias</h2>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Formulario de Opiniones -->
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold colegio-azul mb-4">✍️ Deja tu Opinión</h3>
-                    <form onsubmit="enviarOpinion(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre:</label>
-                            <input type="text" id="nombreOpinion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo:</label>
-                            <select id="tipoOpinion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focu
+    function contactarWhatsApp() {
+      window.open("https://wa.me/573135649661", "_blank");
+    }
+  </script>
+</body>
+</html>
