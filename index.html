@@ -840,169 +840,52 @@
                     </button>
                 </div>
 
-                <!-- ================== DOCENTES TAB ================== -->
-<div id="adminDocentes" class="admin-tab">
-    <div class="bg-white rounded-lg shadow-lg p-6">
-        <h4 class="text-lg font-semibold mb-4 text-blue-600">
-            <i class="fas fa-chalkboard-teacher mr-2"></i> Gestión de Docentes
-        </h4>
-
-        <div class="grid md:grid-cols-2 gap-6">
-            <!-- FORMULARIO -->
-            <div>
-                <h5 class="font-semibold mb-3">Agregar / Editar Docente</h5>
-                <div class="space-y-4">
-                    <input type="text" id="nuevoDocenteId" placeholder="ID del docente" class="input-modern w-full">
-                    <input type="text" id="nuevoDocenteNombre" placeholder="Nombre completo" class="input-modern w-full">
-                    <input type="password" id="nuevoDocentePassword" placeholder="Contraseña" class="input-modern w-full">
-
-                    <select id="nuevoDocenteMateria" class="input-modern w-full">
-                        <option value="">Materia principal (opcional)</option>
-                        <option value="matematicas">Matemáticas</option>
-                        <option value="espanol">Español</option>
-                        <option value="ciencias">Ciencias Naturales</option>
-                        <option value="sociales">Ciencias Sociales</option>
-                        <option value="ingles">Inglés</option>
-                        <option value="educacion_fisica">Educación Física</option>
-                        <option value="artes">Artes</option>
-                        <option value="danzas">Danzas</option>
-                        <option value="musica">Música</option>
-                        <option value="etica">Ética</option>
-                        <option value="comprension">Comprensión Lectora</option>
-                        <option value="tecnologia">Tecnología</option>
-                        <option value="ortografia">Ortografía</option>
-                        <option value="religion">Religión</option>
-                    </select>
-
-                    <select id="nuevoDocenteCoordinador" class="input-modern w-full">
-                        <option value="">Coordinador de grado (opcional)</option>
-                        <option value="jardin">Jardín</option>
-                        <option value="transicion">Transición</option>
-                        <option value="primero">Primero</option>
-                        <option value="segundo">Segundo</option>
-                        <option value="tercero">Tercero</option>
-                        <option value="cuarto">Cuarto</option>
-                        <option value="quinto">Quinto</option>
-                    </select>
-
-                    <!-- BOTÓN PRINCIPAL -->
-                    <button id="btnAgregarDocente" onclick="agregarDocente()" 
-                            class="hml primary w-full bg-blue-800 hover:bg-blue-700 text-white py-2 rounded">
-                        <i class="fas fa-plus mr-2"></i> Agregar Docente
-                    </button>
-                </div>
-            </div>
-
-            <!-- LISTA DE DOCENTES -->
-            <div>
-                <h5 class="font-semibold mb-3">Lista de Docentes</h5>
-                <ul id="listaDocentes" class="space-y-2 text-sm text-gray-700">
-                    <!-- Aquí se cargarán los docentes -->
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ================== JAVASCRIPT ================== -->
-<script>
-    // Arreglo global de docentes
-    let docentes = JSON.parse(localStorage.getItem("docentes")) || [];
-    let indiceEditando = null;
-
-    // Al cargar la página, mostrar lista
-    window.onload = function () {
-        actualizarListaDocentes();
-    };
-
-    // Agregar o guardar cambios de un docente
-    function agregarDocente() {
-        let id = document.getElementById("nuevoDocenteId").value.trim();
-        let nombre = document.getElementById("nuevoDocenteNombre").value.trim();
-        let password = document.getElementById("nuevoDocentePassword").value.trim();
-        let materia = document.getElementById("nuevoDocenteMateria").value;
-        let coordinador = document.getElementById("nuevoDocenteCoordinador").value;
-
-        if (!id || !nombre || !password) {
-            alert("⚠️ Por favor complete los campos obligatorios: ID, Nombre y Contraseña.");
-            return;
-        }
-
-        if (indiceEditando !== null) {
-            // Editar docente existente
-            docentes[indiceEditando] = { id, nombre, password, materia, coordinador };
-            indiceEditando = null;
-            document.querySelector("#btnAgregarDocente").innerHTML = `<i class="fas fa-plus mr-2"></i> Agregar Docente`;
-            alert("✅ Cambios guardados correctamente");
-        } else {
-            // Agregar nuevo docente
-            let docente = { id, nombre, password, materia, coordinador };
-            docentes.push(docente);
-            alert("✅ Docente agregado correctamente");
-        }
-
-        // Guardar en localStorage
-        localStorage.setItem("docentes", JSON.stringify(docentes));
-
-        // Actualizar lista y limpiar formulario
-        actualizarListaDocentes();
-        limpiarFormulario();
-    }
-
-    // Mostrar lista de docentes
-    function actualizarListaDocentes() {
-        let lista = document.getElementById("listaDocentes");
-        lista.innerHTML = "";
-
-        docentes.forEach((docente, index) => {
-            let li = document.createElement("li");
-            li.className = "p-2 border rounded flex justify-between items-center";
-
-            li.innerHTML = `
-                <span><strong>${docente.nombre}</strong> (${docente.id}) - ${docente.materia || "Sin materia"}</span>
-                <div class="space-x-2">
-                    <button onclick="editarDocente(${index})" class="text-blue-600 hover:underline">Editar</button>
-                    <button onclick="eliminarDocente(${index})" class="text-red-600 hover:underline">Eliminar</button>
-                </div>
-            `;
-            lista.appendChild(li);
-        });
-    }
-
-    // Cargar datos de un docente para editarlos
-    function editarDocente(index) {
-        let docente = docentes[index];
-
-        document.getElementById("nuevoDocenteId").value = docente.id;
-        document.getElementById("nuevoDocenteNombre").value = docente.nombre;
-        document.getElementById("nuevoDocentePassword").value = docente.password;
-        document.getElementById("nuevoDocenteMateria").value = docente.materia;
-        document.getElementById("nuevoDocenteCoordinador").value = docente.coordinador;
-
-        indiceEditando = index;
-
-        // Cambiar texto del botón a "Guardar Cambios"
-        document.querySelector("#btnAgregarDocente").innerHTML = `<i class="fas fa-save mr-2"></i> Guardar Cambios`;
-    }
-
-    // Eliminar un docente
-    function eliminarDocente(index) {
-        if (confirm("¿Seguro que deseas eliminar este docente?")) {
-            docentes.splice(index, 1);
-            localStorage.setItem("docentes", JSON.stringify(docentes));
-            actualizarListaDocentes();
-        }
-    }
-
-    // Limpiar formulario
-    function limpiarFormulario() {
-        document.getElementById("nuevoDocenteId").value = "";
-        document.getElementById("nuevoDocenteNombre").value = "";
-        document.getElementById("nuevoDocentePassword").value = "";
-        document.getElementById("nuevoDocenteMateria").value = "";
-        document.getElementById("nuevoDocenteCoordinador").value = "";
-    }
-</script>
+       <!-- Docentes Tab -->
+                <div id="adminDocentes" class="admin-tab">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-lg font-semibold mb-4 text-blue-600">
+                            <i class="fas fa-chalkboard-teacher mr-2"></i> Gestión de Docentes
+                        </h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-semibold mb-3">Agregar Nuevo Docente</h5>
+                                <div class="space-y-4">
+                                    <input type="text" id="nuevoDocenteId" placeholder="ID del docente" class="input-modern w-full">>
+                                    <input type="text" id="nuevoDocenteNombre" placeholder="Nombre completo"class="input-modern w-full"> >
+                                    <input type="password" id="nuevoDocentePassword" placeholder="Contraseña" class="input-modern w-full">>
+                                    <select id="nuevoDocenteMateria" class="input-modern w-full">>
+                                        <option value="">Materia principal (opcional)</option>
+                                        <option value="matematicas">Matemáticas</option>
+                                        <option value="espanol">Español</option>
+                                        <option value="ciencias">Ciencias Naturales</option>
+                                        <option value="sociales">Ciencias Sociales</option>
+                                        <option value="ingles">Inglés</option>
+                                        <option value="educacion_fisica">Educación Física</option>
+                                        <option value="artes">Artes</option>
+                                        <option value="danzas">Danzas</option>
+                                        <option value="musica">Musica</option>
+                                        <option value="etica">Etica</option>
+                                        <option value="comprension">Comprension Lectora</option>
+                                        <option value="tecnologia">Tecnologia</option>
+                                        <option value="ortografia">Ortografia</option>
+                                        <option value="religion">Religion</option>
+                                    </select>
+                                    <select id="nuevoDocenteCoordinador" class="input-modern w-full">
+                                        <option value="">Coordinador de grado (opcional)</option>
+                                        <option value="jardin">Jardín</option>
+                                        <option value="transicion">Transición</option>
+                                        <option value="primero">Primero</option>
+                                        <option value="segundo">Segundo</option>
+                                        <option value="tercero">Tercero</option>
+                                        <option value="cuarto">Cuarto</option>
+                                        <option value="quinto">Quinto</option>
+                                    </select>
+                                    <button onclick="agregarDocente()" class="hml primary">
+                                        <i class="fas fa-plus mr-2"></i> Agregar Docente
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
 
 
                 <!-- Estudiantes Tab -->
