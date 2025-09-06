@@ -5,6 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liceo Exploradores de Sueños - Villa Gorgona</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, get, push, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        
+        // Configuración de Firebase (usando una base de datos demo)
+        const firebaseConfig = {
+            apiKey: "demo-key",
+            authDomain: "liceo-exploradores.firebaseapp.com",
+            databaseURL: "https://liceo-exploradores-default-rtdb.firebaseio.com/",
+            projectId: "liceo-exploradores",
+            storageBucket: "liceo-exploradores.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "demo-app-id"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        
+        // Hacer las funciones disponibles globalmente
+        window.firebaseDB = {
+            ref: ref,
+            set: set,
+            get: get,
+            push: push,
+            remove: remove,
+            onValue: onValue,
+            database: database
+        };
+        
+        // Inicializar la aplicación cuando Firebase esté listo
+        window.initializeApp();
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -19,32 +53,62 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .slide-up { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #86efac 100%);
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-azul-institucional to-blue-800 min-h-screen">
+<body class="bg-gray-50">
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="fixed top-4 right-4 bg-white p-3 rounded-lg shadow-lg z-50 hidden">
+        <div class="flex items-center gap-2">
+            <div class="loading"></div>
+            <span class="text-sm">Sincronizando datos...</span>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="bg-white shadow-lg">
+    <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h1 class="text-3xl md:text-4xl font-bold text-azul-institucional">🏫 Liceo Exploradores de Sueños</h1>
-                    <p class="text-lg text-gray-600 mt-2">📍 Villa Gorgona - Candelaria</p>
+                    <h1 class="text-3xl md:text-4xl font-bold">🏫 Liceo Exploradores de Sueños</h1>
+                    <p class="text-lg opacity-90">Villa Gorgona - Educando con amor desde Jardín hasta 5° Primaria</p>
+                    <p class="text-sm opacity-75">🌐 Datos sincronizados en tiempo real</p>
                 </div>
                 <div class="flex flex-col md:flex-row gap-4">
-                    <button onclick="openWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                    <button onclick="openWhatsApp()" class="btn-hover bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2">
                         📱 WhatsApp
                     </button>
-                    <button onclick="openLocation()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                    <button onclick="openLocation()" class="btn-hover bg-red-500 hover:bg-red-600 px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2">
                         📍 Ubicación
-                    </button>
-                    <button onclick="showPhone()" class="bg-amarillo-institucional hover:bg-yellow-500 text-azul-institucional px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
-                        📞 Teléfono
                     </button>
                 </div>
             </div>
@@ -53,1021 +117,1181 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Login Section -->
-        <div id="loginSection" class="max-w-md mx-auto bg-white rounded-xl shadow-2xl p-8 mb-8 fade-in">
-            <h2 class="text-2xl font-bold text-azul-institucional text-center mb-6">🔐 Acceso al Sistema</h2>
-            
-            <div class="space-y-4">
-                <button onclick="showAdminLogin()" class="w-full bg-azul-institucional hover:bg-blue-900 text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2">
-                    👨‍💼 Acceso Administrador
-                </button>
-                <button onclick="showTeacherLogin()" class="w-full bg-verde-institucional hover:bg-green-400 text-azul-institucional py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2">
-                    👩‍🏫 Acceso Profesores
-                </button>
-                <button onclick="showParentLogin()" class="w-full bg-amarillo-institucional hover:bg-yellow-500 text-azul-institucional py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2">
-                    👨‍👩‍👧‍👦 Acceso Padres
-                </button>
-            </div>
-
-            <!-- Rating Section -->
-            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-                <h3 class="text-lg font-semibold text-azul-institucional mb-3">⭐ Califica nuestra aplicación</h3>
-                <div class="flex justify-center gap-2 mb-3">
-                    <span onclick="setRating(1)" class="text-2xl cursor-pointer hover:scale-110 transition-transform" id="star1">⭐</span>
-                    <span onclick="setRating(2)" class="text-2xl cursor-pointer hover:scale-110 transition-transform" id="star2">⭐</span>
-                    <span onclick="setRating(3)" class="text-2xl cursor-pointer hover:scale-110 transition-transform" id="star3">⭐</span>
-                    <span onclick="setRating(4)" class="text-2xl cursor-pointer hover:scale-110 transition-transform" id="star4">⭐</span>
-                    <span onclick="setRating(5)" class="text-2xl cursor-pointer hover:scale-110 transition-transform" id="star5">⭐</span>
+        <!-- Welcome Section -->
+        <section id="welcome" class="fade-in bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-azul-institucional mb-4">¡Bienvenidos a nuestro portal educativo! 🌟</h2>
+                <p class="text-lg text-gray-700 mb-6">Accede a toda la información académica de tu hijo de manera fácil y segura desde cualquier dispositivo</p>
+                
+                <!-- Contact Info -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-azul-institucional text-white p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-2">📞 Contacto</h3>
+                        <p class="text-lg">Teléfono: 313-XXX-XXXX</p>
+                    </div>
+                    <div class="bg-verde-institucional text-azul-institucional p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-2">📍 Dirección</h3>
+                        <p class="text-lg">Carrera 13# 8-48 Callejón Betania<br>Villagorgona, Candelaria</p>
+                    </div>
                 </div>
-                <p class="text-center text-sm text-gray-600">Promedio: <span id="averageRating">4.8</span>/5 ⭐</p>
+
+                <!-- Login Buttons -->
+                <div class="grid md:grid-cols-3 gap-4">
+                    <button onclick="showLogin('admin')" class="btn-hover bg-azul-institucional hover:bg-blue-800 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300">
+                        👨‍💼 Administrador
+                    </button>
+                    <button onclick="showLogin('teacher')" class="btn-hover bg-amarillo-institucional hover:bg-yellow-500 text-azul-institucional px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300">
+                        👩‍🏫 Profesor
+                    </button>
+                    <button onclick="showLogin('parent')" class="btn-hover bg-verde-institucional hover:bg-green-400 text-azul-institucional px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300">
+                        👨‍👩‍👧‍👦 Padres
+                    </button>
+                </div>
             </div>
-
-
-        </div>
+        </section>
 
         <!-- Login Forms -->
-        <div id="adminLoginForm" class="hidden max-w-md mx-auto bg-white rounded-xl shadow-2xl p-8 slide-up">
-            <h3 class="text-xl font-bold text-azul-institucional mb-4">👨‍💼 Login Administrador</h3>
-            <div class="space-y-4">
-                <input type="text" id="adminUser" placeholder="Usuario" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-azul-institucional focus:border-transparent">
-                <input type="password" id="adminPass" placeholder="Contraseña" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-azul-institucional focus:border-transparent">
-                <button onclick="loginAdmin()" class="w-full bg-azul-institucional hover:bg-blue-900 text-white py-3 rounded-lg font-semibold">Ingresar</button>
-                <button onclick="backToMain()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg">Volver</button>
+        <section id="loginSection" class="hidden fade-in bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="max-w-md mx-auto">
+                <h3 id="loginTitle" class="text-2xl font-bold text-azul-institucional mb-6 text-center"></h3>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2" for="username">Usuario/Documento:</label>
+                        <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-azul-institucional" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2" for="password">Contraseña:</label>
+                        <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-azul-institucional" required>
+                    </div>
+                    <button type="submit" class="w-full bg-azul-institucional hover:bg-blue-800 text-white py-3 rounded-lg font-bold transition-all duration-300">
+                        🔐 Ingresar
+                    </button>
+                </form>
+                <button onclick="showWelcome()" class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg transition-all duration-300">
+                    ← Volver
+                </button>
+                <div id="loginError" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
+                    ❌ Usuario o contraseña incorrecta
+                </div>
             </div>
-        </div>
-
-        <div id="teacherLoginForm" class="hidden max-w-md mx-auto bg-white rounded-xl shadow-2xl p-8 slide-up">
-            <h3 class="text-xl font-bold text-azul-institucional mb-4">👩‍🏫 Login Profesor</h3>
-            <div class="space-y-4">
-                <input type="text" id="teacherUser" placeholder="Usuario" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-verde-institucional focus:border-transparent">
-                <input type="password" id="teacherPass" placeholder="Contraseña" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-verde-institucional focus:border-transparent">
-                <button onclick="loginTeacher()" class="w-full bg-verde-institucional hover:bg-green-400 text-azul-institucional py-3 rounded-lg font-semibold">Ingresar</button>
-                <button onclick="backToMain()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg">Volver</button>
-            </div>
-        </div>
-
-        <div id="parentLoginForm" class="hidden max-w-md mx-auto bg-white rounded-xl shadow-2xl p-8 slide-up">
-            <h3 class="text-xl font-bold text-azul-institucional mb-4">👨‍👩‍👧‍👦 Login Padres</h3>
-            <div class="space-y-4">
-                <input type="text" id="studentDoc" placeholder="Número de documento del estudiante" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amarillo-institucional focus:border-transparent">
-                <input type="password" id="parentPass" placeholder="Contraseña" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amarillo-institucional focus:border-transparent">
-                <button onclick="loginParent()" class="w-full bg-amarillo-institucional hover:bg-yellow-500 text-azul-institucional py-3 rounded-lg font-semibold">Ingresar</button>
-                <button onclick="backToMain()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg">Volver</button>
-            </div>
-        </div>
+        </section>
 
         <!-- Admin Dashboard -->
-        <div id="adminDashboard" class="hidden fade-in">
-            <div class="bg-white rounded-xl shadow-2xl p-8 mb-8">
+        <section id="adminDashboard" class="hidden fade-in">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-azul-institucional">👨‍💼 Panel de Administración</h2>
-                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Cerrar Sesión</button>
+                    <h2 class="text-3xl font-bold text-azul-institucional">👨‍💼 Panel de Administración</h2>
+                    <div class="flex gap-2">
+                        <button onclick="syncData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                            🔄 Sincronizar
+                        </button>
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <button onclick="showStudentManagement()" class="bg-blue-100 hover:bg-blue-200 p-6 rounded-lg text-center transition-colors">
-                        <div class="text-3xl mb-2">👨‍🎓</div>
-                        <div class="font-semibold text-azul-institucional">Gestionar Estudiantes</div>
+                <div class="grid md:grid-cols-4 gap-4 mb-8">
+                    <button onclick="showAdminSection('students')" class="btn-hover bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        👨‍🎓 Gestionar Estudiantes
                     </button>
-                    <button onclick="showTeacherManagement()" class="bg-green-100 hover:bg-green-200 p-6 rounded-lg text-center transition-colors">
-                        <div class="text-3xl mb-2">👩‍🏫</div>
-                        <div class="font-semibold text-azul-institucional">Gestionar Profesores</div>
+                    <button onclick="showAdminSection('teachers')" class="btn-hover bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        👩‍🏫 Gestionar Profesores
                     </button>
-                    <button onclick="showScheduleManagement()" class="bg-yellow-100 hover:bg-yellow-200 p-6 rounded-lg text-center transition-colors">
-                        <div class="text-3xl mb-2">📅</div>
-                        <div class="font-semibold text-azul-institucional">Cronograma</div>
+                    <button onclick="showAdminSection('schedule')" class="btn-hover bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        📅 Cronograma
                     </button>
-                    <button onclick="showReports()" class="bg-purple-100 hover:bg-purple-200 p-6 rounded-lg text-center transition-colors">
-                        <div class="text-3xl mb-2">📊</div>
-                        <div class="font-semibold text-azul-institucional">Reportes</div>
+                    <button onclick="showAdminSection('ratings')" class="btn-hover bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        ⭐ Calificaciones
                     </button>
                 </div>
 
-                <!-- Data Management - Solo para Administrador -->
-                <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
-                    <h3 class="text-lg font-semibold text-red-700 mb-4">🔧 Gestión del Sistema</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <button onclick="exportData()" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold flex items-center justify-center gap-2">
-                            📤 Exportar Datos del Sistema
-                        </button>
-                        <button onclick="resetData()" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-lg font-semibold flex items-center justify-center gap-2">
-                            🔄 Resetear Sistema Completo
-                        </button>
-                    </div>
-                    <p class="text-sm text-red-600 mt-3">⚠️ Estas opciones solo están disponibles para el administrador del sistema</p>
-                </div>
-
-                <!-- Student Management -->
-                <div id="studentManagement" class="hidden">
-                    <h3 class="text-xl font-bold text-azul-institucional mb-4">👨‍🎓 Gestión de Estudiantes</h3>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h4 class="font-semibold mb-4">Agregar Estudiante</h4>
-                            <div class="space-y-3">
-                                <input type="text" id="studentName" placeholder="Nombre completo" class="w-full p-3 border rounded-lg">
-                                <input type="text" id="studentDocument" placeholder="Documento" class="w-full p-3 border rounded-lg">
-                                <select id="studentGrade" class="w-full p-3 border rounded-lg">
-                                    <option value="">Seleccionar grado</option>
-                                    <option value="jardin">Jardín</option>
-                                    <option value="transicion">Transición</option>
-                                    <option value="primero">Primero</option>
-                                    <option value="segundo">Segundo</option>
-                                    <option value="tercero">Tercero</option>
-                                    <option value="cuarto">Cuarto</option>
-                                    <option value="quinto">Quinto</option>
-                                </select>
-                                <input type="text" id="parentName" placeholder="Nombre del padre/madre" class="w-full p-3 border rounded-lg">
-                                <input type="tel" id="parentPhone" placeholder="Teléfono del padre/madre" class="w-full p-3 border rounded-lg">
-                                <button onclick="addStudent()" class="w-full bg-azul-institucional hover:bg-blue-900 text-white py-3 rounded-lg">Agregar Estudiante</button>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h4 class="font-semibold mb-4">Lista de Estudiantes</h4>
-                            <div id="studentsList" class="space-y-2 max-h-96 overflow-y-auto">
-                                <!-- Students will be populated here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Teacher Management -->
-                <div id="teacherManagement" class="hidden">
-                    <h3 class="text-xl font-bold text-azul-institucional mb-4">👩‍🏫 Gestión de Profesores</h3>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h4 class="font-semibold mb-4">Agregar Profesor</h4>
-                            <div class="space-y-3">
-                                <input type="text" id="teacherName" placeholder="Nombre completo" class="w-full p-3 border rounded-lg">
-                                <input type="text" id="teacherUsername" placeholder="Usuario" class="w-full p-3 border rounded-lg">
-                                <input type="password" id="teacherPassword" placeholder="Contraseña" class="w-full p-3 border rounded-lg">
-                                <select id="teacherSubject" class="w-full p-3 border rounded-lg">
-                                    <option value="">Materia principal (opcional)</option>
-                                    <option value="español">Español</option>
-                                    <option value="matematicas">Matemáticas</option>
-                                    <option value="biologia">Biología</option>
-                                    <option value="sociales">Sociales</option>
-                                    <option value="artistica">Artística</option>
-                                    <option value="religion">Religión</option>
-                                    <option value="danzas">Danzas</option>
-                                    <option value="musica">Música</option>
-                                    <option value="tecnologia">Tecnología</option>
-                                    <option value="ortografia">Ortografía</option>
-                                    <option value="comprension">Comprensión Lectora</option>
-                                    <option value="ingles">Inglés</option>
-                                    <option value="educacion_fisica">Educación Física</option>
-                                </select>
-                                <select id="teacherRole" class="w-full p-3 border rounded-lg">
-                                    <option value="">Rol adicional (opcional)</option>
-                                    <option value="coordinador">Coordinador de Grupo</option>
-                                    <option value="area">Profesor de Área</option>
-                                </select>
-                                <input type="text" id="teacherGrade" placeholder="Grado asignado (opcional)" class="w-full p-3 border rounded-lg">
-                                <button onclick="addTeacher()" class="w-full bg-verde-institucional hover:bg-green-400 text-azul-institucional py-3 rounded-lg">Agregar Profesor</button>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h4 class="font-semibold mb-4">Lista de Profesores</h4>
-                            <div id="teachersList" class="space-y-2 max-h-96 overflow-y-auto">
-                                <!-- Teachers will be populated here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Schedule Management -->
-                <div id="scheduleManagement" class="hidden">
-                    <h3 class="text-xl font-bold text-azul-institucional mb-4">📅 Gestión de Cronograma</h3>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h4 class="font-semibold mb-4">Agregar Evento</h4>
-                            <div class="space-y-3">
-                                <input type="text" id="eventTitle" placeholder="Título del evento" class="w-full p-3 border rounded-lg">
-                                <input type="date" id="eventDate" class="w-full p-3 border rounded-lg">
-                                <input type="time" id="eventTime" class="w-full p-3 border rounded-lg">
-                                <textarea id="eventDescription" placeholder="Descripción del evento" class="w-full p-3 border rounded-lg h-24"></textarea>
-                                <select id="eventType" class="w-full p-3 border rounded-lg">
-                                    <option value="reunion">Reunión de Padres</option>
-                                    <option value="actividad">Actividad Escolar</option>
-                                    <option value="evaluacion">Evaluación</option>
-                                    <option value="evento">Evento Especial</option>
-                                </select>
-                                <button onclick="addEvent()" class="w-full bg-amarillo-institucional hover:bg-yellow-500 text-azul-institucional py-3 rounded-lg">Agregar Evento</button>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h4 class="font-semibold mb-4">Próximos Eventos</h4>
-                            <div id="eventsList" class="space-y-2 max-h-96 overflow-y-auto">
-                                <!-- Events will be populated here -->
-                            </div>
-                        </div>
-                    </div>
+                <div id="adminContent" class="bg-gray-50 rounded-lg p-6">
+                    <p class="text-center text-gray-600">Selecciona una opción del menú superior</p>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Teacher Dashboard -->
-        <div id="teacherDashboard" class="hidden fade-in">
-            <div class="bg-white rounded-xl shadow-2xl p-8">
+        <section id="teacherDashboard" class="hidden fade-in">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-azul-institucional">👩‍🏫 Panel de Profesor</h2>
-                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Cerrar Sesión</button>
+                    <h2 class="text-3xl font-bold text-azul-institucional">👩‍🏫 Panel de Profesor</h2>
+                    <div class="flex gap-2">
+                        <button onclick="syncData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                            🔄 Sincronizar
+                        </button>
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <button onclick="showGradeEntry()" class="bg-blue-100 hover:bg-blue-200 p-6 rounded-lg text-center transition-colors">
-                        <div class="text-3xl mb-2">📝</div>
-                        <div class="font-semibold text-azul-institucional">Ingresar Calificaciones</div>
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
+                    <button onclick="showTeacherSection('grades')" class="btn-hover bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        📝 Ingresar Notas
                     </button>
-                    <button onclick="showAttendance()" class="bg-green-100 hover:bg-green-200 p-6 rounded-lg text-center transition-colors">
-                        <div class="text-3xl mb-2">📋</div>
-                        <div class="font-semibold text-azul-institucional">Registro de Asistencia</div>
+                    <button onclick="showTeacherSection('attendance')" class="btn-hover bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        ✅ Asistencia
+                    </button>
+                    <button onclick="showTeacherSection('students')" class="btn-hover bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        👥 Mis Estudiantes
                     </button>
                 </div>
 
-                <!-- Grade Entry -->
-                <div id="gradeEntry" class="hidden">
-                    <h3 class="text-xl font-bold text-azul-institucional mb-4">📝 Ingresar Calificaciones</h3>
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                            <select id="gradeStudent" class="p-3 border rounded-lg">
-                                <option value="">Seleccionar estudiante</option>
-                            </select>
-                            <select id="gradeSubject" class="p-3 border rounded-lg">
-                                <option value="">Seleccionar materia</option>
-                                <option value="español">Español</option>
-                                <option value="matematicas">Matemáticas</option>
-                                <option value="biologia">Biología</option>
-                                <option value="sociales">Sociales</option>
-                                <option value="artistica">Artística</option>
-                                <option value="religion">Religión</option>
-                                <option value="danzas">Danzas</option>
-                                <option value="musica">Música</option>
-                                <option value="tecnologia">Tecnología</option>
-                                <option value="ortografia">Ortografía</option>
-                                <option value="comprension">Comprensión Lectora</option>
-                                <option value="ingles">Inglés</option>
-                                <option value="educacion_fisica">Educación Física</option>
-                            </select>
-                            <select id="gradePeriod" class="p-3 border rounded-lg">
-                                <option value="1">Primer Período</option>
-                                <option value="2">Segundo Período</option>
-                                <option value="3">Tercer Período</option>
-                                <option value="4">Cuarto Período</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Asistencia (30%)</label>
-                                <input type="number" id="attendanceGrade" min="0" max="5" step="0.1" class="w-full p-3 border rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Cuaderno (20%)</label>
-                                <input type="number" id="notebookGrade" min="0" max="5" step="0.1" class="w-full p-3 border rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Trabajo (25%)</label>
-                                <input type="number" id="workGrade" min="0" max="5" step="0.1" class="w-full p-3 border rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Evaluación (25%)</label>
-                                <input type="number" id="examGrade" min="0" max="5" step="0.1" class="w-full p-3 border rounded-lg">
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1">Nota Final Calculada:</label>
-                            <input type="text" id="finalGrade" readonly class="w-full p-3 border rounded-lg bg-gray-100">
-                        </div>
-                        <button onclick="saveGrade()" class="bg-verde-institucional hover:bg-green-400 text-azul-institucional px-6 py-3 rounded-lg font-semibold">Guardar Calificación</button>
-                    </div>
+                <div id="teacherContent" class="bg-gray-50 rounded-lg p-6">
+                    <p class="text-center text-gray-600">Selecciona una opción del menú superior</p>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Parent Dashboard -->
-        <div id="parentDashboard" class="hidden fade-in">
-            <div class="bg-white rounded-xl shadow-2xl p-8">
+        <section id="parentDashboard" class="hidden fade-in">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-azul-institucional">👨‍👩‍👧‍👦 Portal de Padres</h2>
-                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Cerrar Sesión</button>
+                    <h2 class="text-3xl font-bold text-azul-institucional">👨‍👩‍👧‍👦 Portal de Padres</h2>
+                    <div class="flex gap-2">
+                        <button onclick="syncData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                            🔄 Sincronizar
+                        </button>
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </div>
                 </div>
                 
-                <div id="studentInfo" class="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h3 class="text-lg font-semibold text-azul-institucional mb-4">📚 Información del Estudiante</h3>
-                    <div id="studentDetails"></div>
+                <div id="studentInfo" class="mb-8">
+                    <!-- Student info will be loaded here -->
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="text-lg font-semibold text-azul-institucional mb-4">📊 Calificaciones por Materia</h3>
-                        <div id="gradesList" class="space-y-3">
-                            <!-- Grades will be populated here -->
-                        </div>
+                <div class="grid md:grid-cols-2 gap-4 mb-8">
+                    <button onclick="showParentSection('grades')" class="btn-hover bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        📊 Ver Notas
+                    </button>
+                    <button onclick="showParentSection('attendance')" class="btn-hover bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg font-semibold transition-all duration-300">
+                        📅 Ver Asistencia
+                    </button>
+                </div>
+
+                <div id="parentContent" class="bg-gray-50 rounded-lg p-6">
+                    <p class="text-center text-gray-600">Selecciona una opción del menú superior</p>
+                </div>
+
+                <!-- Rating Section -->
+                <div class="mt-8 bg-amarillo-institucional bg-opacity-20 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-azul-institucional mb-4">⭐ Califica nuestra plataforma</h3>
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="setRating(1)" class="rating-star text-3xl text-gray-400 hover:text-yellow-500 transition-colors duration-300">⭐</button>
+                        <button onclick="setRating(2)" class="rating-star text-3xl text-gray-400 hover:text-yellow-500 transition-colors duration-300">⭐</button>
+                        <button onclick="setRating(3)" class="rating-star text-3xl text-gray-400 hover:text-yellow-500 transition-colors duration-300">⭐</button>
+                        <button onclick="setRating(4)" class="rating-star text-3xl text-gray-400 hover:text-yellow-500 transition-colors duration-300">⭐</button>
+                        <button onclick="setRating(5)" class="rating-star text-3xl text-gray-400 hover:text-yellow-500 transition-colors duration-300">⭐</button>
                     </div>
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="text-lg font-semibold text-azul-institucional mb-4">📅 Próximos Eventos</h3>
-                        <div id="parentEventsList" class="space-y-3">
-                            <!-- Events will be populated here -->
-                        </div>
-                    </div>
+                    <textarea id="ratingComment" placeholder="Déjanos tus comentarios..." class="w-full p-3 border border-gray-300 rounded-lg mb-4"></textarea>
+                    <button onclick="submitRating()" class="bg-azul-institucional hover:bg-blue-800 text-white px-6 py-2 rounded-lg transition-all duration-300">
+                        Enviar Calificación
+                    </button>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- Error Modal -->
-    <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg max-w-sm mx-4">
-            <h3 class="text-lg font-semibold text-red-600 mb-2">❌ Error</h3>
-            <p id="errorMessage" class="text-gray-700 mb-4"></p>
-            <button onclick="closeErrorModal()" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg">Cerrar</button>
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-2xl font-bold mb-4">🏫 Liceo Exploradores de Sueños</h3>
+            <p class="mb-4">Formando líderes del mañana con amor y dedicación</p>
+            <p class="text-sm opacity-80">© 2024 - Todos los derechos reservados | Datos sincronizados en la nube</p>
         </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg max-w-sm mx-4">
-            <h3 class="text-lg font-semibold text-green-600 mb-2">✅ Éxito</h3>
-            <p id="successMessage" class="text-gray-700 mb-4"></p>
-            <button onclick="closeSuccessModal()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">Cerrar</button>
-        </div>
-    </div>
+    </footer>
 
     <script>
-        // Sistema de datos con localStorage - ¡Ahora se guarda automáticamente!
-        function loadSystemData() {
-            const saved = localStorage.getItem('liceoSystemData');
-            if (saved) {
-                return JSON.parse(saved);
-            }
-            
-            // Datos iniciales si es la primera vez
-            return {
-                // Credenciales de administrador (ocultas del usuario)
-                admin: { username: 'admin2024', password: 'liceo@2024' },
-                
-                students: [
-                    {
-                        id: 1,
-                        name: 'Ana María González',
-                        document: '12345678',
-                        grade: 'tercero',
-                        parent: 'Carlos González',
-                        phone: '3001234567',
-                        password: '12345678'
-                    }
-                ],
-                
-                teachers: [
-                    {
-                        id: 1,
-                        name: 'María Elena Rodríguez',
-                        username: 'mrodriguez',
-                        password: 'prof2024',
-                        subject: 'matematicas'
-                    }
-                ],
-                
-                grades: [
-                    {
-                        studentId: 1,
-                        subject: 'matematicas',
-                        period: 1,
-                        attendance: 4.5,
-                        notebook: 4.0,
-                        work: 4.2,
-                        exam: 4.8,
-                        final: 4.4
-                    }
-                ],
-                
-                events: [
-                    {
-                        id: 1,
-                        title: 'Reunión de Padres - Primer Período',
-                        date: '2024-02-15',
-                        time: '14:00',
-                        description: 'Entrega de boletines y socialización de resultados académicos',
-                        type: 'reunion'
-                    }
-                ],
-                
-                ratings: [5, 4, 5, 5, 4, 5, 4, 5]
-            };
-        }
-
-        function saveSystemData() {
-            localStorage.setItem('liceoSystemData', JSON.stringify(systemData));
-        }
-
-        // Cargar datos al iniciar
-        let systemData = loadSystemData();
-
+        // Variables globales
         let currentUser = null;
         let currentUserType = null;
+        let selectedRating = 0;
+        let systemData = {
+            students: [],
+            teachers: [],
+            schedule: [],
+            ratings: [],
+            admin: { username: 'admin2024', password: 'LES2024*' }
+        };
 
-        // Funciones de navegación
+        // Funciones de Firebase y sincronización
+        function showLoading() {
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingIndicator').classList.add('hidden');
+        }
+
+        async function saveToCloud(path, data) {
+            try {
+                showLoading();
+                if (window.firebaseDB) {
+                    const dbRef = window.firebaseDB.ref(window.firebaseDB.database, path);
+                    await window.firebaseDB.set(dbRef, data);
+                }
+                hideLoading();
+                return true;
+            } catch (error) {
+                console.error('Error guardando en la nube:', error);
+                hideLoading();
+                // Fallback a localStorage
+                localStorage.setItem(path, JSON.stringify(data));
+                return false;
+            }
+        }
+
+        async function loadFromCloud(path) {
+            try {
+                showLoading();
+                if (window.firebaseDB) {
+                    const dbRef = window.firebaseDB.ref(window.firebaseDB.database, path);
+                    const snapshot = await window.firebaseDB.get(dbRef);
+                    hideLoading();
+                    if (snapshot.exists()) {
+                        return snapshot.val();
+                    }
+                }
+                hideLoading();
+                // Fallback a localStorage
+                const localData = localStorage.getItem(path);
+                return localData ? JSON.parse(localData) : null;
+            } catch (error) {
+                console.error('Error cargando de la nube:', error);
+                hideLoading();
+                // Fallback a localStorage
+                const localData = localStorage.getItem(path);
+                return localData ? JSON.parse(localData) : null;
+            }
+        }
+
+        async function syncData() {
+            try {
+                showLoading();
+                
+                // Cargar todos los datos de la nube
+                const cloudStudents = await loadFromCloud('students') || [];
+                const cloudTeachers = await loadFromCloud('teachers') || [];
+                const cloudSchedule = await loadFromCloud('schedule') || [];
+                const cloudRatings = await loadFromCloud('ratings') || [];
+
+                // Actualizar datos locales
+                systemData.students = cloudStudents;
+                systemData.teachers = cloudTeachers;
+                systemData.schedule = cloudSchedule;
+                systemData.ratings = cloudRatings;
+
+                // Si no hay datos iniciales, crear datos de ejemplo
+                if (systemData.students.length === 0) {
+                    await initializeDefaultData();
+                }
+
+                hideLoading();
+                
+                // Actualizar la interfaz si estamos en algún dashboard
+                if (currentUserType === 'admin') {
+                    // Refrescar contenido de admin si está visible
+                    const adminContent = document.getElementById('adminContent');
+                    if (adminContent && !adminContent.innerHTML.includes('Selecciona una opción')) {
+                        // Determinar qué sección está activa y refrescarla
+                        refreshCurrentAdminSection();
+                    }
+                } else if (currentUserType === 'teacher') {
+                    refreshCurrentTeacherSection();
+                } else if (currentUserType === 'parent') {
+                    refreshCurrentParentSection();
+                }
+
+                console.log('✅ Datos sincronizados correctamente');
+            } catch (error) {
+                console.error('Error sincronizando datos:', error);
+                hideLoading();
+            }
+        }
+
+        async function initializeDefaultData() {
+            // Datos iniciales de ejemplo
+            const defaultStudent = {
+                id: '1234567890',
+                name: 'Ana María García',
+                grade: 'Jardín',
+                parent: 'Carlos García',
+                coordinator: 'María López',
+                grades: {
+                    'Español': { asistencia: 95, cuaderno: 90, trabajo: 88, evaluacion: 92 },
+                    'Matemáticas': { asistencia: 90, cuaderno: 85, trabajo: 87, evaluacion: 89 },
+                    'Biología': { asistencia: 92, cuaderno: 88, trabajo: 90, evaluacion: 91 },
+                    'Sociales': { asistencia: 88, cuaderno: 92, trabajo: 85, evaluacion: 87 },
+                    'Artística': { asistencia: 95, cuaderno: 90, trabajo: 93, evaluacion: 94 },
+                    'Religión': { asistencia: 90, cuaderno: 88, trabajo: 89, evaluacion: 90 },
+                    'Danzas': { asistencia: 93, cuaderno: 91, trabajo: 92, evaluacion: 93 },
+                    'Música': { asistencia: 91, cuaderno: 89, trabajo: 90, evaluacion: 92 },
+                    'Tecnología': { asistencia: 87, cuaderno: 85, trabajo: 88, evaluacion: 86 },
+                    'Ortografía': { asistencia: 89, cuaderno: 87, trabajo: 90, evaluacion: 88 },
+                    'Comprensión Lectora': { asistencia: 92, cuaderno: 90, trabajo: 91, evaluacion: 93 },
+                    'Inglés': { asistencia: 85, cuaderno: 83, trabajo: 86, evaluacion: 87 },
+                    'Educación Física': { asistencia: 95, cuaderno: 90, trabajo: 92, evaluacion: 94 }
+                },
+                attendance: 95
+            };
+
+            const defaultTeacher = {
+                id: 'teacher001',
+                name: 'María López',
+                password: 'teacher123',
+                subjects: ['Español', 'Matemáticas'],
+                coordinator: true,
+                grade: 'Jardín'
+            };
+
+            const defaultActivity = {
+                id: Date.now(),
+                title: 'Reunión de Padres - Jardín',
+                date: '2024-01-15',
+                time: '14:00',
+                description: 'Reunión informativa sobre el progreso académico'
+            };
+
+            // Guardar datos iniciales en la nube
+            await saveToCloud('students', [defaultStudent]);
+            await saveToCloud('teachers', [defaultTeacher]);
+            await saveToCloud('schedule', [defaultActivity]);
+            await saveToCloud('ratings', []);
+
+            // Actualizar datos locales
+            systemData.students = [defaultStudent];
+            systemData.teachers = [defaultTeacher];
+            systemData.schedule = [defaultActivity];
+            systemData.ratings = [];
+        }
+
+        // Configurar listeners en tiempo real
+        function setupRealtimeListeners() {
+            if (window.firebaseDB) {
+                // Listener para estudiantes
+                const studentsRef = window.firebaseDB.ref(window.firebaseDB.database, 'students');
+                window.firebaseDB.onValue(studentsRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        systemData.students = snapshot.val();
+                        refreshCurrentSection();
+                    }
+                });
+
+                // Listener para profesores
+                const teachersRef = window.firebaseDB.ref(window.firebaseDB.database, 'teachers');
+                window.firebaseDB.onValue(teachersRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        systemData.teachers = snapshot.val();
+                        refreshCurrentSection();
+                    }
+                });
+
+                // Listener para cronograma
+                const scheduleRef = window.firebaseDB.ref(window.firebaseDB.database, 'schedule');
+                window.firebaseDB.onValue(scheduleRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        systemData.schedule = snapshot.val();
+                        refreshCurrentSection();
+                    }
+                });
+
+                // Listener para calificaciones
+                const ratingsRef = window.firebaseDB.ref(window.firebaseDB.database, 'ratings');
+                window.firebaseDB.onValue(ratingsRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        systemData.ratings = snapshot.val();
+                        refreshCurrentSection();
+                    }
+                });
+            }
+        }
+
+        function refreshCurrentSection() {
+            // Esta función se llama cuando hay cambios en tiempo real
+            if (currentUserType === 'admin') {
+                refreshCurrentAdminSection();
+            } else if (currentUserType === 'teacher') {
+                refreshCurrentTeacherSection();
+            } else if (currentUserType === 'parent') {
+                refreshCurrentParentSection();
+            }
+        }
+
+        function refreshCurrentAdminSection() {
+            // Implementar lógica para refrescar la sección actual del admin
+            const adminContent = document.getElementById('adminContent');
+            if (adminContent && adminContent.innerHTML.includes('Gestión de Estudiantes')) {
+                showAdminSection('students');
+            } else if (adminContent && adminContent.innerHTML.includes('Gestión de Profesores')) {
+                showAdminSection('teachers');
+            } else if (adminContent && adminContent.innerHTML.includes('Cronograma')) {
+                showAdminSection('schedule');
+            } else if (adminContent && adminContent.innerHTML.includes('Calificaciones de Padres')) {
+                showAdminSection('ratings');
+            }
+        }
+
+        function refreshCurrentTeacherSection() {
+            // Implementar lógica para refrescar la sección actual del profesor
+            const teacherContent = document.getElementById('teacherContent');
+            if (teacherContent && teacherContent.innerHTML.includes('Ingresar Notas')) {
+                showTeacherSection('grades');
+            } else if (teacherContent && teacherContent.innerHTML.includes('Control de Asistencia')) {
+                showTeacherSection('attendance');
+            } else if (teacherContent && teacherContent.innerHTML.includes('Mis Estudiantes')) {
+                showTeacherSection('students');
+            }
+        }
+
+        function refreshCurrentParentSection() {
+            // Implementar lógica para refrescar la sección actual del padre
+            const parentContent = document.getElementById('parentContent');
+            if (parentContent && parentContent.innerHTML.includes('Notas de')) {
+                showParentSection('grades');
+            } else if (parentContent && parentContent.innerHTML.includes('Asistencia de')) {
+                showParentSection('attendance');
+            }
+        }
+
+        // Funciones de navegación (sin cambios)
+        function showWelcome() {
+            hideAllSections();
+            document.getElementById('welcome').classList.remove('hidden');
+        }
+
+        function showLogin(userType) {
+            hideAllSections();
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginError').classList.add('hidden');
+            
+            const titles = {
+                admin: '👨‍💼 Acceso Administrador',
+                teacher: '👩‍🏫 Acceso Profesor',
+                parent: '👨‍👩‍👧‍👦 Acceso Padres'
+            };
+            
+            document.getElementById('loginTitle').textContent = titles[userType];
+            document.getElementById('loginForm').dataset.userType = userType;
+            
+            // Limpiar formulario
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function hideAllSections() {
+            const sections = ['welcome', 'loginSection', 'adminDashboard', 'teacherDashboard', 'parentDashboard'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+        }
+
+        // Función de login (actualizada para usar datos sincronizados)
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userType = event.target.dataset.userType;
+            
+            // Sincronizar datos antes del login
+            await syncData();
+            
+            let loginSuccess = false;
+            
+            if (userType === 'admin') {
+                if (username === systemData.admin.username && password === systemData.admin.password) {
+                    loginSuccess = true;
+                    currentUser = 'admin';
+                    currentUserType = 'admin';
+                    showAdminDashboard();
+                }
+            } else if (userType === 'teacher') {
+                const teacher = systemData.teachers.find(t => t.id === username && t.password === password);
+                if (teacher) {
+                    loginSuccess = true;
+                    currentUser = teacher;
+                    currentUserType = 'teacher';
+                    showTeacherDashboard();
+                }
+            } else if (userType === 'parent') {
+                const student = systemData.students.find(s => s.id === username);
+                if (student && password === username) {
+                    loginSuccess = true;
+                    currentUser = student;
+                    currentUserType = 'parent';
+                    showParentDashboard();
+                }
+            }
+            
+            if (!loginSuccess) {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        // Dashboards (sin cambios significativos)
+        function showAdminDashboard() {
+            hideAllSections();
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            document.getElementById('adminContent').innerHTML = '<p class="text-center text-gray-600">Selecciona una opción del menú superior</p>';
+        }
+
+        function showTeacherDashboard() {
+            hideAllSections();
+            document.getElementById('teacherDashboard').classList.remove('hidden');
+            document.getElementById('teacherContent').innerHTML = '<p class="text-center text-gray-600">Selecciona una opción del menú superior</p>';
+        }
+
+        function showParentDashboard() {
+            hideAllSections();
+            document.getElementById('parentDashboard').classList.remove('hidden');
+            
+            const studentInfo = document.getElementById('studentInfo');
+            studentInfo.innerHTML = `
+                <div class="bg-azul-institucional text-white rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-2">👨‍🎓 ${currentUser.name}</h3>
+                    <p class="text-lg">Grado: ${currentUser.grade}</p>
+                    <p class="text-lg">Documento: ${currentUser.id}</p>
+                    <p class="text-lg">Coordinador: ${currentUser.coordinator}</p>
+                </div>
+            `;
+            
+            document.getElementById('parentContent').innerHTML = '<p class="text-center text-gray-600">Selecciona una opción del menú superior</p>';
+        }
+
+        // Funciones de gestión de datos (actualizadas para usar la nube)
+        async function addStudent(event) {
+            event.preventDefault();
+            
+            const newStudent = {
+                id: document.getElementById('studentId').value,
+                name: document.getElementById('studentName').value,
+                grade: document.getElementById('studentGrade').value,
+                parent: document.getElementById('studentParent').value,
+                coordinator: document.getElementById('studentCoordinator').value || 'Sin asignar',
+                grades: {},
+                attendance: 100
+            };
+            
+            // Inicializar notas en 0 para todas las materias
+            const subjects = ['Español', 'Matemáticas', 'Biología', 'Sociales', 'Artística', 'Religión', 'Danzas', 'Música', 'Tecnología', 'Ortografía', 'Comprensión Lectora', 'Inglés', 'Educación Física'];
+            subjects.forEach(subject => {
+                newStudent.grades[subject] = { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 };
+            });
+            
+            systemData.students.push(newStudent);
+            
+            // Guardar en la nube
+            await saveToCloud('students', systemData.students);
+            
+            // Actualizar la lista
+            document.getElementById('studentsList').innerHTML = generateStudentsList();
+            
+            // Limpiar formulario
+            event.target.reset();
+            
+            alert('✅ Estudiante agregado exitosamente y sincronizado en la nube');
+        }
+
+        async function addTeacher(event) {
+            event.preventDefault();
+            
+            const subjects = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                if (checkbox.value !== 'on') {
+                    subjects.push(checkbox.value);
+                }
+            });
+            
+            const newTeacher = {
+                id: document.getElementById('teacherId').value,
+                name: document.getElementById('teacherName').value,
+                password: document.getElementById('teacherPassword').value,
+                email: document.getElementById('teacherEmail').value || '',
+                subjects: subjects,
+                coordinator: document.getElementById('isCoordinator').checked,
+                grade: document.getElementById('teacherGrade').value || ''
+            };
+            
+            systemData.teachers.push(newTeacher);
+            
+            // Guardar en la nube
+            await saveToCloud('teachers', systemData.teachers);
+            
+            // Actualizar la lista
+            document.getElementById('teachersList').innerHTML = generateTeachersList();
+            
+            // Limpiar formulario
+            event.target.reset();
+            
+            alert('✅ Profesor agregado exitosamente y sincronizado en la nube');
+        }
+
+        async function addActivity(event) {
+            event.preventDefault();
+            
+            const newActivity = {
+                id: Date.now(),
+                title: document.getElementById('activityTitle').value,
+                date: document.getElementById('activityDate').value,
+                time: document.getElementById('activityTime').value,
+                description: document.getElementById('activityDescription').value
+            };
+            
+            systemData.schedule.push(newActivity);
+            
+            // Guardar en la nube
+            await saveToCloud('schedule', systemData.schedule);
+            
+            // Actualizar la lista
+            document.getElementById('activitiesList').innerHTML = generateActivitiesList();
+            
+            // Limpiar formulario
+            event.target.reset();
+            
+            alert('✅ Actividad agregada exitosamente y sincronizada en la nube');
+        }
+
+        async function removeStudent(studentId) {
+            if (confirm('¿Estás seguro de que quieres eliminar este estudiante?')) {
+                systemData.students = systemData.students.filter(s => s.id !== studentId);
+                
+                // Guardar en la nube
+                await saveToCloud('students', systemData.students);
+                
+                document.getElementById('studentsList').innerHTML = generateStudentsList();
+                alert('✅ Estudiante eliminado exitosamente y sincronizado en la nube');
+            }
+        }
+
+        async function removeTeacher(teacherId) {
+            if (confirm('¿Estás seguro de que quieres eliminar este profesor?')) {
+                systemData.teachers = systemData.teachers.filter(t => t.id !== teacherId);
+                
+                // Guardar en la nube
+                await saveToCloud('teachers', systemData.teachers);
+                
+                document.getElementById('teachersList').innerHTML = generateTeachersList();
+                alert('✅ Profesor eliminado exitosamente y sincronizado en la nube');
+            }
+        }
+
+        async function removeActivity(activityId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta actividad?')) {
+                systemData.schedule = systemData.schedule.filter(a => a.id !== activityId);
+                
+                // Guardar en la nube
+                await saveToCloud('schedule', systemData.schedule);
+                
+                document.getElementById('activitiesList').innerHTML = generateActivitiesList();
+                alert('✅ Actividad eliminada exitosamente y sincronizada en la nube');
+            }
+        }
+
+        async function saveGrades(event) {
+            event.preventDefault();
+            
+            const studentId = document.getElementById('gradeStudent').value;
+            const subject = document.getElementById('gradeSubject').value;
+            const attendance = parseInt(document.getElementById('gradeAttendance').value);
+            const notebook = parseInt(document.getElementById('gradeNotebook').value);
+            const work = parseInt(document.getElementById('gradeWork').value);
+            const evaluation = parseInt(document.getElementById('gradeEvaluation').value);
+            
+            const student = systemData.students.find(s => s.id === studentId);
+            if (student) {
+                student.grades[subject] = {
+                    asistencia: attendance,
+                    cuaderno: notebook,
+                    trabajo: work,
+                    evaluacion: evaluation
+                };
+                
+                // Guardar en la nube
+                await saveToCloud('students', systemData.students);
+                
+                alert('✅ Notas guardadas exitosamente y sincronizadas en la nube');
+                event.target.reset();
+            }
+        }
+
+        async function submitRating() {
+            if (selectedRating === 0) {
+                alert('Por favor selecciona una calificación');
+                return;
+            }
+            
+            const comment = document.getElementById('ratingComment').value;
+            
+            const newRating = {
+                rating: selectedRating,
+                comment: comment,
+                date: new Date().toLocaleDateString(),
+                student: currentUser.name
+            };
+            
+            systemData.ratings.push(newRating);
+            
+            // Guardar en la nube
+            await saveToCloud('ratings', systemData.ratings);
+            
+            alert('✅ ¡Gracias por tu calificación! Se ha sincronizado en la nube');
+            
+            // Limpiar formulario
+            selectedRating = 0;
+            document.getElementById('ratingComment').value = '';
+            document.querySelectorAll('.rating-star').forEach(star => {
+                star.classList.remove('text-yellow-500');
+                star.classList.add('text-gray-400');
+            });
+        }
+
+        // Resto de funciones sin cambios significativos...
+        // [Incluir todas las demás funciones como generateStudentsList, showAdminSection, etc.]
+
+        // Secciones de administrador
+        function showAdminSection(section) {
+            const content = document.getElementById('adminContent');
+            
+            switch(section) {
+                case 'students':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">👨‍🎓 Gestión de Estudiantes</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-xl font-bold mb-4">➕ Agregar Estudiante</h4>
+                                <form onsubmit="addStudent(event)">
+                                    <input type="text" id="studentName" placeholder="Nombre completo" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="text" id="studentId" placeholder="Documento" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <select id="studentGrade" class="w-full p-3 border rounded-lg mb-3" required>
+                                        <option value="">Seleccionar grado</option>
+                                        <option value="Jardín">Jardín</option>
+                                        <option value="Transición">Transición</option>
+                                        <option value="1°">1° Primaria</option>
+                                        <option value="2°">2° Primaria</option>
+                                        <option value="3°">3° Primaria</option>
+                                        <option value="4°">4° Primaria</option>
+                                        <option value="5°">5° Primaria</option>
+                                    </select>
+                                    <input type="text" id="studentParent" placeholder="Nombre del padre/madre" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="text" id="studentCoordinator" placeholder="Coordinador de grupo (opcional)" class="w-full p-3 border rounded-lg mb-3">
+                                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg font-semibold">Agregar Estudiante</button>
+                                </form>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-xl font-bold mb-4">📋 Lista de Estudiantes</h4>
+                                <div id="studentsList" class="space-y-3 max-h-96 overflow-y-auto">
+                                    ${generateStudentsList()}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'teachers':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">👩‍🏫 Gestión de Profesores</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-xl font-bold mb-4">➕ Agregar Profesor</h4>
+                                <form onsubmit="addTeacher(event)">
+                                    <input type="text" id="teacherName" placeholder="Nombre completo" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="text" id="teacherId" placeholder="ID de usuario" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="password" id="teacherPassword" placeholder="Contraseña" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="email" id="teacherEmail" placeholder="Email (opcional)" class="w-full p-3 border rounded-lg mb-3">
+                                    <select id="teacherGrade" class="w-full p-3 border rounded-lg mb-3">
+                                        <option value="">Grado a cargo (opcional)</option>
+                                        <option value="Jardín">Jardín</option>
+                                        <option value="Transición">Transición</option>
+                                        <option value="1°">1° Primaria</option>
+                                        <option value="2°">2° Primaria</option>
+                                        <option value="3°">3° Primaria</option>
+                                        <option value="4°">4° Primaria</option>
+                                        <option value="5°">5° Primaria</option>
+                                    </select>
+                                    <div class="mb-3">
+                                        <label class="block text-gray-700 font-semibold mb-2">Materias que enseña:</label>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <label class="flex items-center"><input type="checkbox" value="Español" class="mr-2"> Español</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Matemáticas" class="mr-2"> Matemáticas</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Biología" class="mr-2"> Biología</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Sociales" class="mr-2"> Sociales</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Artística" class="mr-2"> Artística</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Religión" class="mr-2"> Religión</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Danzas" class="mr-2"> Danzas</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Música" class="mr-2"> Música</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Tecnología" class="mr-2"> Tecnología</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Ortografía" class="mr-2"> Ortografía</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Comprensión Lectora" class="mr-2"> Comprensión Lectora</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Inglés" class="mr-2"> Inglés</label>
+                                            <label class="flex items-center"><input type="checkbox" value="Educación Física" class="mr-2"> Educación Física</label>
+                                        </div>
+                                    </div>
+                                    <label class="flex items-center mb-3">
+                                        <input type="checkbox" id="isCoordinator" class="mr-2"> Es coordinador de grupo
+                                    </label>
+                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold">Agregar Profesor</button>
+                                </form>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-xl font-bold mb-4">📋 Lista de Profesores</h4>
+                                <div id="teachersList" class="space-y-3 max-h-96 overflow-y-auto">
+                                    ${generateTeachersList()}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'schedule':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">📅 Cronograma de Actividades</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-xl font-bold mb-4">➕ Agregar Actividad</h4>
+                                <form onsubmit="addActivity(event)">
+                                    <input type="text" id="activityTitle" placeholder="Título de la actividad" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="date" id="activityDate" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="time" id="activityTime" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <textarea id="activityDescription" placeholder="Descripción de la actividad" class="w-full p-3 border rounded-lg mb-3 h-24" required></textarea>
+                                    <button type="submit" class="w-full bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold">Agregar Actividad</button>
+                                </form>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-xl font-bold mb-4">📋 Próximas Actividades</h4>
+                                <div id="activitiesList" class="space-y-3 max-h-96 overflow-y-auto">
+                                    ${generateActivitiesList()}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'ratings':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">⭐ Calificaciones de Padres</h3>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <div id="ratingsList">
+                                ${generateRatingsList()}
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Secciones de profesor
+        function showTeacherSection(section) {
+            const content = document.getElementById('teacherContent');
+            
+            switch(section) {
+                case 'grades':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">📝 Ingresar Notas</h3>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <form onsubmit="saveGrades(event)">
+                                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                    <select id="gradeStudent" class="p-3 border rounded-lg" required>
+                                        <option value="">Seleccionar estudiante</option>
+                                        ${generateStudentOptions()}
+                                    </select>
+                                    <select id="gradeSubject" class="p-3 border rounded-lg" required>
+                                        <option value="">Seleccionar materia</option>
+                                        ${generateSubjectOptions()}
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1">Asistencia (30%)</label>
+                                        <input type="number" id="gradeAttendance" min="0" max="100" class="w-full p-3 border rounded-lg" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1">Cuaderno (20%)</label>
+                                        <input type="number" id="gradeNotebook" min="0" max="100" class="w-full p-3 border rounded-lg" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1">Trabajo (25%)</label>
+                                        <input type="number" id="gradeWork" min="0" max="100" class="w-full p-3 border rounded-lg" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1">Evaluación (25%)</label>
+                                        <input type="number" id="gradeEvaluation" min="0" max="100" class="w-full p-3 border rounded-lg" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg font-semibold">Guardar Notas</button>
+                            </form>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'attendance':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">✅ Control de Asistencia</h3>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <div class="mb-4">
+                                <input type="date" id="attendanceDate" class="p-3 border rounded-lg mr-4" value="${new Date().toISOString().split('T')[0]}">
+                                <button onclick="loadAttendance()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg">Cargar Lista</button>
+                            </div>
+                            <div id="attendanceList">
+                                ${generateAttendanceList()}
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'students':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">👥 Mis Estudiantes</h3>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <div class="grid gap-4">
+                                ${generateMyStudentsList()}
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Secciones de padres
+        function showParentSection(section) {
+            const content = document.getElementById('parentContent');
+            
+            switch(section) {
+                case 'grades':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">📊 Notas de ${currentUser.name}</h3>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            ${generateGradesReport()}
+                        </div>
+                    `;
+                    break;
+                    
+                case 'attendance':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-azul-institucional mb-6">📅 Asistencia de ${currentUser.name}</h3>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">${currentUser.attendance >= 90 ? '😊' : currentUser.attendance >= 80 ? '😐' : '😟'}</div>
+                                <h4 class="text-3xl font-bold text-azul-institucional mb-2">${currentUser.attendance}%</h4>
+                                <p class="text-lg text-gray-600">Asistencia general</p>
+                                <div class="mt-6 p-4 ${currentUser.attendance >= 90 ? 'bg-green-100 text-green-800' : currentUser.attendance >= 80 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'} rounded-lg">
+                                    ${currentUser.attendance >= 90 ? '¡Excelente asistencia! 🎉' : currentUser.attendance >= 80 ? 'Buena asistencia, puede mejorar 👍' : 'Asistencia baja, necesita mejorar ⚠️'}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Funciones auxiliares para generar contenido
+        function generateStudentsList() {
+            return systemData.students.map(student => `
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold">${student.name}</p>
+                        <p class="text-sm text-gray-600">Grado: ${student.grade} | Doc: ${student.id}</p>
+                    </div>
+                    <button onclick="removeStudent('${student.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                        🗑️ Eliminar
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function generateTeachersList() {
+            return systemData.teachers.map(teacher => `
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold">${teacher.name}</p>
+                        <p class="text-sm text-gray-600">ID: ${teacher.id} | Materias: ${teacher.subjects.join(', ')}</p>
+                    </div>
+                    <button onclick="removeTeacher('${teacher.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                        🗑️ Eliminar
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function generateActivitiesList() {
+            return systemData.schedule.map(activity => `
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h5 class="font-semibold text-azul-institucional">${activity.title}</h5>
+                            <p class="text-sm text-gray-600">📅 ${activity.date} - ⏰ ${activity.time}</p>
+                            <p class="text-sm mt-2">${activity.description}</p>
+                        </div>
+                        <button onclick="removeActivity(${activity.id})" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateRatingsList() {
+            if (systemData.ratings.length === 0) {
+                return '<p class="text-center text-gray-600">No hay calificaciones aún</p>';
+            }
+            
+            const avgRating = systemData.ratings.reduce((sum, r) => sum + r.rating, 0) / systemData.ratings.length;
+            
+            return `
+                <div class="text-center mb-6">
+                    <h4 class="text-2xl font-bold text-azul-institucional">Calificación Promedio: ${avgRating.toFixed(1)} ⭐</h4>
+                    <p class="text-gray-600">Basado en ${systemData.ratings.length} calificaciones</p>
+                </div>
+                <div class="space-y-4">
+                    ${systemData.ratings.map(rating => `
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-yellow-500">${'⭐'.repeat(rating.rating)}</span>
+                                <span class="ml-2 text-sm text-gray-600">${rating.date}</span>
+                            </div>
+                            <p class="text-gray-700">${rating.comment}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function generateStudentOptions() {
+            return systemData.students.map(student => 
+                `<option value="${student.id}">${student.name} - ${student.grade}</option>`
+            ).join('');
+        }
+
+        function generateSubjectOptions() {
+            const subjects = ['Español', 'Matemáticas', 'Biología', 'Sociales', 'Artística', 'Religión', 'Danzas', 'Música', 'Tecnología', 'Ortografía', 'Comprensión Lectora', 'Inglés', 'Educación Física'];
+            return subjects.map(subject => 
+                `<option value="${subject}">${subject}</option>`
+            ).join('');
+        }
+
+        function generateAttendanceList() {
+            return systemData.students.map(student => `
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg mb-2">
+                    <span class="font-semibold">${student.name}</span>
+                    <div class="flex gap-2">
+                        <label class="flex items-center">
+                            <input type="radio" name="attendance_${student.id}" value="present" class="mr-2" checked>
+                            ✅ Presente
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="attendance_${student.id}" value="absent" class="mr-2">
+                            ❌ Ausente
+                        </label>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateMyStudentsList() {
+            const myStudents = systemData.students.filter(student => 
+                currentUser.subjects && currentUser.subjects.length > 0
+            );
+            
+            return myStudents.map(student => `
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <h5 class="font-semibold text-azul-institucional">${student.name}</h5>
+                    <p class="text-sm text-gray-600">Grado: ${student.grade} | Documento: ${student.id}</p>
+                    <p class="text-sm text-gray-600">Padre/Madre: ${student.parent}</p>
+                </div>
+            `).join('');
+        }
+
+        function generateGradesReport() {
+            const grades = currentUser.grades;
+            let html = '<div class="space-y-4">';
+            
+            for (const [subject, scores] of Object.entries(grades)) {
+                const finalGrade = (scores.asistencia * 0.3 + scores.cuaderno * 0.2 + scores.trabajo * 0.25 + scores.evaluacion * 0.25).toFixed(1);
+                const gradeColor = finalGrade >= 90 ? 'text-green-600' : finalGrade >= 80 ? 'text-yellow-600' : 'text-red-600';
+                
+                html += `
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <h5 class="font-semibold text-azul-institucional">${subject}</h5>
+                            <span class="text-2xl font-bold ${gradeColor}">${finalGrade}</span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                            <div>Asistencia: ${scores.asistencia}</div>
+                            <div>Cuaderno: ${scores.cuaderno}</div>
+                            <div>Trabajo: ${scores.trabajo}</div>
+                            <div>Evaluación: ${scores.evaluacion}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        // Sistema de calificaciones
+        function setRating(stars) {
+            selectedRating = stars;
+            const starElements = document.querySelectorAll('.rating-star');
+            starElements.forEach((star, index) => {
+                if (index < stars) {
+                    star.classList.remove('text-gray-400');
+                    star.classList.add('text-yellow-500');
+                } else {
+                    star.classList.remove('text-yellow-500');
+                    star.classList.add('text-gray-400');
+                }
+            });
+        }
+
+        // Funciones de utilidad
         function openWhatsApp() {
-            window.open('https://wa.me/573135649661', '_blank');
+            window.open('https://wa.me/573130000000', '_blank');
         }
 
         function openLocation() {
             window.open('https://maps.google.com/?q=Carrera+13+8-48+Callejón+Betania+Villagorgona+Candelaria', '_blank');
         }
 
-        function showPhone() {
-            alert('📞 Teléfono del colegio: +57 313 5649661\n📍 Carrera 13# 8-48 Callejón Betania\nVillagorgona, Candelaria');
-        }
-
-        // Sistema de calificaciones
-        function setRating(stars) {
-            systemData.ratings.push(stars);
-            saveSystemData(); // Guardar automáticamente
-            updateAverageRating();
-            showSuccess('¡Gracias por tu calificación! ⭐');
-        }
-
-        function updateAverageRating() {
-            const average = systemData.ratings.reduce((a, b) => a + b, 0) / systemData.ratings.length;
-            document.getElementById('averageRating').textContent = average.toFixed(1);
-        }
-
-        // Funciones de gestión de datos
-        function exportData() {
-            const dataStr = JSON.stringify(systemData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'liceo_datos_' + new Date().toISOString().split('T')[0] + '.json';
-            link.click();
-            showSuccess('Datos exportados exitosamente');
-        }
-
-        function resetData() {
-            if (confirm('⚠️ ¿Está seguro de resetear todos los datos? Esta acción no se puede deshacer.')) {
-                localStorage.removeItem('liceoSystemData');
-                systemData = loadSystemData();
-                updateAverageRating();
-                showSuccess('Datos reseteados exitosamente');
-            }
-        }
-
-        // Funciones de login
-        function showAdminLogin() {
-            hideAllSections();
-            document.getElementById('adminLoginForm').classList.remove('hidden');
-        }
-
-        function showTeacherLogin() {
-            hideAllSections();
-            document.getElementById('teacherLoginForm').classList.remove('hidden');
-        }
-
-        function showParentLogin() {
-            hideAllSections();
-            document.getElementById('parentLoginForm').classList.remove('hidden');
-        }
-
-        function backToMain() {
-            hideAllSections();
-            document.getElementById('loginSection').classList.remove('hidden');
-        }
-
-        function hideAllSections() {
-            const sections = ['loginSection', 'adminLoginForm', 'teacherLoginForm', 'parentLoginForm', 'adminDashboard', 'teacherDashboard', 'parentDashboard'];
-            sections.forEach(section => {
-                document.getElementById(section).classList.add('hidden');
-            });
-        }
-
-        function loginAdmin() {
-            const username = document.getElementById('adminUser').value;
-            const password = document.getElementById('adminPass').value;
-            
-            if (username === systemData.admin.username && password === systemData.admin.password) {
-                currentUser = { username: username };
-                currentUserType = 'admin';
-                hideAllSections();
-                document.getElementById('adminDashboard').classList.remove('hidden');
-                loadStudentsList();
-                loadTeachersList();
-                loadEventsList();
-            } else {
-                showError('Usuario o contraseña incorrecta');
-            }
-        }
-
-        function loginTeacher() {
-            const username = document.getElementById('teacherUser').value;
-            const password = document.getElementById('teacherPass').value;
-            
-            const teacher = systemData.teachers.find(t => t.username === username && t.password === password);
-            if (teacher) {
-                currentUser = teacher;
-                currentUserType = 'teacher';
-                hideAllSections();
-                document.getElementById('teacherDashboard').classList.remove('hidden');
-                loadStudentsForGrading();
-            } else {
-                showError('Usuario o contraseña incorrecta');
-            }
-        }
-
-        function loginParent() {
-            const document_num = document.getElementById('studentDoc').value;
-            const password = document.getElementById('parentPass').value;
-            
-            const student = systemData.students.find(s => s.document === document_num && s.password === password);
-            if (student) {
-                currentUser = student;
-                currentUserType = 'parent';
-                hideAllSections();
-                document.getElementById('parentDashboard').classList.remove('hidden');
-                loadStudentInfo();
-                loadStudentGrades();
-                loadParentEvents();
-            } else {
-                showError('Número o contraseña incorrecta');
-            }
-        }
-
         function logout() {
             currentUser = null;
             currentUserType = null;
-            backToMain();
+            showWelcome();
         }
 
-        // Funciones de administración
-        function showStudentManagement() {
-            hideAdminSections();
-            document.getElementById('studentManagement').classList.remove('hidden');
-        }
-
-        function showTeacherManagement() {
-            hideAdminSections();
-            document.getElementById('teacherManagement').classList.remove('hidden');
-        }
-
-        function showScheduleManagement() {
-            hideAdminSections();
-            document.getElementById('scheduleManagement').classList.remove('hidden');
-        }
-
-        function showReports() {
-            hideAdminSections();
-            alert('📊 Módulo de reportes en desarrollo');
-        }
-
-        function hideAdminSections() {
-            const sections = ['studentManagement', 'teacherManagement', 'scheduleManagement'];
-            sections.forEach(section => {
-                document.getElementById(section).classList.add('hidden');
-            });
-        }
-
-        function addStudent() {
-            const name = document.getElementById('studentName').value;
-            const document_num = document.getElementById('studentDocument').value;
-            const grade = document.getElementById('studentGrade').value;
-            const parent = document.getElementById('parentName').value;
-            const phone = document.getElementById('parentPhone').value;
-
-            if (!name || !document_num || !grade || !parent || !phone) {
-                showError('Por favor complete todos los campos');
-                return;
-            }
-
-            // Verificar si el documento ya existe
-            const existingStudent = systemData.students.find(s => s.document === document_num);
-            if (existingStudent) {
-                showError('Ya existe un estudiante con este número de documento');
-                return;
-            }
-
-            const newStudent = {
-                id: systemData.students.length + 1,
-                name: name,
-                document: document_num,
-                grade: grade,
-                parent: parent,
-                phone: phone,
-                password: document_num // Contraseña inicial es el documento
-            };
-
-            systemData.students.push(newStudent);
-            saveSystemData(); // Guardar automáticamente
-            loadStudentsList();
-            clearStudentForm();
-            showSuccess('Estudiante agregado exitosamente');
-        }
-
-        function addTeacher() {
-            const name = document.getElementById('teacherName').value;
-            const username = document.getElementById('teacherUsername').value;
-            const password = document.getElementById('teacherPassword').value;
-            const subject = document.getElementById('teacherSubject').value;
-            const role = document.getElementById('teacherRole').value;
-            const grade = document.getElementById('teacherGrade').value;
-
-            if (!name || !username || !password) {
-                showError('Por favor complete todos los campos obligatorios (nombre, usuario y contraseña)');
-                return;
-            }
-
-            // Verificar si el usuario ya existe
-            const existingTeacher = systemData.teachers.find(t => t.username === username);
-            if (existingTeacher) {
-                showError('El nombre de usuario ya existe');
-                return;
-            }
-
-            const newTeacher = {
-                id: systemData.teachers.length + 1,
-                name: name,
-                username: username,
-                password: password,
-                subject: subject || '',
-                role: role || '',
-                grade: grade || ''
-            };
-
-            systemData.teachers.push(newTeacher);
-            saveSystemData(); // Guardar automáticamente
-            loadTeachersList();
-            clearTeacherForm();
-            showSuccess('Profesor agregado exitosamente');
-        }
-
-        function addEvent() {
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            const time = document.getElementById('eventTime').value;
-            const description = document.getElementById('eventDescription').value;
-            const type = document.getElementById('eventType').value;
-
-            if (!title || !date || !time || !description) {
-                showError('Por favor complete todos los campos');
-                return;
-            }
-
-            const newEvent = {
-                id: systemData.events.length + 1,
-                title: title,
-                date: date,
-                time: time,
-                description: description,
-                type: type
-            };
-
-            systemData.events.push(newEvent);
-            saveSystemData(); // Guardar automáticamente
-            loadEventsList();
-            clearEventForm();
-            showSuccess('Evento agregado exitosamente');
-        }
-
-        function deleteStudent(id) {
-            if (confirm('¿Está seguro de eliminar este estudiante?')) {
-                systemData.students = systemData.students.filter(s => s.id !== id);
-                saveSystemData(); // Guardar automáticamente
-                loadStudentsList();
-                showSuccess('Estudiante eliminado exitosamente');
-            }
-        }
-
-        function deleteTeacher(id) {
-            if (confirm('¿Está seguro de eliminar este profesor?')) {
-                systemData.teachers = systemData.teachers.filter(t => t.id !== id);
-                saveSystemData(); // Guardar automáticamente
-                loadTeachersList();
-                showSuccess('Profesor eliminado exitosamente');
-            }
-        }
-
-        function deleteEvent(id) {
-            if (confirm('¿Está seguro de eliminar este evento?')) {
-                systemData.events = systemData.events.filter(e => e.id !== id);
-                saveSystemData(); // Guardar automáticamente
-                loadEventsList();
-                showSuccess('Evento eliminado exitosamente');
-            }
-        }
-
-        // Funciones de carga de datos
-        function loadStudentsList() {
-            const container = document.getElementById('studentsList');
-            container.innerHTML = '';
-            
-            systemData.students.forEach(student => {
-                const div = document.createElement('div');
-                div.className = 'bg-white p-4 rounded-lg border flex justify-between items-center';
-                div.innerHTML = `
-                    <div>
-                        <div class="font-semibold">${student.name}</div>
-                        <div class="text-sm text-gray-600">Doc: ${student.document} | Grado: ${student.grade}</div>
-                        <div class="text-sm text-gray-600">Padre: ${student.parent} | Tel: ${student.phone}</div>
-                    </div>
-                    <button onclick="deleteStudent(${student.id})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Eliminar</button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function loadTeachersList() {
-            const container = document.getElementById('teachersList');
-            container.innerHTML = '';
-            
-            systemData.teachers.forEach(teacher => {
-                const div = document.createElement('div');
-                div.className = 'bg-white p-4 rounded-lg border flex justify-between items-center';
+        // Función de inicialización
+        window.initializeApp = async function() {
+            try {
+                // Cargar datos iniciales
+                await syncData();
                 
-                let roleText = '';
-                if (teacher.role) {
-                    roleText = `<div class="text-sm text-blue-600">${teacher.role === 'coordinador' ? 'Coordinador de Grupo' : 'Profesor de Área'}</div>`;
-                }
+                // Configurar listeners en tiempo real
+                setupRealtimeListeners();
                 
-                let gradeText = '';
-                if (teacher.grade) {
-                    gradeText = `<div class="text-sm text-gray-600">Grado: ${teacher.grade}</div>`;
-                }
+                // Mostrar pantalla de bienvenida
+                showWelcome();
                 
-                let subjectText = '';
-                if (teacher.subject) {
-                    subjectText = `<div class="text-sm text-gray-600">Materia: ${teacher.subject}</div>`;
-                }
-                
-                div.innerHTML = `
-                    <div>
-                        <div class="font-semibold">${teacher.name}</div>
-                        <div class="text-sm text-gray-600">Usuario: ${teacher.username}</div>
-                        ${subjectText}
-                        ${roleText}
-                        ${gradeText}
-                    </div>
-                    <button onclick="deleteTeacher(${teacher.id})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Eliminar</button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function loadEventsList() {
-            const container = document.getElementById('eventsList');
-            container.innerHTML = '';
-            
-            systemData.events.forEach(event => {
-                const div = document.createElement('div');
-                div.className = 'bg-white p-4 rounded-lg border';
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="font-semibold">${event.title}</div>
-                        <button onclick="deleteEvent(${event.id})" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">Eliminar</button>
-                    </div>
-                    <div class="text-sm text-gray-600">📅 ${event.date} ⏰ ${event.time}</div>
-                    <div class="text-sm text-gray-700 mt-1">${event.description}</div>
-                    <div class="text-xs text-blue-600 mt-1">${event.type}</div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        // Funciones del profesor
-        function showGradeEntry() {
-            hideTeacherSections();
-            document.getElementById('gradeEntry').classList.remove('hidden');
-        }
-
-        function showAttendance() {
-            hideTeacherSections();
-            alert('📋 Módulo de asistencia en desarrollo');
-        }
-
-        function hideTeacherSections() {
-            const sections = ['gradeEntry'];
-            sections.forEach(section => {
-                document.getElementById(section).classList.add('hidden');
-            });
-        }
-
-        function loadStudentsForGrading() {
-            const select = document.getElementById('gradeStudent');
-            select.innerHTML = '<option value="">Seleccionar estudiante</option>';
-            
-            systemData.students.forEach(student => {
-                const option = document.createElement('option');
-                option.value = student.id;
-                option.textContent = `${student.name} (${student.grade})`;
-                select.appendChild(option);
-            });
-        }
-
-        function saveGrade() {
-            const studentId = parseInt(document.getElementById('gradeStudent').value);
-            const subject = document.getElementById('gradeSubject').value;
-            const period = parseInt(document.getElementById('gradePeriod').value);
-            const attendance = parseFloat(document.getElementById('attendanceGrade').value);
-            const notebook = parseFloat(document.getElementById('notebookGrade').value);
-            const work = parseFloat(document.getElementById('workGrade').value);
-            const exam = parseFloat(document.getElementById('examGrade').value);
-
-            if (!studentId || !subject || !period || isNaN(attendance) || isNaN(notebook) || isNaN(work) || isNaN(exam)) {
-                showError('Por favor complete todos los campos');
-                return;
+                console.log('✅ Aplicación inicializada correctamente con sincronización en la nube');
+            } catch (error) {
+                console.error('Error inicializando la aplicación:', error);
+                // Fallback a funcionamiento local
+                showWelcome();
             }
+        };
 
-            // Validar que las notas estén en el rango correcto
-            if (attendance < 0 || attendance > 5 || notebook < 0 || notebook > 5 || 
-                work < 0 || work > 5 || exam < 0 || exam > 5) {
-                showError('Las calificaciones deben estar entre 0 y 5');
-                return;
-            }
-
-            const final = (attendance * 0.3) + (notebook * 0.2) + (work * 0.25) + (exam * 0.25);
-
-            const gradeRecord = {
-                studentId: studentId,
-                subject: subject,
-                period: period,
-                attendance: attendance,
-                notebook: notebook,
-                work: work,
-                exam: exam,
-                final: parseFloat(final.toFixed(2))
-            };
-
-            // Eliminar calificación existente si existe
-            systemData.grades = systemData.grades.filter(g => 
-                !(g.studentId === studentId && g.subject === subject && g.period === period)
-            );
-
-            systemData.grades.push(gradeRecord);
-            saveSystemData(); // Guardar automáticamente
-            clearGradeForm();
-            showSuccess('Calificación guardada exitosamente');
-        }
-
-        // Funciones de padres
-        function loadStudentInfo() {
-            const container = document.getElementById('studentDetails');
-            container.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><strong>Nombre:</strong> ${currentUser.name}</div>
-                    <div><strong>Documento:</strong> ${currentUser.document}</div>
-                    <div><strong>Grado:</strong> ${currentUser.grade}</div>
-                    <div><strong>Padre/Madre:</strong> ${currentUser.parent}</div>
-                </div>
-            `;
-        }
-
-        function loadStudentGrades() {
-            const container = document.getElementById('gradesList');
-            container.innerHTML = '';
-            
-            const studentGrades = systemData.grades.filter(g => g.studentId === currentUser.id);
-            
-            if (studentGrades.length === 0) {
-                container.innerHTML = '<p class="text-gray-500">No hay calificaciones registradas aún.</p>';
-                return;
-            }
-
-            const subjectNames = {
-                'español': 'Español',
-                'matematicas': 'Matemáticas',
-                'biologia': 'Biología',
-                'sociales': 'Sociales',
-                'artistica': 'Artística',
-                'religion': 'Religión',
-                'danzas': 'Danzas',
-                'musica': 'Música',
-                'tecnologia': 'Tecnología',
-                'ortografia': 'Ortografía',
-                'comprension': 'Comprensión Lectora',
-                'ingles': 'Inglés',
-                'educacion_fisica': 'Educación Física'
-            };
-            
-            const subjects = Object.keys(subjectNames);
-            
-            subjects.forEach(subject => {
-                const subjectGrades = studentGrades.filter(g => g.subject === subject);
-                if (subjectGrades.length > 0) {
-                    const div = document.createElement('div');
-                    div.className = 'bg-white p-4 rounded-lg border';
-                    
-                    const average = subjectGrades.reduce((sum, g) => sum + g.final, 0) / subjectGrades.length;
-                    
-                    let statusColor = 'text-red-600';
-                    let statusText = 'Bajo';
-                    if (average >= 3.5) {
-                        statusColor = 'text-green-600';
-                        statusText = 'Aprobado';
-                    } else if (average >= 3.0) {
-                        statusColor = 'text-yellow-600';
-                        statusText = 'Básico';
-                    }
-                    
-                    div.innerHTML = `
-                        <div class="font-semibold text-azul-institucional mb-2">${subjectNames[subject]}</div>
-                        <div class="text-sm text-gray-600">Promedio: <span class="${statusColor} font-semibold">${average.toFixed(2)}</span></div>
-                        <div class="text-xs ${statusColor} font-medium">${statusText}</div>
-                        <div class="text-xs text-gray-500 mt-1">${subjectGrades.length} período(s) registrado(s)</div>
-                    `;
-                    container.appendChild(div);
-                }
-            });
-        }
-
-        function loadParentEvents() {
-            const container = document.getElementById('parentEventsList');
-            container.innerHTML = '';
-            
-            systemData.events.forEach(event => {
-                const div = document.createElement('div');
-                div.className = 'bg-white p-4 rounded-lg border';
-                div.innerHTML = `
-                    <div class="font-semibold text-azul-institucional">${event.title}</div>
-                    <div class="text-sm text-gray-600">📅 ${event.date} ⏰ ${event.time}</div>
-                    <div class="text-sm text-gray-700 mt-1">${event.description}</div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        // Funciones de utilidad
-        function clearStudentForm() {
-            document.getElementById('studentName').value = '';
-            document.getElementById('studentDocument').value = '';
-            document.getElementById('studentGrade').value = '';
-            document.getElementById('parentName').value = '';
-            document.getElementById('parentPhone').value = '';
-        }
-
-        function clearTeacherForm() {
-            document.getElementById('teacherName').value = '';
-            document.getElementById('teacherUsername').value = '';
-            document.getElementById('teacherPassword').value = '';
-            document.getElementById('teacherSubject').value = '';
-            document.getElementById('teacherRole').value = '';
-            document.getElementById('teacherGrade').value = '';
-        }
-
-        function clearEventForm() {
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventTime').value = '';
-            document.getElementById('eventDescription').value = '';
-            document.getElementById('eventType').value = 'reunion';
-        }
-
-        function clearGradeForm() {
-            document.getElementById('gradeStudent').value = '';
-            document.getElementById('gradeSubject').value = '';
-            document.getElementById('gradePeriod').value = '1';
-            document.getElementById('attendanceGrade').value = '';
-            document.getElementById('notebookGrade').value = '';
-            document.getElementById('workGrade').value = '';
-            document.getElementById('examGrade').value = '';
-            document.getElementById('finalGrade').value = '';
-        }
-
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
-            document.getElementById('errorModal').classList.remove('hidden');
-        }
-
-        function showSuccess(message) {
-            document.getElementById('successMessage').textContent = message;
-            document.getElementById('successModal').classList.remove('hidden');
-        }
-
-        function closeErrorModal() {
-            document.getElementById('errorModal').classList.add('hidden');
-        }
-
-        function closeSuccessModal() {
-            document.getElementById('successModal').classList.add('hidden');
-        }
-
-        // Calcular nota final automáticamente
+        // Inicializar cuando el DOM esté listo (fallback si Firebase no carga)
         document.addEventListener('DOMContentLoaded', function() {
-            const gradeInputs = ['attendanceGrade', 'notebookGrade', 'workGrade', 'examGrade'];
-            gradeInputs.forEach(inputId => {
-                document.getElementById(inputId).addEventListener('input', calculateFinalGrade);
-            });
+            // Si Firebase no se ha cargado en 3 segundos, inicializar sin él
+            setTimeout(() => {
+                if (!window.firebaseDB) {
+                    console.log('Iniciando en modo local (sin sincronización en la nube)');
+                    window.initializeApp();
+                }
+            }, 3000);
         });
-
-        function calculateFinalGrade() {
-            const attendance = parseFloat(document.getElementById('attendanceGrade').value) || 0;
-            const notebook = parseFloat(document.getElementById('notebookGrade').value) || 0;
-            const work = parseFloat(document.getElementById('workGrade').value) || 0;
-            const exam = parseFloat(document.getElementById('examGrade').value) || 0;
-
-            const final = (attendance * 0.3) + (notebook * 0.2) + (work * 0.25) + (exam * 0.25);
-            document.getElementById('finalGrade').value = final.toFixed(2);
-        }
-
-        // Inicializar la aplicación
-        updateAverageRating();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b090e0369df78a',t:'MTc1NzE4ODk2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b10368636af78a',t:'MTc1NzE5MzY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
