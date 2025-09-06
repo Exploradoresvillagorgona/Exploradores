@@ -185,7 +185,7 @@
                                 <input type="text" id="teacherUsername" placeholder="Usuario" class="w-full p-3 border rounded-lg">
                                 <input type="password" id="teacherPassword" placeholder="Contraseña" class="w-full p-3 border rounded-lg">
                                 <select id="teacherSubject" class="w-full p-3 border rounded-lg">
-                                    <option value="">Seleccionar materia principal</option>
+                                    <option value="">Materia principal (opcional)</option>
                                     <option value="español">Español</option>
                                     <option value="matematicas">Matemáticas</option>
                                     <option value="biologia">Biología</option>
@@ -615,8 +615,8 @@
             const role = document.getElementById('teacherRole').value;
             const grade = document.getElementById('teacherGrade').value;
 
-            if (!name || !username || !password || !subject) {
-                showError('Por favor complete todos los campos obligatorios');
+            if (!name || !username || !password) {
+                showError('Por favor complete todos los campos obligatorios (nombre, usuario y contraseña)');
                 return;
             }
 
@@ -632,7 +632,7 @@
                 name: name,
                 username: username,
                 password: password,
-                subject: subject,
+                subject: subject || '',
                 role: role || '',
                 grade: grade || ''
             };
@@ -732,11 +732,16 @@
                     gradeText = `<div class="text-sm text-gray-600">Grado: ${teacher.grade}</div>`;
                 }
                 
+                let subjectText = '';
+                if (teacher.subject) {
+                    subjectText = `<div class="text-sm text-gray-600">Materia: ${teacher.subject}</div>`;
+                }
+                
                 div.innerHTML = `
                     <div>
                         <div class="font-semibold">${teacher.name}</div>
                         <div class="text-sm text-gray-600">Usuario: ${teacher.username}</div>
-                        <div class="text-sm text-gray-600">Materia: ${teacher.subject}</div>
+                        ${subjectText}
                         ${roleText}
                         ${gradeText}
                     </div>
@@ -1003,6 +1008,5 @@
         // Inicializar la aplicación
         updateAverageRating();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b068f1f6cd31e0',t:'MTc1NzE4NzMzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b07f51177631e0',t:'MTc1NzE4ODI0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
