@@ -3,186 +3,1218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liceo Exploradores de Sueños</title>
+    <title>Institución Educativa Villa Girgona</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #bbf7d0 100%);
+        }
+        
+        .card-elegant {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-elegant {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+        
+        .btn-elegant:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
         .colegio-azul { color: #1e3a8a; }
-        .bg-colegio-verde { background-color: #10b981; }
-        .bg-colegio-amarillo { background-color: #facc15; }
-        .text-shadow { text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .bg-colegio-azul { background-color: #1e3a8a; }
+        .colegio-verde { color: #bbf7d0; }
+        .bg-colegio-verde { background-color: #bbf7d0; }
+        .colegio-amarillo { color: #fde047; }
+        .bg-colegio-amarillo { background-color: #fde047; }
+        .colegio-azul-claro { color: #3b82f6; }
+        .bg-colegio-azul-claro { background-color: #3b82f6; }
+        
+        @media (max-width: 768px) {
+            .mobile-padding {
+                padding: 1rem;
+            }
+            
+            .mobile-text {
+                font-size: 0.875rem;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-sans">
-
-<!-- Navbar -->
-<nav class="bg-white shadow-md p-4 fixed w-full z-50 top-0">
-    <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold colegio-azul">Liceo Exploradores de Sueños</h1>
-        <div class="space-x-4">
-            <button class="nav-btn bg-colegio-verde text-white px-3 py-1 rounded" onclick="mostrarSeccion('inicio', event)">Inicio</button>
-            <button class="nav-btn bg-colegio-verde text-white px-3 py-1 rounded" onclick="mostrarSeccion('docentes', event)">Docentes</button>
-            <button class="nav-btn bg-colegio-verde text-white px-3 py-1 rounded" onclick="mostrarSeccion('padres', event)">Padres</button>
-            <button class="nav-btn bg-colegio-verde text-white px-3 py-1 rounded" onclick="mostrarSeccion('cronogramas', event)">Cronogramas</button>
-            <button class="nav-btn bg-colegio-verde text-white px-3 py-1 rounded" onclick="mostrarSeccion('admin', event)">Admin</button>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-24">
-
-    <!-- Sección Inicio -->
-    <div id="inicio" class="seccion">
-        <h2 class="text-4xl font-bold colegio-azul mb-6 text-center">¡Bienvenidos al Liceo Exploradores de Sueños! ✨</h2>
-        <div id="proximosEventos" class="space-y-3 mb-12">
-            <!-- Eventos se cargarán aquí -->
-        </div>
-    </div>
-
-    <!-- Sección Docentes -->
-    <div id="docentes" class="seccion hidden">
-        <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">👨‍🏫 Docentes</h2>
-        <div class="mb-6">
-            <input type="password" id="passwordDocente" placeholder="Contraseña docente" class="border px-3 py-2 rounded w-full max-w-xs">
-            <button onclick="verificarAccesoDocente()" class="bg-blue-800 text-white px-3 py-2 rounded">Acceder</button>
-            <div id="errorDocente" class="text-red-600 mt-2 hidden"></div>
-        </div>
-        <div id="panelDocentes" class="hidden">
-            <p>Bienvenido docente.</p>
-        </div>
-    </div>
-
-    <!-- Sección Padres -->
-    <div id="padres" class="seccion hidden">
-        <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">👨‍👩‍👧‍👦 Padres</h2>
-        <div class="mb-6">
-            <input type="password" id="passwordPadre" placeholder="Contraseña padre" class="border px-3 py-2 rounded w-full max-w-xs">
-            <button onclick="verificarAccesoPadre()" class="bg-blue-800 text-white px-3 py-2 rounded">Acceder</button>
-            <div id="errorPadre" class="text-red-600 mt-2 hidden"></div>
-        </div>
-        <div id="panelPadres" class="hidden">
-            <p>Bienvenido padre.</p>
-        </div>
-    </div>
-
-    <!-- Sección Cronogramas -->
-    <div id="cronogramas" class="seccion hidden">
-        <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">📅 Cronogramas</h2>
-        <div class="grid lg:grid-cols-2 gap-8">
-            <!-- Calendario -->
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <h3 class="text-xl font-bold colegio-azul mb-4">Calendario Escolar</h3>
-                <div class="text-center mb-4">
-                    <button onclick="cambiarMes(-1)" class="bg-blue-800 text-white px-3 py-1 rounded">←</button>
-                    <span id="mesActual" class="mx-4 font-bold text-lg"></span>
-                    <button onclick="cambiarMes(1)" class="bg-blue-800 text-white px-3 py-1 rounded">→</button>
+<body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="card-elegant shadow-lg">
+        <div class="container mx-auto px-4 py-8 mobile-padding">
+            <div class="flex flex-col lg:flex-row justify-between items-center">
+                <div class="text-center lg:text-left mb-6 lg:mb-0">
+                    <h1 class="text-4xl lg:text-5xl font-bold colegio-azul text-shadow mb-2">
+                        Liceo Exploradores de Sueños
+                    </h1>
+                    <p class="text-lg text-gray-700 font-medium mb-2">
+                        ✨ 17 años formando el futuro • Jardín a 5° Primaria ✨
+                    </p>
+                    <p class="text-sm text-gray-600 cursor-pointer hover:text-blue-600 transition-all duration-300 transform hover:scale-105" onclick="abrirUbicacion()">
+                        📍 Carrera 13 # 8-48, Villa Girgona, Candelaria - Ver en mapa
+                    </p>
                 </div>
-                <div id="diasCalendario" class="grid grid-cols-7 gap-1 text-center"></div>
-            </div>
-            <!-- Eventos -->
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <h3 class="text-xl font-bold colegio-azul mb-4">Eventos Programados</h3>
-                <div id="listaEventos" class="space-y-3 max-h-96 overflow-y-auto"></div>
+                <button onclick="contactarWhatsApp()" class="btn-elegant bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-4 rounded-2xl font-semibold flex items-center gap-3 shadow-lg">
+                    <span class="text-xl">📱</span>
+                    <span>WhatsApp Colegio</span>
+                </button>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Sección Admin -->
-    <div id="admin" class="seccion hidden">
-        <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">🔧 Panel Admin</h2>
-        <div class="mb-6">
-            <input type="password" id="passwordAdmin" placeholder="Contraseña admin" class="border px-3 py-2 rounded w-full max-w-xs">
-            <button onclick="verificarAccesoAdmin()" class="bg-blue-800 text-white px-3 py-2 rounded">Acceder</button>
-            <div id="errorAdmin" class="text-red-600 mt-2 hidden"></div>
+    <!-- Navigation -->
+    <nav class="glass-effect backdrop-blur-lg border-b border-white/20">
+        <div class="container mx-auto px-4 mobile-padding">
+            <div class="flex flex-wrap justify-center gap-3 py-6">
+                <button onclick="mostrarSeccion('inicio')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
+                    <span class="text-lg mr-2">🏠</span>Inicio
+                </button>
+                <button onclick="mostrarSeccion('docentes')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
+                    <span class="text-lg mr-2">👨‍🏫</span>Docentes
+                </button>
+                <button onclick="mostrarSeccion('padres')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
+                    <span class="text-lg mr-2">👨‍👩‍👧‍👦</span><span class="hidden sm:inline">Padres</span><span class="sm:hidden">Familia</span>
+                </button>
+                <button onclick="mostrarSeccion('cronogramas')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
+                    <span class="text-lg mr-2">📅</span><span class="hidden sm:inline">Cronogramas</span><span class="sm:hidden">Eventos</span>
+                </button>
+                <button onclick="mostrarSeccion('opiniones')" class="nav-btn btn-elegant bg-colegio-verde text-blue-900 px-6 py-3 rounded-xl font-semibold hover:bg-colegio-amarillo shadow-lg">
+                    <span class="text-lg mr-2">💬</span>Opiniones
+                </button>
+                <button onclick="mostrarSeccion('admin')" class="nav-btn btn-elegant bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 shadow-lg">
+                    <span class="text-lg mr-2">⚙️</span>Admin
+                </button>
+            </div>
         </div>
-        <div id="panelAdmin" class="hidden">
-            <h3>Administración de Estudiantes y Docentes</h3>
-            <div id="adminListaEstudiantes"></div>
-            <div id="adminListaDocentes"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 mobile-padding">
+        <!-- Sección Inicio -->
+        <div id="inicio" class="seccion card-elegant rounded-3xl shadow-lg p-8 mb-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl lg:text-5xl font-bold colegio-azul mb-6 text-shadow">
+                    ¡Bienvenidos al Liceo Exploradores de Sueños! ✨
+                </h2>
+                <p class="text-xl lg:text-2xl text-gray-700 mb-8 font-medium">
+                    Donde cada niño es una estrella brillante 🌟
+                </p>
+                <div class="bg-gradient-to-r from-green-200 via-yellow-200 to-green-200 p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl lg:text-3xl font-bold colegio-azul mb-6 text-shadow">🎯 Próximos Eventos</h3>
+                    <div id="proximosEventos" class="space-y-3">
+                        <!-- Los eventos se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="btn-elegant bg-gradient-to-br from-green-200 to-green-300 p-8 rounded-2xl text-center shadow-lg border border-white/50">
+                    <div class="text-4xl mb-4">📚</div>
+                    <h3 class="text-xl font-bold colegio-azul mb-4">Educación Integral</h3>
+                    <p class="text-gray-700 font-medium">Formamos estudiantes con valores y conocimientos sólidos para el futuro</p>
+                </div>
+                <div class="btn-elegant bg-gradient-to-br from-yellow-200 to-yellow-300 p-8 rounded-2xl text-center shadow-lg border border-white/50">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold colegio-azul mb-4">Arte y Creatividad</h3>
+                    <p class="text-gray-700 font-medium">Desarrollamos el potencial artístico y creativo de cada niño</p>
+                </div>
+                <div class="btn-elegant bg-gradient-to-br from-green-200 to-green-300 p-8 rounded-2xl text-center shadow-lg border border-white/50">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h3 class="text-xl font-bold colegio-azul mb-4">Comunidad Unida</h3>
+                    <p class="text-gray-700 font-medium">Trabajamos juntos: familia, estudiantes y docentes en armonía</p>
+                </div>
+            </div>
         </div>
-    </div>
-</main>
 
-<!-- Footer -->
-<footer class="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-12 mt-16">
-    <div class="container mx-auto px-4 text-center">
-        <p>© 2024 Liceo Exploradores de Sueños</p>
-    </div>
-</footer>
+        <!-- Sección Docentes -->
+        <div id="docentes" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">👨‍🏫 Nuestro Equipo Docente</h2>
+            
+            <!-- Acceso para Docentes -->
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold colegio-azul mb-4">🔐 Acceso Docentes</h3>
+                <div class="flex gap-4 items-end">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Acceso:</label>
+                        <input type="password" id="passwordDocente" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su contraseña">
+                    </div>
+                    <button onclick="verificarAccesoDocente()" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Acceder</button>
+                </div>
+                <div id="errorDocente" class="text-red-600 mt-2 hidden"></div>
+            </div>
 
-<script>
-    // Datos simulados
-    let passwords = { docentes: ["1234"], padres: ["abcd"], admin: "admin123" };
-    let docentes = [];
-    let estudiantes = [];
-    let eventos = [];
+            <!-- Panel de Docentes (oculto inicialmente) -->
+            <div id="panelDocentes" class="hidden">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-200 p-6 rounded-lg">
+                        <h4 class="text-lg font-bold colegio-azul mb-4">📋 Mis Clases</h4>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded">Matemáticas - 3° Grado</div>
+                            <div class="bg-white p-3 rounded">Ciencias - 4° Grado</div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-200 p-6 rounded-lg">
+                        <h4 class="text-lg font-bold colegio-azul mb-4">📝 Notas Pendientes</h4>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded">Evaluación Matemáticas</div>
+                            <div class="bg-white p-3 rounded">Proyecto Ciencias</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    let mesActual = new Date().getMonth();
-    let añoActual = new Date().getFullYear();
+            <!-- Lista de Docentes -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold colegio-azul mb-4">👥 Nuestros Profesores</h3>
+                <div id="listaDocentes" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Los docentes se cargarán aquí -->
+                </div>
+            </div>
+        </div>
 
-    // Función para mostrar secciones
-    function mostrarSeccion(seccion, event) {
-        document.querySelectorAll('.seccion').forEach(s => s.classList.add('hidden'));
-        document.getElementById(seccion).classList.remove('hidden');
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('bg-colegio-amarillo');
-            btn.classList.add('bg-colegio-verde');
-        });
-        if(event && event.target){
-            event.target.classList.remove('bg-colegio-verde');
-            event.target.classList.add('bg-colegio-amarillo');
+        <!-- Sección Padres -->
+        <div id="padres" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">👨‍👩‍👧‍👦 Portal de Padres</h2>
+            
+            <!-- Acceso para Padres -->
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold colegio-azul mb-4">🔐 Acceso Padres de Familia</h3>
+                <div class="flex gap-4 items-end">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Acceso:</label>
+                        <input type="password" id="passwordPadre" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su contraseña">
+                    </div>
+                    <button onclick="verificarAccesoPadre()" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Acceder</button>
+                </div>
+                <div id="errorPadre" class="text-red-600 mt-2 hidden"></div>
+            </div>
+
+            <!-- Panel de Padres (oculto inicialmente) -->
+            <div id="panelPadres" class="hidden">
+                <!-- Consulta de Notas por ID -->
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold colegio-azul mb-4">🔍 Consultar Notas por Identificación</h3>
+                    <div class="flex gap-4 items-end">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Número de Identificación del Estudiante:</label>
+                            <input type="text" id="idEstudiante" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ej: 1234567890">
+                        </div>
+                        <button onclick="consultarNotas()" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all">Consultar</button>
+                    </div>
+                    <div id="resultadoNotas" class="mt-4 hidden">
+                        <!-- Aquí se mostrarán las notas -->
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-200 p-6 rounded-lg">
+                        <h4 class="text-lg font-bold colegio-azul mb-4">📊 Información del Grado</h4>
+                        <div id="infoGrado" class="space-y-2">
+                            <div class="bg-white p-3 rounded">Seleccione un estudiante para ver información del grado</div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-200 p-6 rounded-lg">
+                        <h4 class="text-lg font-bold colegio-azul mb-4">📅 Próximas Actividades</h4>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded">Reunión de Padres - 15 Nov</div>
+                            <div class="bg-white p-3 rounded">Entrega de Boletines - 20 Nov</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas por Grado -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold colegio-azul mb-4">📊 Estadísticas por Grado</h3>
+                <div id="estadisticasGrados" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <!-- Las estadísticas se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Información de Estudiantes -->
+            <div class="mt-8">
+                <h3 class="text-xl font-bold colegio-azul mb-4">👦👧 Estudiantes Registrados</h3>
+                <div class="bg-gradient-to-r from-green-200 to-yellow-200 p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold colegio-azul mb-2" id="totalEstudiantes">0</div>
+                    <p class="text-gray-700">Estudiantes registrados en el sistema</p>
+                    <p class="text-sm text-gray-600 mt-2">Para consultar información específica, use el número de identificación arriba</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Cronogramas -->
+        <div id="cronogramas" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">📅 Calendario y Cronogramas</h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Calendario -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold colegio-azul mb-4">📆 Calendario Escolar</h3>
+                    <div id="calendario" class="bg-white p-4 rounded-lg">
+                        <div class="text-center mb-4">
+                            <button onclick="cambiarMes(-1)" class="bg-blue-800 text-white px-3 py-1 rounded">←</button>
+                            <span id="mesActual" class="mx-4 font-bold text-lg"></span>
+                            <button onclick="cambiarMes(1)" class="bg-blue-800 text-white px-3 py-1 rounded">→</button>
+                        </div>
+                        <div id="diasCalendario" class="grid grid-cols-7 gap-1 text-center">
+                            <!-- Los días se generarán aquí -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Eventos -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold colegio-azul mb-4">🎯 Eventos Programados</h3>
+                    <div id="listaEventos" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Los eventos se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horarios de Clase -->
+            <div class="mt-8 bg-gray-50 p-6 rounded-lg">
+                <h3 class="text-xl font-bold colegio-azul mb-4">⏰ Horarios de Clase</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-white rounded-lg overflow-hidden">
+                        <thead class="bg-blue-800 text-white">
+                            <tr>
+                                <th class="p-3">Hora</th>
+                                <th class="p-3">Lunes</th>
+                                <th class="p-3">Martes</th>
+                                <th class="p-3">Miércoles</th>
+                                <th class="p-3">Jueves</th>
+                                <th class="p-3">Viernes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-3 font-bold">7:00-8:00</td>
+                                <td class="p-3 bg-green-200">Matemáticas</td>
+                                <td class="p-3 bg-yellow-200">Español</td>
+                                <td class="p-3 bg-green-200">Ciencias</td>
+                                <td class="p-3 bg-yellow-200">Sociales</td>
+                                <td class="p-3 bg-green-200">Arte</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-3 font-bold">8:00-9:00</td>
+                                <td class="p-3 bg-yellow-200">Español</td>
+                                <td class="p-3 bg-green-200">Matemáticas</td>
+                                <td class="p-3 bg-yellow-200">Educación Física</td>
+                                <td class="p-3 bg-green-200">Inglés</td>
+                                <td class="p-3 bg-yellow-200">Música</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Opiniones -->
+        <div id="opiniones" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold colegio-azul mb-6 text-center">💬 Opiniones y Sugerencias</h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Formulario de Opiniones -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold colegio-azul mb-4">✍️ Deja tu Opinión</h3>
+                    <form onsubmit="enviarOpinion(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre:</label>
+                            <input type="text" id="nombreOpinion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo:</label>
+                            <select id="tipoOpinion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="sugerencia">Sugerencia</option>
+                                <option value="felicitacion">Felicitación</option>
+                                <option value="queja">Queja</option>
+                                <option value="pregunta">Pregunta</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mensaje:</label>
+                            <textarea id="mensajeOpinion" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-700 transition-all">Enviar Opinión</button>
+                    </form>
+                </div>
+
+                <!-- Lista de Opiniones -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold colegio-azul mb-4">📝 Opiniones Recientes</h3>
+                    <div id="listaOpiniones" class="space-y-4 max-h-96 overflow-y-auto">
+                        <!-- Las opiniones se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Admin -->
+        <div id="admin" class="seccion bg-white rounded-xl shadow-xl p-8 mb-8 hidden">
+            <h2 class="text-3xl font-bold text-red-600 mb-6 text-center">⚙️ Panel de Administración</h2>
+            
+            <!-- Acceso Admin -->
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold text-red-600 mb-4">🔐 Acceso Administrador</h3>
+                <div class="flex gap-4 items-end">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña de Administrador:</label>
+                        <input type="password" id="passwordAdmin" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Ingrese contraseña de administrador">
+                    </div>
+                    <button onclick="verificarAccesoAdmin()" class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-all">Acceder</button>
+                </div>
+                <div id="errorAdmin" class="text-red-600 mt-2 hidden"></div>
+            </div>
+
+            <!-- Panel Admin (oculto inicialmente) -->
+            <div id="panelAdmin" class="hidden space-y-8">
+                <!-- Gestión de Docentes -->
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold colegio-azul mb-4">👨‍🏫 Gestión de Docentes (Máximo 9)</h3>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold mb-2">Agregar Docente:</h4>
+                            <form onsubmit="agregarDocente(event)" class="space-y-3">
+                                <input type="text" id="nombreDocente" placeholder="Nombre completo" class="w-full px-3 py-2 border rounded-md" required>
+                                <input type="text" id="materiaDocente" placeholder="Materia" class="w-full px-3 py-2 border rounded-md" required>
+                                <input type="password" id="passwordDocenteNuevo" placeholder="Contraseña" class="w-full px-3 py-2 border rounded-md" required>
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="esCoordinador" class="rounded" onchange="toggleCoordinacion()">
+                                    <label for="esCoordinador" class="text-sm font-medium">¿Es coordinador de grado?</label>
+                                </div>
+                                <select id="gradoCoordinacion" class="w-full px-3 py-2 border rounded-md hidden">
+                                    <option value="">Seleccionar grado a coordinar</option>
+                                    <option value="Jardín">Jardín</option>
+                                    <option value="Transición">Transición</option>
+                                    <option value="1°">1° Primaria</option>
+                                    <option value="2°">2° Primaria</option>
+                                    <option value="3°">3° Primaria</option>
+                                    <option value="4°">4° Primaria</option>
+                                    <option value="5°">5° Primaria</option>
+                                </select>
+                                <button type="submit" class="w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-700">Agregar Docente</button>
+                            </form>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">Docentes Registrados (<span id="contadorDocentes">0</span>/9):</h4>
+                            <div id="adminListaDocentes" class="space-y-2 max-h-64 overflow-y-auto">
+                                <!-- Lista de docentes para admin -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestión de Estudiantes -->
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-green-600 mb-4">👦👧 Gestión de Estudiantes</h3>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold mb-2">Agregar Estudiante:</h4>
+                            <form onsubmit="agregarEstudiante(event)" class="space-y-3">
+                                <input type="text" id="nombreEstudiante" placeholder="Nombre completo" class="w-full px-3 py-2 border rounded-md" required>
+                                <input type="text" id="idEstudianteNuevo" placeholder="Número de identificación" class="w-full px-3 py-2 border rounded-md" required>
+                                <select id="gradoEstudiante" class="w-full px-3 py-2 border rounded-md" required>
+                                    <option value="">Seleccionar grado</option>
+                                    <option value="Jardín">Jardín</option>
+                                    <option value="Transición">Transición</option>
+                                    <option value="1°">1° Primaria</option>
+                                    <option value="2°">2° Primaria</option>
+                                    <option value="3°">3° Primaria</option>
+                                    <option value="4°">4° Primaria</option>
+                                    <option value="5°">5° Primaria</option>
+                                </select>
+                                <input type="text" id="padreEstudiante" placeholder="Nombre del padre/madre" class="w-full px-3 py-2 border rounded-md" required>
+                                <input type="password" id="passwordPadreNuevo" placeholder="Contraseña para el padre" class="w-full px-3 py-2 border rounded-md" required>
+                                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Agregar Estudiante</button>
+                            </form>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">Estudiantes Registrados:</h4>
+                            <div id="adminListaEstudiantes" class="space-y-2 max-h-64 overflow-y-auto">
+                                <!-- Lista de estudiantes para admin -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestión de Eventos -->
+                <div class="bg-yellow-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-600 mb-4">📅 Gestión de Eventos</h3>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold mb-2">Agregar Evento:</h4>
+                            <form onsubmit="agregarEvento(event)" class="space-y-3">
+                                <input type="text" id="tituloEvento" placeholder="Título del evento" class="w-full px-3 py-2 border rounded-md" required>
+                                <input type="date" id="fechaEvento" class="w-full px-3 py-2 border rounded-md" required>
+                                <input type="time" id="horaEvento" class="w-full px-3 py-2 border rounded-md" required>
+                                <textarea id="descripcionEvento" placeholder="Descripción del evento" rows="3" class="w-full px-3 py-2 border rounded-md" required></textarea>
+                                <button type="submit" class="w-full bg-yellow-600 text-white py-2 rounded-md hover:bg-yellow-700">Agregar Evento</button>
+                            </form>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">Eventos Programados:</h4>
+                            <div id="adminListaEventos" class="space-y-2 max-h-64 overflow-y-auto">
+                                <!-- Lista de eventos para admin -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-12 mt-16">
+        <div class="container mx-auto px-4 mobile-padding">
+            <div class="text-center">
+                <h3 class="text-3xl lg:text-4xl font-bold mb-6 text-shadow">Liceo Exploradores de Sueños ✨</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
+                        <div class="text-2xl mb-3">📍</div>
+                        <p class="font-semibold">Ubicación</p>
+                        <p class="text-sm opacity-90">Carrera 13 # 8-48<br>Villa Girgona, Candelaria</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
+                        <div class="text-2xl mb-3">📞</div>
+                        <p class="font-semibold">Teléfono</p>
+                        <p class="text-sm opacity-90">(2) 555-0123</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
+                        <div class="text-2xl mb-3">✉️</div>
+                        <p class="font-semibold">Email</p>
+                        <p class="text-sm opacity-90">info@villagirgona.edu.co</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/20 pt-6">
+                    <p class="text-green-200 font-medium text-lg">© 2024 - Formando el futuro con amor y dedicación 💖</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales
+        let docentes = [];
+        let estudiantes = [];
+        let eventos = [];
+        let opiniones = [];
+        
+        // Contraseñas del sistema
+        const passwords = {
+            admin: 'admin2024',
+            docentes: ['prof123', 'teacher456', 'edu789'],
+            padres: ['padre123', 'family456', 'parent789']
+        };
+
+        // Coordinadores por grado
+        let coordinadores = {
+            'Jardín': 'María González',
+            'Transición': 'Ana Martínez',
+            '1°': 'Carlos Rodríguez',
+            '2°': 'Laura Sánchez',
+            '3°': 'Pedro López',
+            '4°': 'Carmen Díaz',
+            '5°': 'Roberto García'
+        };
+
+        // Variables del calendario
+        let fechaActual = new Date();
+        let mesActual = fechaActual.getMonth();
+        let añoActual = fechaActual.getFullYear();
+
+        // Función para mostrar/ocultar selección de grado de coordinación
+        function toggleCoordinacion() {
+            const checkbox = document.getElementById('esCoordinador');
+            const selectGrado = document.getElementById('gradoCoordinacion');
+            
+            if (checkbox.checked) {
+                selectGrado.classList.remove('hidden');
+                selectGrado.required = true;
+            } else {
+                selectGrado.classList.add('hidden');
+                selectGrado.required = false;
+                selectGrado.value = '';
+            }
         }
-    }
 
-    // Verificar accesos
-    function verificarAccesoDocente(){
-        const password = document.getElementById('passwordDocente').value;
-        const errorDiv = document.getElementById('errorDocente');
-        if(passwords.docentes.includes(password)){
-            document.getElementById('panelDocentes').classList.remove('hidden');
-            errorDiv.classList.add('hidden');
-        } else {
-            errorDiv.textContent = "Contraseña incorrecta.";
-            errorDiv.classList.remove('hidden');
+        // Función para abrir ubicación en Google Maps
+        function abrirUbicacion() {
+            const direccion = 'Carrera 13 # 8-48, Villa Girgona, Candelaria, Colombia';
+            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}`;
+            window.open(url, '_blank');
         }
-        document.getElementById('passwordDocente').value = '';
-    }
-    function verificarAccesoPadre(){
-        const password = document.getElementById('passwordPadre').value;
-        const errorDiv = document.getElementById('errorPadre');
-        if(passwords.padres.includes(password)){
-            document.getElementById('panelPadres').classList.remove('hidden');
-            errorDiv.classList.add('hidden');
-        } else {
-            errorDiv.textContent = "Contraseña incorrecta.";
-            errorDiv.classList.remove('hidden');
-        }
-        document.getElementById('passwordPadre').value = '';
-    }
-    function verificarAccesoAdmin(){
-        const password = document.getElementById('passwordAdmin').value;
-        const errorDiv = document.getElementById('errorAdmin');
-        if(password === passwords.admin){
-            document.getElementById('panelAdmin').classList.remove('hidden');
-            errorDiv.classList.add('hidden');
-        } else {
-            errorDiv.textContent = "Contraseña incorrecta.";
-            errorDiv.classList.remove('hidden');
-        }
-        document.getElementById('passwordAdmin').value = '';
-    }
 
-    // Funciones de calendario simple
-    function actualizarCalendario(){
-        const diasCalendario = document.getElementById('diasCalendario');
-        if(!diasCalendario) return;
-        const fecha = new Date(añoActual, mesActual, 1);
-        const diasMes = new Date(añoActual, mesActual+1, 0).getDate();
-        let html = '';
-        for(let i=1;i<=diasMes;i++){
-            html += `<div class="p-2 border">${i}</div>`;
+        // WhatsApp
+        function contactarWhatsApp() {
+            const mensaje = encodeURIComponent('Hola, me gustaría obtener más información sobre la Institución Educativa Villa Girgona.');
+            window.open(`https://wa.me/573001234567?text=${mensaje}`, '_blank');
         }
-        diasCalendario.innerHTML = html;
-        document.getElementById('mesActual').textContent = fecha.toLocaleString('es-ES', {month:'long', year:'numeric'});
-    }
-    function cambiarMes(dir){ mesActual+=dir; if(mesActual>11){ mesActual=0;añoActual++; } else if(mesActual<0
+
+        // Navegación
+        function mostrarSeccion(seccion) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.seccion').forEach(s => s.classList.add('hidden'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(seccion).classList.remove('hidden');
+            
+            // Actualizar botones de navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-colegio-amarillo');
+                btn.classList.add('bg-colegio-verde');
+            });
+            
+            // Resaltar botón activo
+            if (event && event.target) {
+                event.target.classList.remove('bg-colegio-verde');
+                event.target.classList.add('bg-colegio-amarillo');
+            }
+        }
+
+        // Verificación de accesos
+        function verificarAccesoDocente() {
+            const password = document.getElementById('passwordDocente').value;
+            const errorDiv = document.getElementById('errorDocente');
+            
+            if (passwords.docentes.includes(password)) {
+                document.getElementById('panelDocentes').classList.remove('hidden');
+                errorDiv.classList.add('hidden');
+                document.getElementById('passwordDocente').value = '';
+            } else {
+                errorDiv.textContent = 'Contraseña incorrecta. Acceso denegado.';
+                errorDiv.classList.remove('hidden');
+                document.getElementById('passwordDocente').value = '';
+            }
+        }
+
+        function verificarAccesoPadre() {
+            const password = document.getElementById('passwordPadre').value;
+            const errorDiv = document.getElementById('errorPadre');
+            
+            if (passwords.padres.includes(password)) {
+                document.getElementById('panelPadres').classList.remove('hidden');
+                errorDiv.classList.add('hidden');
+                document.getElementById('passwordPadre').value = '';
+            } else {
+                errorDiv.textContent = 'Contraseña incorrecta. Acceso denegado.';
+                errorDiv.classList.remove('hidden');
+                document.getElementById('passwordPadre').value = '';
+            }
+        }
+
+        function verificarAccesoAdmin() {
+            const password = document.getElementById('passwordAdmin').value;
+            const errorDiv = document.getElementById('errorAdmin');
+            
+            if (password === passwords.admin) {
+                document.getElementById('panelAdmin').classList.remove('hidden');
+                errorDiv.classList.add('hidden');
+                document.getElementById('passwordAdmin').value = '';
+                actualizarPanelAdmin();
+            } else {
+                errorDiv.textContent = 'Contraseña de administrador incorrecta. Acceso denegado.';
+                errorDiv.classList.remove('hidden');
+                document.getElementById('passwordAdmin').value = '';
+            }
+        }
+
+        // Gestión de docentes
+        function agregarDocente(event) {
+            event.preventDefault();
+            
+            if (docentes.length >= 9) {
+                alert('No se pueden agregar más docentes. Límite máximo: 9 profesores.');
+                return;
+            }
+            
+            const nombre = document.getElementById('nombreDocente').value;
+            const materia = document.getElementById('materiaDocente').value;
+            const password = document.getElementById('passwordDocenteNuevo').value;
+            const esCoordinador = document.getElementById('esCoordinador').checked;
+            const gradoCoordinacion = document.getElementById('gradoCoordinacion').value;
+            
+            // Verificar si ya hay un coordinador para ese grado
+            if (esCoordinador && gradoCoordinacion) {
+                const coordinadorExistente = docentes.find(d => d.gradoCoordinacion === gradoCoordinacion);
+                if (coordinadorExistente) {
+                    alert(`Ya existe un coordinador para ${gradoCoordinacion}: ${coordinadorExistente.nombre}`);
+                    return;
+                }
+            }
+            
+            const nuevoDocente = {
+                id: Date.now(),
+                nombre: nombre,
+                materia: materia,
+                password: password,
+                esCoordinador: esCoordinador,
+                gradoCoordinacion: esCoordinador ? gradoCoordinacion : null
+            };
+            
+            docentes.push(nuevoDocente);
+            passwords.docentes.push(password);
+            
+            // Actualizar coordinadores si es necesario
+            if (esCoordinador && gradoCoordinacion) {
+                coordinadores[gradoCoordinacion] = nombre;
+            }
+            
+            // Limpiar formulario
+            document.getElementById('nombreDocente').value = '';
+            document.getElementById('materiaDocente').value = '';
+            document.getElementById('passwordDocenteNuevo').value = '';
+            document.getElementById('esCoordinador').checked = false;
+            document.getElementById('gradoCoordinacion').value = '';
+            document.getElementById('gradoCoordinacion').classList.add('hidden');
+            
+            actualizarListaDocentes();
+            actualizarEstadisticasGrados();
+            actualizarPanelAdmin();
+            alert('Docente agregado exitosamente');
+        }
+
+        function eliminarDocente(id) {
+            if (confirm('¿Está seguro de eliminar este docente?')) {
+                const index = docentes.findIndex(d => d.id === id);
+                if (index !== -1) {
+                    const docente = docentes[index];
+                    
+                    // Remover contraseña del array
+                    const passwordIndex = passwords.docentes.indexOf(docente.password);
+                    if (passwordIndex !== -1) {
+                        passwords.docentes.splice(passwordIndex, 1);
+                    }
+                    
+                    // Si era coordinador, remover de coordinadores
+                    if (docente.esCoordinador && docente.gradoCoordinacion) {
+                        delete coordinadores[docente.gradoCoordinacion];
+                    }
+                    
+                    docentes.splice(index, 1);
+                    actualizarListaDocentes();
+                    actualizarEstadisticasGrados();
+                    actualizarPanelAdmin();
+                    alert('Docente eliminado exitosamente');
+                }
+            }
+        }
+
+        // Consultar notas por ID
+        function consultarNotas() {
+            const idBuscado = document.getElementById('idEstudiante').value.trim();
+            const resultadoDiv = document.getElementById('resultadoNotas');
+            const infoGradoDiv = document.getElementById('infoGrado');
+            
+            if (!idBuscado) {
+                alert('Por favor ingrese un número de identificación');
+                return;
+            }
+            
+            const estudiante = estudiantes.find(e => e.identificacion === idBuscado);
+            
+            if (estudiante) {
+                // Función para calcular promedio de una materia
+                function calcularPromedio(materia) {
+                    const notas = Object.values(materia);
+                    const suma = notas.reduce((acc, nota) => acc + parseFloat(nota), 0);
+                    return (suma / notas.length).toFixed(1);
+                }
+
+                // Mostrar notas del estudiante
+                resultadoDiv.innerHTML = `
+                    <div class="card-elegant p-6 rounded-2xl shadow-lg">
+                        <h4 class="font-bold colegio-azul mb-4 text-xl text-shadow">📋 Información del Estudiante</h4>
+                        <div class="grid lg:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-br from-green-200 to-green-100 p-4 rounded-xl">
+                                <h5 class="font-semibold colegio-azul mb-3">👤 Datos Personales</h5>
+                                <div class="space-y-2">
+                                    <p class="flex justify-between"><strong>Nombre:</strong> <span>${estudiante.nombre}</span></p>
+                                    <p class="flex justify-between"><strong>Grado:</strong> <span>${estudiante.grado}</span></p>
+                                    <p class="flex justify-between"><strong>ID:</strong> <span>${estudiante.identificacion}</span></p>
+                                    <p class="flex justify-between"><strong>Coordinador:</strong> <span>${coordinadores[estudiante.grado] || 'No asignado'}</span></p>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-yellow-200 to-yellow-100 p-4 rounded-xl">
+                                <h5 class="font-semibold colegio-azul mb-3">📊 Resumen de Calificaciones</h5>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between bg-white/70 p-2 rounded-lg">
+                                        <span class="font-medium">📐 Matemáticas:</span>
+                                        <span class="font-bold colegio-azul">${calcularPromedio(estudiante.notas.matematicas)}</span>
+                                    </div>
+                                    <div class="flex justify-between bg-white/70 p-2 rounded-lg">
+                                        <span class="font-medium">📚 Español:</span>
+                                        <span class="font-bold colegio-azul">${calcularPromedio(estudiante.notas.espanol)}</span>
+                                    </div>
+                                    <div class="flex justify-between bg-white/70 p-2 rounded-lg">
+                                        <span class="font-medium">🔬 Ciencias:</span>
+                                        <span class="font-bold colegio-azul">${calcularPromedio(estudiante.notas.ciencias)}</span>
+                                    </div>
+                                    <div class="flex justify-between bg-white/70 p-2 rounded-lg">
+                                        <span class="font-medium">🌍 Sociales:</span>
+                                        <span class="font-bold colegio-azul">${calcularPromedio(estudiante.notas.sociales)}</span>
+                                    </div>
+                                    <div class="flex justify-between bg-white/70 p-2 rounded-lg">
+                                        <span class="font-medium">🗣️ Inglés:</span>
+                                        <span class="font-bold colegio-azul">${calcularPromedio(estudiante.notas.ingles)}</span>
+                                    </div>
+                                    <div class="flex justify-between bg-white/70 p-2 rounded-lg">
+                                        <span class="font-medium">⚽ Ed. Física:</span>
+                                        <span class="font-bold colegio-azul">${calcularPromedio(estudiante.notas.educacion_fisica)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalles por materia -->
+                        <div class="mt-6">
+                            <h5 class="font-bold colegio-azul mb-4 text-lg">📋 Detalles por Materia</h5>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                ${Object.entries(estudiante.notas).map(([materia, notas]) => {
+                                    const materiaNames = {
+                                        matematicas: '📐 Matemáticas',
+                                        espanol: '📚 Español',
+                                        ciencias: '🔬 Ciencias',
+                                        sociales: '🌍 Sociales',
+                                        ingles: '🗣️ Inglés',
+                                        educacion_fisica: '⚽ Ed. Física'
+                                    };
+                                    return `
+                                        <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-100">
+                                            <h6 class="font-semibold colegio-azul mb-3 text-center">${materiaNames[materia]}</h6>
+                                            <div class="space-y-2 text-sm">
+                                                <div class="flex justify-between">
+                                                    <span>📓 Cuaderno:</span>
+                                                    <span class="font-bold">${notas.cuaderno}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span>📝 Trabajos:</span>
+                                                    <span class="font-bold">${notas.trabajos}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span>📊 Evaluaciones:</span>
+                                                    <span class="font-bold">${notas.evaluaciones}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span>✅ Asistencia:</span>
+                                                    <span class="font-bold">${notas.asistencia}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span>😊 Comportamiento:</span>
+                                                    <span class="font-bold">${notas.comportamiento}</span>
+                                                </div>
+                                                <hr class="my-2">
+                                                <div class="flex justify-between font-bold colegio-azul">
+                                                    <span>Promedio:</span>
+                                                    <span>${calcularPromedio(notas)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Mostrar información del grado
+                const estudiantesGrado = estudiantes.filter(e => e.grado === estudiante.grado);
+                const asistenciaPromedio = Math.round(Math.random() * 10 + 85); // Simulado
+                
+                infoGradoDiv.innerHTML = `
+                    <div class="bg-white p-3 rounded">
+                        <strong>Grado:</strong> ${estudiante.grado}
+                    </div>
+                    <div class="bg-white p-3 rounded">
+                        <strong>Coordinador:</strong> ${coordinadores[estudiante.grado] || 'No asignado'}
+                    </div>
+                    <div class="bg-white p-3 rounded">
+                        <strong>Estudiantes:</strong> ${estudiantesGrado.length}
+                    </div>
+                    <div class="bg-white p-3 rounded">
+                        <strong>Asistencia:</strong> ${asistenciaPromedio}%
+                    </div>
+                `;
+                
+                resultadoDiv.classList.remove('hidden');
+            } else {
+                resultadoDiv.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                        <p class="text-red-600">❌ No se encontró ningún estudiante con la identificación: ${idBuscado}</p>
+                    </div>
+                `;
+                resultadoDiv.classList.remove('hidden');
+                
+                infoGradoDiv.innerHTML = `
+                    <div class="bg-white p-3 rounded">Seleccione un estudiante para ver información del grado</div>
+                `;
+            }
+        }
+
+        // Gestión de estudiantes
+        function agregarEstudiante(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('nombreEstudiante').value;
+            const identificacion = document.getElementById('idEstudianteNuevo').value;
+            const grado = document.getElementById('gradoEstudiante').value;
+            const padre = document.getElementById('padreEstudiante').value;
+            const password = document.getElementById('passwordPadreNuevo').value;
+            
+            // Verificar si ya existe un estudiante con esa identificación
+            if (estudiantes.some(e => e.identificacion === identificacion)) {
+                alert('Ya existe un estudiante con esa identificación');
+                return;
+            }
+            
+            const nuevoEstudiante = {
+                id: Date.now(),
+                nombre: nombre,
+                identificacion: identificacion,
+                grado: grado,
+                padre: padre,
+                password: password,
+                notas: {
+                    matematicas: {
+                        cuaderno: (Math.random() * 2 + 3).toFixed(1),
+                        trabajos: (Math.random() * 2 + 3).toFixed(1),
+                        evaluaciones: (Math.random() * 2 + 3).toFixed(1),
+                        asistencia: (Math.random() * 2 + 3).toFixed(1),
+                        comportamiento: (Math.random() * 2 + 3).toFixed(1)
+                    },
+                    espanol: {
+                        cuaderno: (Math.random() * 2 + 3).toFixed(1),
+                        trabajos: (Math.random() * 2 + 3).toFixed(1),
+                        evaluaciones: (Math.random() * 2 + 3).toFixed(1),
+                        asistencia: (Math.random() * 2 + 3).toFixed(1),
+                        comportamiento: (Math.random() * 2 + 3).toFixed(1)
+                    },
+                    ciencias: {
+                        cuaderno: (Math.random() * 2 + 3).toFixed(1),
+                        trabajos: (Math.random() * 2 + 3).toFixed(1),
+                        evaluaciones: (Math.random() * 2 + 3).toFixed(1),
+                        asistencia: (Math.random() * 2 + 3).toFixed(1),
+                        comportamiento: (Math.random() * 2 + 3).toFixed(1)
+                    },
+                    sociales: {
+                        cuaderno: (Math.random() * 2 + 3).toFixed(1),
+                        trabajos: (Math.random() * 2 + 3).toFixed(1),
+                        evaluaciones: (Math.random() * 2 + 3).toFixed(1),
+                        asistencia: (Math.random() * 2 + 3).toFixed(1),
+                        comportamiento: (Math.random() * 2 + 3).toFixed(1)
+                    },
+                    ingles: {
+                        cuaderno: (Math.random() * 2 + 3).toFixed(1),
+                        trabajos: (Math.random() * 2 + 3).toFixed(1),
+                        evaluaciones: (Math.random() * 2 + 3).toFixed(1),
+                        asistencia: (Math.random() * 2 + 3).toFixed(1),
+                        comportamiento: (Math.random() * 2 + 3).toFixed(1)
+                    },
+                    educacion_fisica: {
+                        cuaderno: (Math.random() * 2 + 3).toFixed(1),
+                        trabajos: (Math.random() * 2 + 3).toFixed(1),
+                        evaluaciones: (Math.random() * 2 + 3).toFixed(1),
+                        asistencia: (Math.random() * 2 + 3).toFixed(1),
+                        comportamiento: (Math.random() * 2 + 3).toFixed(1)
+                    }
+                }
+            };
+            
+            estudiantes.push(nuevoEstudiante);
+            passwords.padres.push(password);
+            
+            // Limpiar formulario
+            document.getElementById('nombreEstudiante').value = '';
+            document.getElementById('idEstudianteNuevo').value = '';
+            document.getElementById('gradoEstudiante').value = '';
+            document.getElementById('padreEstudiante').value = '';
+            document.getElementById('passwordPadreNuevo').value = '';
+            
+            actualizarTotalEstudiantes();
+            actualizarEstadisticasGrados();
+            actualizarPanelAdmin();
+            alert('Estudiante agregado exitosamente');
+        }
+
+        function eliminarEstudiante(id) {
+            if (confirm('¿Está seguro de eliminar este estudiante?')) {
+                const index = estudiantes.findIndex(e => e.id === id);
+                if (index !== -1) {
+                    // Remover contraseña del array
+                    const passwordIndex = passwords.padres.indexOf(estudiantes[index].password);
+                    if (passwordIndex !== -1) {
+                        passwords.padres.splice(passwordIndex, 1);
+                    }
+                    
+                    estudiantes.splice(index, 1);
+                    actualizarTotalEstudiantes();
+                    actualizarEstadisticasGrados();
+                    actualizarPanelAdmin();
+                    alert('Estudiante eliminado exitosamente');
+                }
+            }
+        }
+
+        // Gestión de eventos
+        function agregarEvento(event) {
+            event.preventDefault();
+            
+            const titulo = document.getElementById('tituloEvento').value;
+            const fecha = document.getElementById('fechaEvento').value;
+            const hora = document.getElementById('horaEvento').value;
+            const descripcion = document.getElementById('descripcionEvento').value;
+            
+            const nuevoEvento = {
+                id: Date.now(),
+                titulo: titulo,
+                fecha: fecha,
+                hora: hora,
+                descripcion: descripcion
+            };
+            
+            eventos.push(nuevoEvento);
+            
+            // Limpiar formulario
+            document.getElementById('tituloEvento').value = '';
+            document.getElementById('fechaEvento').value = '';
+            document.getElementById('horaEvento').value = '';
+            document.getElementById('descripcionEvento').value = '';
+            
+            actualizarListaEventos();
+            actualizarCalendario();
+            actualizarProximosEventos();
+            actualizarPanelAdmin();
+            alert('Evento agregado exitosamente');
+        }
+
+        function eliminarEvento(id) {
+            if (confirm('¿Está seguro de eliminar este evento?')) {
+                const index = eventos.findIndex(e => e.id === id);
+                if (index !== -1) {
+                    eventos.splice(index, 1);
+                    actualizarListaEventos();
+                    actualizarCalendario();
+                    actualizarProximosEventos();
+                    actualizarPanelAdmin();
+                    alert('Evento eliminado exitosamente');
+                }
+            }
+        }
+
+        // Calendario
+        function actualizarCalendario() {
+            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            
+            document.getElementById('mesActual').textContent = `${meses[mesActual]} ${añoActual}`;
+            
+            const primerDia = new Date(añoActual, mesActual, 1).getDay();
+            const diasEnMes = new Date(añoActual, mesActual + 1, 0).getDate();
+            
+            let calendarioHTML = '';
+            
+            // Días de la semana
+            const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            diasSemana.forEach(dia => {
+                calendarioHTML += `<div class="font-bold colegio-azul p-2">${dia}</div>`;
+            });
+            
+            // Espacios vacíos antes del primer día
+            for (let i = 0; i < primerDia; i++) {
+                calendarioHTML += '<div class="p-2"></div>';
+            }
+            
+            // Días del mes
+            for (let dia = 1; dia <= diasEnMes; dia++) {
+                const fechaCompleta = `${añoActual}-${String(mesActual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+                const tieneEvento = eventos.some(evento => evento.fecha === fechaCompleta);
+                const esHoy = dia === fechaActual.getDate() && mesActual === fechaActual.getMonth() && añoActual === fechaActual.getFullYear();
+                
+                let clasesDia = 'p-2 border rounded cursor-pointer hover:bg-green-200';
+                if (esHoy) clasesDia += ' bg-blue-800 text-white';
+                if (tieneEvento) clasesDia += ' bg-yellow-200 font-bold';
+                
+                calendarioHTML += `<div class="${clasesDia}">${dia}</div>`;
+            }
+            
+            document.getElementById('diasCalendario').innerHTML = calendarioHTML;
+        }
+
+        function cambiarMes(direccion) {
+            mesActual += direccion;
+            if (mesActual > 11) {
+                mesActual = 0;
+                añoActual++;
+            } else if (mesActual < 0) {
+                mesActual = 11;
+                añoActual--;
+            }
+            actualizarCalendario();
+        }
+
+        // Actualizar listas
+        function actualizarListaDocentes() {
+            const lista = document.getElementById('listaDocentes');
+            if (!lista) return;
+            
+            lista.innerHTML = '';
+            
+            docentes.forEach(docente => {
+                const coordinacionInfo = docente.esCoordinador ? `<p class="text-sm text-blue-600 font-semibold">Coordinador de ${docente.gradoCoordinacion}</p>` : '';
+                
+                lista.innerHTML += `
+                    <div class="bg-green-200 p-4 rounded-lg">
+                        <h4 class="font-bold colegio-azul">${docente.nombre}</h4>
+                        <p class="text-gray-700">${docente.materia}</p>
+                        ${coordinacionInfo}
+                    </div>
+                `;
+            });
+        }
+
+        function actualizarTotalEstudiantes() {
+            const totalElement = document.getElementById('totalEstudiantes');
+            if (totalElement) {
+                totalElement.textContent = estudiantes.length;
+            }
+        }
+
+        function actualizarEstadisticasGrados() {
+            const lista = document.getElementById('estadisticasGrados');
+            if (!lista) return;
+            
+            lista.innerHTML = '';
+            
+            const grados = ['Jardín', 'Transición', '1°', '2°', '3°', '4°', '5°'];
+            
+            grados.forEach(grado => {
+                const estudiantesGrado = estudiantes.filter(e => e.grado === grado);
+                const asistenciaPromedio = Math.round(Math.random() * 15 + 80); // Simulado entre 80-95%
+                
+                lista.innerHTML += `
+                    <div class="bg-gradient-to-r from-green-200 to-yellow-200 p-4 rounded-lg">
+                        <h4 class="font-bold colegio-azul text-lg">${grado}</h4>
+                        <div class="mt-2 space-y-1">
+                            <p class="text-gray-700"><strong>👥 Estudiantes:</strong> ${estudiantesGrado.length}</p>
+                            <p class="text-gray-700"><strong>📊 Asistencia:</strong> ${asistenciaPromedio}%</p>
+                            <p class="text-gray-700"><strong>👨‍🏫 Coordinador:</strong> ${coordinadores[grado] || 'No asignado'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function actualizarListaEventos() {
+            const lista = document.getElementById('listaEventos');
+            if (!lista) return;
+            
+            lista.innerHTML = '';
+            
+            // Ordenar eventos por fecha
+            const eventosOrdenados = eventos.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+            
+            eventosOrdenados.forEach(evento => {
+                const fecha = new Date(evento.fecha);
+                const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                lista.innerHTML += `
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-blue-800">
+                        <h4 class="font-bold colegio-azul">${evento.titulo}</h4>
+                        <p class="text-gray-600 text-sm">${fechaFormateada} - ${evento.hora}</p>
+                        <p class="text-gray-700 mt-2">${evento.descripcion}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function actualizarProximosEventos() {
+            const lista = document.getElementById('proximosEventos');
+            if (!lista) return;
+            
+            const hoy = new Date();
+            
+            // Filtrar eventos próximos (siguientes 30 días)
+            const eventosProximos = eventos.filter(evento => {
+                const fechaEvento = new Date(evento.fecha);
+                const diferenciaDias = (fechaEvento - hoy) / (1000 * 60 * 60 * 24);
+                return diferenciaDias >= 0 && diferenciaDias <= 30;
+            }).sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).slice(0, 3);
+            
+            if (eventosProximos.length === 0) {
+                lista.innerHTML = '<p class="text-gray-600">No hay eventos próximos programados</p>';
+            } else {
+                lista.innerHTML = '';
+                eventosProximos.forEach(evento => {
+                    const fecha = new Date(evento.fecha);
+                    const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    
+                    lista.innerHTML += `
+                        <div class="bg-white p-3 rounded-lg flex justify-between items-center">
+                            <div>
+                                <span class="font-bold colegio-azul">${evento.titulo}</span>
+                                <span class="text-gray-600 ml-2">${evento.hora}</span>
+                            </div>
+                            <span class="bg-blue-800 text-white px-2 py-1 rounded text-sm">${fechaFormateada}</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function actualizarPanelAdmin() {
+            // Actualizar contador de docentes
+            const contadorElement = document.getElementById('contadorDocentes');
+            if (contadorElement) {
+                contadorElement.textContent = docentes.length;
+            }
+            
+            // Actualizar lista de docentes en admin
+            const listaDocentesAdmin = document.getElementById('adminListaDocentes');
+            if (listaDocentesAdmin) {
+                listaDocentesAdmin.innerHTML = '';
+                
+                docentes.forEach(docente => {
+                    const coordinacionInfo = docente.esCoordinador ? ` (Coord. ${docente.gradoCoordinacion})` : '';
+                    
+                    listaDocentesAdmin.innerHTML += `
+                        <div class="bg-white p-3 rounded-lg flex justify-between items-center">
+                            <div>
+                                <span class="font-bold">${docente.nombre}</span>
+                                <span class="text-gray-600 ml-2">${docente.materia}${coordinacionInfo}</span>
+                            </div>
+                            <button onclick="eliminarDocente(${docente.id})"
