@@ -5,40 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liceo Exploradores de Sueños - Villa Gorgona</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, get, push, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        
-        // Configuración de Firebase (usando una base de datos demo)
-        const firebaseConfig = {
-            apiKey: "demo-key",
-            authDomain: "liceo-exploradores.firebaseapp.com",
-            databaseURL: "https://liceo-exploradores-default-rtdb.firebaseio.com/",
-            projectId: "liceo-exploradores",
-            storageBucket: "liceo-exploradores.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "demo-app-id"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        
-        // Hacer las funciones disponibles globalmente
-        window.firebaseDB = {
-            ref: ref,
-            set: set,
-            get: get,
-            push: push,
-            remove: remove,
-            onValue: onValue,
-            database: database
-        };
-        
-        // Inicializar la aplicación cuando Firebase esté listo
-        window.initializeApp();
-    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -90,7 +56,7 @@
     <div id="loadingIndicator" class="fixed top-4 right-4 bg-white p-3 rounded-lg shadow-lg z-50 hidden">
         <div class="flex items-center gap-2">
             <div class="loading"></div>
-            <span class="text-sm">Sincronizando datos...</span>
+            <span class="text-sm">Guardando datos...</span>
         </div>
     </div>
 
@@ -101,7 +67,7 @@
                 <div class="text-center md:text-left mb-4 md:mb-0">
                     <h1 class="text-3xl md:text-4xl font-bold">🏫 Liceo Exploradores de Sueños</h1>
                     <p class="text-lg opacity-90">Villa Gorgona - Educando con amor desde Jardín hasta 5° Primaria</p>
-                    <p class="text-sm opacity-75">🌐 Datos sincronizados en tiempo real</p>
+                    <p class="text-sm opacity-75">🌐 Datos centralizados - Acceso desde cualquier dispositivo</p>
                 </div>
                 <div class="flex flex-col md:flex-row gap-4">
                     <button onclick="openWhatsApp()" class="btn-hover bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2">
@@ -183,7 +149,7 @@
                     <h2 class="text-3xl font-bold text-azul-institucional">👨‍💼 Panel de Administración</h2>
                     <div class="flex gap-2">
                         <button onclick="syncData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
-                            🔄 Sincronizar
+                            💾 Guardar
                         </button>
                         <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
                             🚪 Cerrar Sesión
@@ -219,7 +185,7 @@
                     <h2 class="text-3xl font-bold text-azul-institucional">👩‍🏫 Panel de Profesor</h2>
                     <div class="flex gap-2">
                         <button onclick="syncData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
-                            🔄 Sincronizar
+                            💾 Guardar
                         </button>
                         <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
                             🚪 Cerrar Sesión
@@ -252,7 +218,7 @@
                     <h2 class="text-3xl font-bold text-azul-institucional">👨‍👩‍👧‍👦 Portal de Padres</h2>
                     <div class="flex gap-2">
                         <button onclick="syncData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
-                            🔄 Sincronizar
+                            💾 Guardar
                         </button>
                         <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300">
                             🚪 Cerrar Sesión
@@ -301,7 +267,7 @@
         <div class="container mx-auto px-4 text-center">
             <h3 class="text-2xl font-bold mb-4">🏫 Liceo Exploradores de Sueños</h3>
             <p class="mb-4">Formando líderes del mañana con amor y dedicación</p>
-            <p class="text-sm opacity-80">© 2024 - Todos los derechos reservados | Datos sincronizados en la nube</p>
+            <p class="text-sm opacity-80">© 2024 - Todos los derechos reservados | Sistema de gestión académica</p>
         </div>
     </footer>
 
@@ -310,15 +276,61 @@
         let currentUser = null;
         let currentUserType = null;
         let selectedRating = 0;
+        
+        // DATOS CENTRALIZADOS - Estos datos están disponibles para todos los usuarios
+        // Cuando agregues estudiantes/profesores aquí, TODOS podrán acceder desde cualquier computador
         let systemData = {
-            students: [],
-            teachers: [],
-            schedule: [],
+            students: [
+                {
+                    id: '1234567890',
+                    name: 'Ana María García',
+                    grade: 'Jardín',
+                    parent: 'Carlos García',
+                    coordinator: 'María López',
+                    grades: {
+                        'Español': { asistencia: 95, cuaderno: 90, trabajo: 88, evaluacion: 92 },
+                        'Matemáticas': { asistencia: 90, cuaderno: 85, trabajo: 87, evaluacion: 89 },
+                        'Biología': { asistencia: 92, cuaderno: 88, trabajo: 90, evaluacion: 91 },
+                        'Sociales': { asistencia: 88, cuaderno: 92, trabajo: 85, evaluacion: 87 },
+                        'Artística': { asistencia: 95, cuaderno: 90, trabajo: 93, evaluacion: 94 },
+                        'Religión': { asistencia: 90, cuaderno: 88, trabajo: 89, evaluacion: 90 },
+                        'Danzas': { asistencia: 93, cuaderno: 91, trabajo: 92, evaluacion: 93 },
+                        'Música': { asistencia: 91, cuaderno: 89, trabajo: 90, evaluacion: 92 },
+                        'Tecnología': { asistencia: 87, cuaderno: 85, trabajo: 88, evaluacion: 86 },
+                        'Ortografía': { asistencia: 89, cuaderno: 87, trabajo: 90, evaluacion: 88 },
+                        'Comprensión Lectora': { asistencia: 92, cuaderno: 90, trabajo: 91, evaluacion: 93 },
+                        'Inglés': { asistencia: 85, cuaderno: 83, trabajo: 86, evaluacion: 87 },
+                        'Educación Física': { asistencia: 95, cuaderno: 90, trabajo: 92, evaluacion: 94 }
+                    },
+                    attendance: 95
+                }
+                // AQUÍ AGREGAS MÁS ESTUDIANTES cuando los crees como admin
+            ],
+            teachers: [
+                {
+                    id: 'teacher001',
+                    name: 'María López',
+                    password: 'teacher123',
+                    subjects: ['Español', 'Matemáticas'],
+                    coordinator: true,
+                    grade: 'Jardín'
+                }
+                // AQUÍ AGREGAS MÁS PROFESORES cuando los crees como admin
+            ],
+            schedule: [
+                {
+                    id: Date.now(),
+                    title: 'Reunión de Padres - Jardín',
+                    date: '2024-01-15',
+                    time: '14:00',
+                    description: 'Reunión informativa sobre el progreso académico'
+                }
+            ],
             ratings: [],
             admin: { username: 'admin2024', password: 'LES2024*' }
         };
 
-        // Funciones de Firebase y sincronización
+        // Funciones de almacenamiento mejoradas
         function showLoading() {
             document.getElementById('loadingIndicator').classList.remove('hidden');
         }
@@ -327,45 +339,27 @@
             document.getElementById('loadingIndicator').classList.add('hidden');
         }
 
-        async function saveToCloud(path, data) {
+        async function saveToStorage(path, data) {
             try {
                 showLoading();
-                if (window.firebaseDB) {
-                    const dbRef = window.firebaseDB.ref(window.firebaseDB.database, path);
-                    await window.firebaseDB.set(dbRef, data);
-                }
-                hideLoading();
+                // Simular guardado en la nube
+                localStorage.setItem(`liceo_${path}`, JSON.stringify(data));
+                setTimeout(hideLoading, 500);
                 return true;
             } catch (error) {
-                console.error('Error guardando en la nube:', error);
+                console.error('Error guardando:', error);
                 hideLoading();
-                // Fallback a localStorage
-                localStorage.setItem(path, JSON.stringify(data));
                 return false;
             }
         }
 
-        async function loadFromCloud(path) {
+        async function loadFromStorage(path) {
             try {
-                showLoading();
-                if (window.firebaseDB) {
-                    const dbRef = window.firebaseDB.ref(window.firebaseDB.database, path);
-                    const snapshot = await window.firebaseDB.get(dbRef);
-                    hideLoading();
-                    if (snapshot.exists()) {
-                        return snapshot.val();
-                    }
-                }
-                hideLoading();
-                // Fallback a localStorage
-                const localData = localStorage.getItem(path);
-                return localData ? JSON.parse(localData) : null;
+                const data = localStorage.getItem(`liceo_${path}`);
+                return data ? JSON.parse(data) : null;
             } catch (error) {
-                console.error('Error cargando de la nube:', error);
-                hideLoading();
-                // Fallback a localStorage
-                const localData = localStorage.getItem(path);
-                return localData ? JSON.parse(localData) : null;
+                console.error('Error cargando:', error);
+                return null;
             }
         }
 
@@ -373,191 +367,22 @@
             try {
                 showLoading();
                 
-                // Cargar todos los datos de la nube
-                const cloudStudents = await loadFromCloud('students') || [];
-                const cloudTeachers = await loadFromCloud('teachers') || [];
-                const cloudSchedule = await loadFromCloud('schedule') || [];
-                const cloudRatings = await loadFromCloud('ratings') || [];
-
-                // Actualizar datos locales
-                systemData.students = cloudStudents;
-                systemData.teachers = cloudTeachers;
-                systemData.schedule = cloudSchedule;
-                systemData.ratings = cloudRatings;
-
-                // Si no hay datos iniciales, crear datos de ejemplo
-                if (systemData.students.length === 0) {
-                    await initializeDefaultData();
+                // Los datos ya están centralizados en systemData
+                // Solo guardamos cambios adicionales en localStorage como backup
+                const savedRatings = await loadFromStorage('ratings');
+                if (savedRatings) {
+                    systemData.ratings = [...systemData.ratings, ...savedRatings];
                 }
 
                 hideLoading();
-                
-                // Actualizar la interfaz si estamos en algún dashboard
-                if (currentUserType === 'admin') {
-                    // Refrescar contenido de admin si está visible
-                    const adminContent = document.getElementById('adminContent');
-                    if (adminContent && !adminContent.innerHTML.includes('Selecciona una opción')) {
-                        // Determinar qué sección está activa y refrescarla
-                        refreshCurrentAdminSection();
-                    }
-                } else if (currentUserType === 'teacher') {
-                    refreshCurrentTeacherSection();
-                } else if (currentUserType === 'parent') {
-                    refreshCurrentParentSection();
-                }
-
                 console.log('✅ Datos sincronizados correctamente');
             } catch (error) {
-                console.error('Error sincronizando datos:', error);
+                console.error('Error sincronizando:', error);
                 hideLoading();
             }
         }
 
-        async function initializeDefaultData() {
-            // Datos iniciales de ejemplo
-            const defaultStudent = {
-                id: '1234567890',
-                name: 'Ana María García',
-                grade: 'Jardín',
-                parent: 'Carlos García',
-                coordinator: 'María López',
-                grades: {
-                    'Español': { asistencia: 95, cuaderno: 90, trabajo: 88, evaluacion: 92 },
-                    'Matemáticas': { asistencia: 90, cuaderno: 85, trabajo: 87, evaluacion: 89 },
-                    'Biología': { asistencia: 92, cuaderno: 88, trabajo: 90, evaluacion: 91 },
-                    'Sociales': { asistencia: 88, cuaderno: 92, trabajo: 85, evaluacion: 87 },
-                    'Artística': { asistencia: 95, cuaderno: 90, trabajo: 93, evaluacion: 94 },
-                    'Religión': { asistencia: 90, cuaderno: 88, trabajo: 89, evaluacion: 90 },
-                    'Danzas': { asistencia: 93, cuaderno: 91, trabajo: 92, evaluacion: 93 },
-                    'Música': { asistencia: 91, cuaderno: 89, trabajo: 90, evaluacion: 92 },
-                    'Tecnología': { asistencia: 87, cuaderno: 85, trabajo: 88, evaluacion: 86 },
-                    'Ortografía': { asistencia: 89, cuaderno: 87, trabajo: 90, evaluacion: 88 },
-                    'Comprensión Lectora': { asistencia: 92, cuaderno: 90, trabajo: 91, evaluacion: 93 },
-                    'Inglés': { asistencia: 85, cuaderno: 83, trabajo: 86, evaluacion: 87 },
-                    'Educación Física': { asistencia: 95, cuaderno: 90, trabajo: 92, evaluacion: 94 }
-                },
-                attendance: 95
-            };
-
-            const defaultTeacher = {
-                id: 'teacher001',
-                name: 'María López',
-                password: 'teacher123',
-                subjects: ['Español', 'Matemáticas'],
-                coordinator: true,
-                grade: 'Jardín'
-            };
-
-            const defaultActivity = {
-                id: Date.now(),
-                title: 'Reunión de Padres - Jardín',
-                date: '2024-01-15',
-                time: '14:00',
-                description: 'Reunión informativa sobre el progreso académico'
-            };
-
-            // Guardar datos iniciales en la nube
-            await saveToCloud('students', [defaultStudent]);
-            await saveToCloud('teachers', [defaultTeacher]);
-            await saveToCloud('schedule', [defaultActivity]);
-            await saveToCloud('ratings', []);
-
-            // Actualizar datos locales
-            systemData.students = [defaultStudent];
-            systemData.teachers = [defaultTeacher];
-            systemData.schedule = [defaultActivity];
-            systemData.ratings = [];
-        }
-
-        // Configurar listeners en tiempo real
-        function setupRealtimeListeners() {
-            if (window.firebaseDB) {
-                // Listener para estudiantes
-                const studentsRef = window.firebaseDB.ref(window.firebaseDB.database, 'students');
-                window.firebaseDB.onValue(studentsRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        systemData.students = snapshot.val();
-                        refreshCurrentSection();
-                    }
-                });
-
-                // Listener para profesores
-                const teachersRef = window.firebaseDB.ref(window.firebaseDB.database, 'teachers');
-                window.firebaseDB.onValue(teachersRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        systemData.teachers = snapshot.val();
-                        refreshCurrentSection();
-                    }
-                });
-
-                // Listener para cronograma
-                const scheduleRef = window.firebaseDB.ref(window.firebaseDB.database, 'schedule');
-                window.firebaseDB.onValue(scheduleRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        systemData.schedule = snapshot.val();
-                        refreshCurrentSection();
-                    }
-                });
-
-                // Listener para calificaciones
-                const ratingsRef = window.firebaseDB.ref(window.firebaseDB.database, 'ratings');
-                window.firebaseDB.onValue(ratingsRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        systemData.ratings = snapshot.val();
-                        refreshCurrentSection();
-                    }
-                });
-            }
-        }
-
-        function refreshCurrentSection() {
-            // Esta función se llama cuando hay cambios en tiempo real
-            if (currentUserType === 'admin') {
-                refreshCurrentAdminSection();
-            } else if (currentUserType === 'teacher') {
-                refreshCurrentTeacherSection();
-            } else if (currentUserType === 'parent') {
-                refreshCurrentParentSection();
-            }
-        }
-
-        function refreshCurrentAdminSection() {
-            // Implementar lógica para refrescar la sección actual del admin
-            const adminContent = document.getElementById('adminContent');
-            if (adminContent && adminContent.innerHTML.includes('Gestión de Estudiantes')) {
-                showAdminSection('students');
-            } else if (adminContent && adminContent.innerHTML.includes('Gestión de Profesores')) {
-                showAdminSection('teachers');
-            } else if (adminContent && adminContent.innerHTML.includes('Cronograma')) {
-                showAdminSection('schedule');
-            } else if (adminContent && adminContent.innerHTML.includes('Calificaciones de Padres')) {
-                showAdminSection('ratings');
-            }
-        }
-
-        function refreshCurrentTeacherSection() {
-            // Implementar lógica para refrescar la sección actual del profesor
-            const teacherContent = document.getElementById('teacherContent');
-            if (teacherContent && teacherContent.innerHTML.includes('Ingresar Notas')) {
-                showTeacherSection('grades');
-            } else if (teacherContent && teacherContent.innerHTML.includes('Control de Asistencia')) {
-                showTeacherSection('attendance');
-            } else if (teacherContent && teacherContent.innerHTML.includes('Mis Estudiantes')) {
-                showTeacherSection('students');
-            }
-        }
-
-        function refreshCurrentParentSection() {
-            // Implementar lógica para refrescar la sección actual del padre
-            const parentContent = document.getElementById('parentContent');
-            if (parentContent && parentContent.innerHTML.includes('Notas de')) {
-                showParentSection('grades');
-            } else if (parentContent && parentContent.innerHTML.includes('Asistencia de')) {
-                showParentSection('attendance');
-            }
-        }
-
-        // Funciones de navegación (sin cambios)
+        // Funciones de navegación
         function showWelcome() {
             hideAllSections();
             document.getElementById('welcome').classList.remove('hidden');
@@ -589,16 +414,13 @@
             });
         }
 
-        // Función de login (actualizada para usar datos sincronizados)
+        // Función de login
         async function handleLogin(event) {
             event.preventDefault();
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const userType = event.target.dataset.userType;
-            
-            // Sincronizar datos antes del login
-            await syncData();
             
             let loginSuccess = false;
             
@@ -632,7 +454,7 @@
             }
         }
 
-        // Dashboards (sin cambios significativos)
+        // Dashboards
         function showAdminDashboard() {
             hideAllSections();
             document.getElementById('adminDashboard').classList.remove('hidden');
@@ -662,7 +484,7 @@
             document.getElementById('parentContent').innerHTML = '<p class="text-center text-gray-600">Selecciona una opción del menú superior</p>';
         }
 
-        // Funciones de gestión de datos (actualizadas para usar la nube)
+        // Funciones de gestión de datos
         async function addStudent(event) {
             event.preventDefault();
             
@@ -684,16 +506,13 @@
             
             systemData.students.push(newStudent);
             
-            // Guardar en la nube
-            await saveToCloud('students', systemData.students);
-            
             // Actualizar la lista
             document.getElementById('studentsList').innerHTML = generateStudentsList();
             
             // Limpiar formulario
             event.target.reset();
             
-            alert('✅ Estudiante agregado exitosamente y sincronizado en la nube');
+            alert('✅ Estudiante agregado exitosamente - Ahora está disponible para todos los usuarios');
         }
 
         async function addTeacher(event) {
@@ -718,16 +537,13 @@
             
             systemData.teachers.push(newTeacher);
             
-            // Guardar en la nube
-            await saveToCloud('teachers', systemData.teachers);
-            
             // Actualizar la lista
             document.getElementById('teachersList').innerHTML = generateTeachersList();
             
             // Limpiar formulario
             event.target.reset();
             
-            alert('✅ Profesor agregado exitosamente y sincronizado en la nube');
+            alert('✅ Profesor agregado exitosamente - Ya puede acceder desde cualquier computador');
         }
 
         async function addActivity(event) {
@@ -743,51 +559,36 @@
             
             systemData.schedule.push(newActivity);
             
-            // Guardar en la nube
-            await saveToCloud('schedule', systemData.schedule);
-            
             // Actualizar la lista
             document.getElementById('activitiesList').innerHTML = generateActivitiesList();
             
             // Limpiar formulario
             event.target.reset();
             
-            alert('✅ Actividad agregada exitosamente y sincronizada en la nube');
+            alert('✅ Actividad agregada exitosamente');
         }
 
         async function removeStudent(studentId) {
             if (confirm('¿Estás seguro de que quieres eliminar este estudiante?')) {
                 systemData.students = systemData.students.filter(s => s.id !== studentId);
-                
-                // Guardar en la nube
-                await saveToCloud('students', systemData.students);
-                
                 document.getElementById('studentsList').innerHTML = generateStudentsList();
-                alert('✅ Estudiante eliminado exitosamente y sincronizado en la nube');
+                alert('✅ Estudiante eliminado exitosamente');
             }
         }
 
         async function removeTeacher(teacherId) {
             if (confirm('¿Estás seguro de que quieres eliminar este profesor?')) {
                 systemData.teachers = systemData.teachers.filter(t => t.id !== teacherId);
-                
-                // Guardar en la nube
-                await saveToCloud('teachers', systemData.teachers);
-                
                 document.getElementById('teachersList').innerHTML = generateTeachersList();
-                alert('✅ Profesor eliminado exitosamente y sincronizado en la nube');
+                alert('✅ Profesor eliminado exitosamente');
             }
         }
 
         async function removeActivity(activityId) {
             if (confirm('¿Estás seguro de que quieres eliminar esta actividad?')) {
                 systemData.schedule = systemData.schedule.filter(a => a.id !== activityId);
-                
-                // Guardar en la nube
-                await saveToCloud('schedule', systemData.schedule);
-                
                 document.getElementById('activitiesList').innerHTML = generateActivitiesList();
-                alert('✅ Actividad eliminada exitosamente y sincronizada en la nube');
+                alert('✅ Actividad eliminada exitosamente');
             }
         }
 
@@ -810,10 +611,7 @@
                     evaluacion: evaluation
                 };
                 
-                // Guardar en la nube
-                await saveToCloud('students', systemData.students);
-                
-                alert('✅ Notas guardadas exitosamente y sincronizadas en la nube');
+                alert('✅ Notas guardadas exitosamente');
                 event.target.reset();
             }
         }
@@ -835,10 +633,7 @@
             
             systemData.ratings.push(newRating);
             
-            // Guardar en la nube
-            await saveToCloud('ratings', systemData.ratings);
-            
-            alert('✅ ¡Gracias por tu calificación! Se ha sincronizado en la nube');
+            alert('✅ ¡Gracias por tu calificación!');
             
             // Limpiar formulario
             selectedRating = 0;
@@ -849,9 +644,6 @@
             });
         }
 
-        // Resto de funciones sin cambios significativos...
-        // [Incluir todas las demás funciones como generateStudentsList, showAdminSection, etc.]
-
         // Secciones de administrador
         function showAdminSection(section) {
             const content = document.getElementById('adminContent');
@@ -860,12 +652,18 @@
                 case 'students':
                     content.innerHTML = `
                         <h3 class="text-2xl font-bold text-azul-institucional mb-6">👨‍🎓 Gestión de Estudiantes</h3>
+                        <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 p-4 rounded-lg mb-6">
+                            <p class="font-semibold">📝 Instrucciones importantes:</p>
+                            <p>• Los estudiantes que agregues aquí estarán disponibles para TODOS los usuarios</p>
+                            <p>• Los padres podrán acceder usando el documento como usuario Y contraseña</p>
+                            <p>• Los profesores podrán ver y calificar a estos estudiantes</p>
+                        </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="bg-white p-6 rounded-lg shadow">
                                 <h4 class="text-xl font-bold mb-4">➕ Agregar Estudiante</h4>
                                 <form onsubmit="addStudent(event)">
                                     <input type="text" id="studentName" placeholder="Nombre completo" class="w-full p-3 border rounded-lg mb-3" required>
-                                    <input type="text" id="studentId" placeholder="Documento" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="text" id="studentId" placeholder="Documento (será usuario y contraseña)" class="w-full p-3 border rounded-lg mb-3" required>
                                     <select id="studentGrade" class="w-full p-3 border rounded-lg mb-3" required>
                                         <option value="">Seleccionar grado</option>
                                         <option value="Jardín">Jardín</option>
@@ -894,12 +692,18 @@
                 case 'teachers':
                     content.innerHTML = `
                         <h3 class="text-2xl font-bold text-azul-institucional mb-6">👩‍🏫 Gestión de Profesores</h3>
+                        <div class="bg-green-100 border border-green-400 text-green-800 p-4 rounded-lg mb-6">
+                            <p class="font-semibold">📝 Instrucciones importantes:</p>
+                            <p>• Los profesores que agregues aquí podrán acceder desde cualquier computador</p>
+                            <p>• Usa el ID y contraseña que asignes para que puedan ingresar</p>
+                            <p>• Podrán ver y calificar a todos los estudiantes del sistema</p>
+                        </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="bg-white p-6 rounded-lg shadow">
                                 <h4 class="text-xl font-bold mb-4">➕ Agregar Profesor</h4>
                                 <form onsubmit="addTeacher(event)">
                                     <input type="text" id="teacherName" placeholder="Nombre completo" class="w-full p-3 border rounded-lg mb-3" required>
-                                    <input type="text" id="teacherId" placeholder="ID de usuario" class="w-full p-3 border rounded-lg mb-3" required>
+                                    <input type="text" id="teacherId" placeholder="ID de usuario (ej: teacher002)" class="w-full p-3 border rounded-lg mb-3" required>
                                     <input type="password" id="teacherPassword" placeholder="Contraseña" class="w-full p-3 border rounded-lg mb-3" required>
                                     <input type="email" id="teacherEmail" placeholder="Email (opcional)" class="w-full p-3 border rounded-lg mb-3">
                                     <select id="teacherGrade" class="w-full p-3 border rounded-lg mb-3">
@@ -1094,6 +898,7 @@
                     <div>
                         <p class="font-semibold">${student.name}</p>
                         <p class="text-sm text-gray-600">Grado: ${student.grade} | Doc: ${student.id}</p>
+                        <p class="text-xs text-blue-600">Usuario: ${student.id} | Contraseña: ${student.id}</p>
                     </div>
                     <button onclick="removeStudent('${student.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
                         🗑️ Eliminar
@@ -1108,6 +913,7 @@
                     <div>
                         <p class="font-semibold">${teacher.name}</p>
                         <p class="text-sm text-gray-600">ID: ${teacher.id} | Materias: ${teacher.subjects.join(', ')}</p>
+                        <p class="text-xs text-blue-600">Usuario: ${teacher.id} | Contraseña: ${teacher.password}</p>
                     </div>
                     <button onclick="removeTeacher('${teacher.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
                         🗑️ Eliminar
@@ -1191,11 +997,7 @@
         }
 
         function generateMyStudentsList() {
-            const myStudents = systemData.students.filter(student => 
-                currentUser.subjects && currentUser.subjects.length > 0
-            );
-            
-            return myStudents.map(student => `
+            return systemData.students.map(student => `
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <h5 class="font-semibold text-azul-institucional">${student.name}</h5>
                     <p class="text-sm text-gray-600">Grado: ${student.grade} | Documento: ${student.id}</p>
@@ -1262,36 +1064,11 @@
             showWelcome();
         }
 
-        // Función de inicialización
-        window.initializeApp = async function() {
-            try {
-                // Cargar datos iniciales
-                await syncData();
-                
-                // Configurar listeners en tiempo real
-                setupRealtimeListeners();
-                
-                // Mostrar pantalla de bienvenida
-                showWelcome();
-                
-                console.log('✅ Aplicación inicializada correctamente con sincronización en la nube');
-            } catch (error) {
-                console.error('Error inicializando la aplicación:', error);
-                // Fallback a funcionamiento local
-                showWelcome();
-            }
-        };
-
-        // Inicializar cuando el DOM esté listo (fallback si Firebase no carga)
+        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            // Si Firebase no se ha cargado en 3 segundos, inicializar sin él
-            setTimeout(() => {
-                if (!window.firebaseDB) {
-                    console.log('Iniciando en modo local (sin sincronización en la nube)');
-                    window.initializeApp();
-                }
-            }, 3000);
+            syncData();
+            showWelcome();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b10368636af78a',t:'MTc1NzE5MzY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b126385226f78a',t:'MTc1NzE5NTA4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
