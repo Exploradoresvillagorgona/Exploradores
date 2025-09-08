@@ -1,1 +1,1433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liceo Exploradores de Sueños - Villa Gorgona</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'school-blue': '#1e3a8a',
+                        'school-yellow': '#fbbf24',
+                        'school-green': '#86efac',
+                        'school-white': '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #86efac 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 58, 138, 0.4);
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .sync-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Indicador de sincronización -->
+    <div id="sync-status" class="sync-indicator">
+        🌐 Sistema compartido activo
+    </div>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-3xl md:text-4xl font-bold">🏫 Liceo Exploradores de Sueños</h1>
+                    <p class="text-lg mt-2">Villa Gorgona - Candelaria 🌟</p>
+                    <p class="text-sm mt-1 opacity-90">🌐 Sistema compartido - Acceso universal desde cualquier lugar</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <button onclick="openWhatsApp()" class="btn-primary px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+                        📱 WhatsApp: 313-564-96-61
+                    </button>
+                    <button onclick="openLocation()" class="bg-school-green text-school-blue px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+                        📍 Ver Ubicación
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Welcome Section -->
+        <div id="welcome-section" class="text-center mb-12 fade-in">
+            <div class="bg-white rounded-2xl p-8 card-shadow">
+                <h2 class="text-3xl font-bold text-school-blue mb-4">¡Bienvenidos a Nuestro Portal Educativo! 🎓</h2>
+                <p class="text-lg text-gray-700 mb-2">Educación de calidad desde Jardín hasta 5° de Primaria</p>
+                <p class="text-sm text-green-600 mb-6">🌐 Sistema compartido - Acceso universal desde cualquier dispositivo</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button onclick="showLogin('admin')" class="btn-primary text-white py-4 px-6 rounded-xl font-semibold">
+                        👨‍💼 Acceso Administrador
+                    </button>
+                    <button onclick="showLogin('teacher')" class="bg-school-yellow text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        👩‍🏫 Acceso Profesores
+                    </button>
+                    <button onclick="showLogin('parent')" class="bg-school-green text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        👨‍👩‍👧‍👦 Acceso Padres
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Forms -->
+        <div id="login-section" class="hidden fade-in">
+            <div class="max-w-md mx-auto bg-white rounded-2xl p-8 card-shadow">
+                <h3 id="login-title" class="text-2xl font-bold text-school-blue mb-6 text-center"></h3>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Usuario:</label>
+                        <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-school-blue" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Contraseña:</label>
+                        <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-school-blue" required>
+                    </div>
+                    <button type="submit" id="login-btn" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+                        🔐 Ingresar
+                    </button>
+                </form>
+                <button onclick="showWelcome()" class="w-full mt-4 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600">
+                    ← Volver
+                </button>
+                <div id="login-error" class="hidden mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-center">
+                    ❌ Usuario o contraseña incorrecta
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="hidden fade-in">
+            <div class="bg-white rounded-2xl p-8 card-shadow mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-school-blue">👨‍💼 Panel de Administración</h2>
+                    <div class="flex gap-4">
+                        <div class="text-sm text-green-600">
+                            ✅ Sistema activo
+                        </div>
+                        <button onclick="showShareableLink('¡Comparte el sistema con profesores y padres!')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                            🔗 Compartir Sistema
+                        </button>
+                        <button onclick="exportData()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                            📥 Exportar Datos
+                        </button>
+                        <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <button onclick="showSection('students-management')" class="btn-primary text-white py-4 px-6 rounded-xl font-semibold">
+                        👨‍🎓 Gestionar Estudiantes
+                    </button>
+                    <button onclick="showSection('teachers-management')" class="bg-school-yellow text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        👩‍🏫 Gestionar Profesores
+                    </button>
+                    <button onclick="showSection('schedule-management')" class="bg-school-green text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        📅 Cronograma
+                    </button>
+                    <button onclick="showSection('reports-management')" class="bg-purple-500 text-white py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        📊 Boletines
+                    </button>
+                </div>
+
+                <!-- Students Management -->
+                <div id="students-management" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">👨‍🎓 Gestión de Estudiantes</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="text-xl font-semibold mb-4">➕ Agregar Estudiante</h4>
+                            <form onsubmit="addStudent(event)">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <input type="text" placeholder="Nombre completo" class="px-4 py-2 border rounded-lg" required>
+                                    <input type="text" placeholder="Documento" class="px-4 py-2 border rounded-lg" required>
+                                    <select class="px-4 py-2 border rounded-lg" required>
+                                        <option value="">Seleccionar grado</option>
+                                        <option value="jardin">Jardín</option>
+                                        <option value="transicion">Transición</option>
+                                        <option value="primero">1° Primaria</option>
+                                        <option value="segundo">2° Primaria</option>
+                                        <option value="tercero">3° Primaria</option>
+                                        <option value="cuarto">4° Primaria</option>
+                                        <option value="quinto">5° Primaria</option>
+                                    </select>
+                                    <input type="text" placeholder="Nombre del padre/madre" class="px-4 py-2 border rounded-lg" required>
+                                </div>
+                                <button type="submit" class="mt-4 btn-primary text-white px-6 py-2 rounded-lg">
+                                    ✅ Agregar Estudiante
+                                </button>
+                            </form>
+                            <div class="mt-4 text-center">
+                                <button onclick="showShareableLink('¡Estudiantes listos! Comparte con los padres')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                                    📤 Compartir con Padres
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="text-xl font-semibold mb-4">📋 Lista de Estudiantes</h4>
+                            <div id="students-list" class="max-h-96 overflow-y-auto">
+                                <!-- Students will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teachers Management -->
+                <div id="teachers-management" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">👩‍🏫 Gestión de Profesores</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="text-xl font-semibold mb-4">➕ Agregar Profesor</h4>
+                            <form onsubmit="addTeacher(event)">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <input type="text" placeholder="Nombre completo" class="px-4 py-2 border rounded-lg" required>
+                                    <input type="text" placeholder="Documento" class="px-4 py-2 border rounded-lg" required>
+                                    <input type="text" placeholder="Usuario" class="px-4 py-2 border rounded-lg" required>
+                                    <input type="password" placeholder="Contraseña" class="px-4 py-2 border rounded-lg" required>
+                                    <input type="tel" placeholder="Teléfono (opcional)" class="px-4 py-2 border rounded-lg">
+                                    <select class="px-4 py-2 border rounded-lg">
+                                        <option value="">Coordinador de grupo (opcional)</option>
+                                        <option value="jardin">Jardín</option>
+                                        <option value="transicion">Transición</option>
+                                        <option value="primero">1° Primaria</option>
+                                        <option value="segundo">2° Primaria</option>
+                                        <option value="tercero">3° Primaria</option>
+                                        <option value="cuarto">4° Primaria</option>
+                                        <option value="quinto">5° Primaria</option>
+                                    </select>
+                                    <div class="col-span-1">
+                                        <label class="block text-gray-700 font-semibold mb-2">Áreas que enseña (opcional):</label>
+                                        <div class="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border rounded-lg p-2">
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="español" class="mr-2"> Español
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="matematicas" class="mr-2"> Matemáticas
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="biologia" class="mr-2"> Biología
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="sociales" class="mr-2"> Sociales
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="artistica" class="mr-2"> Artística
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="religion" class="mr-2"> Religión
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="danzas" class="mr-2"> Danzas
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="musica" class="mr-2"> Música
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="tecnologia" class="mr-2"> Tecnología
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="ortografia" class="mr-2"> Ortografía
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="comprension" class="mr-2"> Comprensión Lectora
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="ingles" class="mr-2"> Inglés
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="educacion_fisica" class="mr-2"> Educación Física
+                                            </label>
+                                            <label class="flex items-center text-sm">
+                                                <input type="checkbox" value="catedra" class="mr-2"> Cátedra
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="mt-4 btn-primary text-white px-6 py-2 rounded-lg">
+                                    ✅ Agregar Profesor
+                                </button>
+                            </form>
+                            <div class="mt-4 text-center">
+                                <button onclick="showShareableLink('¡Profesores registrados! Comparte el acceso')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                                    📤 Compartir con Profesores
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="text-xl font-semibold mb-4">📋 Lista de Profesores</h4>
+                            <div id="teachers-list" class="max-h-96 overflow-y-auto">
+                                <!-- Teachers will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Management -->
+                <div id="schedule-management" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">📅 Gestión de Cronograma</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="text-xl font-semibold mb-4">➕ Agregar Evento</h4>
+                            <form onsubmit="addEvent(event)">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <input type="text" placeholder="Título del evento" class="px-4 py-2 border rounded-lg" required>
+                                    <textarea placeholder="Descripción" class="px-4 py-2 border rounded-lg" rows="3" required></textarea>
+                                    <input type="date" class="px-4 py-2 border rounded-lg" required>
+                                    <input type="time" class="px-4 py-2 border rounded-lg" required>
+                                    <select class="px-4 py-2 border rounded-lg" required>
+                                        <option value="">Tipo de evento</option>
+                                        <option value="reunion">Reunión de padres</option>
+                                        <option value="actividad">Actividad escolar</option>
+                                        <option value="evaluacion">Evaluación</option>
+                                        <option value="celebracion">Celebración</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="mt-4 btn-primary text-white px-6 py-2 rounded-lg">
+                                    ✅ Agregar Evento
+                                </button>
+                            </form>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="text-xl font-semibold mb-4">📋 Próximos Eventos</h4>
+                            <div id="events-list" class="max-h-96 overflow-y-auto">
+                                <!-- Events will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Management -->
+                <div id="reports-management" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">📊 Boletines de Estudiantes</h3>
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <div class="mb-4">
+                            <select id="student-select" class="px-4 py-2 border rounded-lg mr-4">
+                                <option value="">Seleccionar estudiante</option>
+                            </select>
+                            <button onclick="generateReport()" class="btn-primary text-white px-6 py-2 rounded-lg">
+                                📋 Ver Boletín
+                            </button>
+                        </div>
+                        <div id="student-report" class="hidden mt-6 p-6 bg-white rounded-xl border">
+                            <!-- Report will be generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teacher Dashboard -->
+        <div id="teacher-dashboard" class="hidden fade-in">
+            <div class="bg-white rounded-2xl p-8 card-shadow mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-school-blue">👩‍🏫 Panel de Profesor</h2>
+                    <div class="flex gap-4">
+                        <div class="text-sm text-green-600">
+                            ✅ Sistema activo
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <button onclick="showSection('grades-entry')" class="btn-primary text-white py-4 px-6 rounded-xl font-semibold">
+                        📝 Ingresar Notas
+                    </button>
+                    <button onclick="showSection('view-schedule')" class="bg-school-green text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        📅 Ver Cronograma
+                    </button>
+                </div>
+
+                <!-- Grades Entry -->
+                <div id="grades-entry" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">📝 Registro de Notas</h3>
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <select id="grade-select" class="px-4 py-2 border rounded-lg">
+                                <option value="">Seleccionar grado</option>
+                                <option value="jardin">Jardín</option>
+                                <option value="transicion">Transición</option>
+                                <option value="primero">1° Primaria</option>
+                                <option value="segundo">2° Primaria</option>
+                                <option value="tercero">3° Primaria</option>
+                                <option value="cuarto">4° Primaria</option>
+                                <option value="quinto">5° Primaria</option>
+                            </select>
+                            <select id="subject-select" class="px-4 py-2 border rounded-lg">
+                                <option value="">Seleccionar materia</option>
+                                <option value="español">Español</option>
+                                <option value="matematicas">Matemáticas</option>
+                                <option value="biologia">Biología</option>
+                                <option value="sociales">Sociales</option>
+                                <option value="artistica">Artística</option>
+                                <option value="religion">Religión</option>
+                                <option value="danzas">Danzas</option>
+                                <option value="musica">Música</option>
+                                <option value="tecnologia">Tecnología</option>
+                                <option value="ortografia">Ortografía</option>
+                                <option value="comprension">Comprensión Lectora</option>
+                                <option value="ingles">Inglés</option>
+                                <option value="educacion_fisica">Educación Física</option>
+                                <option value="catedra">Cátedra</option>
+                            </select>
+                            <button onclick="loadStudentsForGrades()" class="btn-primary text-white px-6 py-2 rounded-lg">
+                                📋 Cargar Estudiantes
+                            </button>
+                        </div>
+                        <div id="students-grades" class="hidden">
+                            <!-- Students grades form will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View Schedule -->
+                <div id="view-schedule" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">📅 Cronograma de Actividades</h3>
+                    <div id="teacher-events-list" class="bg-gray-50 p-6 rounded-xl">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Dashboard -->
+        <div id="parent-dashboard" class="hidden fade-in">
+            <div class="bg-white rounded-2xl p-8 card-shadow mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-school-blue">👨‍👩‍👧‍👦 Portal de Padres</h2>
+                    <div class="flex gap-4">
+                        <div class="text-sm text-green-600">
+                            ✅ Sistema activo
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <button onclick="showSection('student-grades')" class="btn-primary text-white py-4 px-6 rounded-xl font-semibold">
+                        📊 Ver Notas
+                    </button>
+                    <button onclick="showSection('student-attendance')" class="bg-school-yellow text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        📅 Ver Asistencia
+                    </button>
+                    <button onclick="showSection('rate-app')" class="bg-school-green text-school-blue py-4 px-6 rounded-xl font-semibold hover:scale-105 transition-transform">
+                        ⭐ Calificar App
+                    </button>
+                </div>
+
+                <!-- Student Grades -->
+                <div id="student-grades" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">📊 Notas del Estudiante</h3>
+                    <div id="parent-student-info" class="bg-gray-50 p-6 rounded-xl">
+                        <!-- Student grades will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Student Attendance -->
+                <div id="student-attendance" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">📅 Asistencia del Estudiante</h3>
+                    <div id="parent-attendance-info" class="bg-gray-50 p-6 rounded-xl">
+                        <!-- Attendance will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Rate App -->
+                <div id="rate-app" class="hidden">
+                    <h3 class="text-2xl font-bold text-school-blue mb-4">⭐ Calificar la Aplicación</h3>
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <form onsubmit="submitRating(event)">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Calificación:</label>
+                                <div class="flex gap-2">
+                                    <button type="button" onclick="setRating(1)" class="rating-star text-3xl text-gray-300 hover:text-yellow-400">⭐</button>
+                                    <button type="button" onclick="setRating(2)" class="rating-star text-3xl text-gray-300 hover:text-yellow-400">⭐</button>
+                                    <button type="button" onclick="setRating(3)" class="rating-star text-3xl text-gray-300 hover:text-yellow-400">⭐</button>
+                                    <button type="button" onclick="setRating(4)" class="rating-star text-3xl text-gray-300 hover:text-yellow-400">⭐</button>
+                                    <button type="button" onclick="setRating(5)" class="rating-star text-3xl text-gray-300 hover:text-yellow-400">⭐</button>
+                                </div>
+                                <input type="hidden" id="rating-value" value="0">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Comentarios:</label>
+                                <textarea placeholder="Comparte tu experiencia..." class="w-full px-4 py-2 border rounded-lg" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary text-white px-6 py-2 rounded-lg">
+                                ✅ Enviar Calificación
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-2xl font-bold mb-4">🏫 Liceo Exploradores de Sueños</h3>
+            <p class="mb-2">📍 Carrera 13# 8-48 Callejón Betania</p>
+            <p class="mb-2">Villa Gorgona, Candelaria</p>
+            <p class="mb-4">📱 WhatsApp: 313-564-96-61</p>
+            <p class="text-sm opacity-80">Educando con amor desde Jardín hasta 5° de Primaria 💙💛💚</p>
+            <p class="text-xs opacity-70 mt-2">🌐 Sistema compartido - Acceso universal desde cualquier lugar</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentUserType = null;
+        let selectedRating = 0;
+
+        // Data structure using URL parameters (universal sharing)
+        let schoolData = {
+            students: {},
+            teachers: {},
+            events: {},
+            grades: {},
+            attendance: {},
+            ratings: {}
+        };
+
+        // Admin credentials
+        const adminCredentials = {
+            username: 'admin123',
+            password: 'Exploradores'
+        };
+
+        // URL-based storage functions (universal access)
+        function saveToURL() {
+            try {
+                const compressedData = btoa(JSON.stringify(schoolData));
+                const newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?data=' + compressedData;
+                
+                // Update browser URL without reload
+                window.history.replaceState({}, '', newUrl);
+                
+                showSaveNotification('🌐 Datos guardados automáticamente');
+                return true;
+            } catch (error) {
+                console.error('Error guardando datos en URL:', error);
+                showSaveNotification('❌ Error al guardar datos', 'error');
+                return false;
+            }
+        }
+
+        function loadFromURL() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const data = urlParams.get('data');
+                
+                if (data) {
+                    const decompressedData = JSON.parse(atob(data));
+                    schoolData = decompressedData;
+                    console.log('✅ Datos cargados desde el enlace compartido');
+                    showSaveNotification('🌐 Datos cargados desde enlace compartido', 'success');
+                } else {
+                    console.log('📝 Iniciando con datos vacíos - Nuevo enlace');
+                }
+                return true;
+            } catch (error) {
+                console.error('Error cargando datos desde URL:', error);
+                console.log('📝 Iniciando con datos vacíos debido a error');
+                return false;
+            }
+        }
+
+        function showShareableLink(message = "¡Información lista para compartir!") {
+            const url = window.location.href;
+            
+            // Remove existing link display if any
+            const existingDisplay = document.getElementById('shareable-link-display');
+            if (existingDisplay) {
+                existingDisplay.remove();
+            }
+            
+            // Create new shareable link display
+            const linkDisplay = document.createElement('div');
+            linkDisplay.id = 'shareable-link-display';
+            linkDisplay.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white p-6 rounded-xl shadow-2xl z-50 max-w-md w-full mx-4';
+            
+            linkDisplay.innerHTML = `
+                <div class="text-center">
+                    <div class="text-lg font-bold mb-2">🎉 ${message}</div>
+                    <div class="text-sm mb-4">Comparte este enlace para acceso universal:</div>
+                    <div class="text-xs bg-white bg-opacity-20 p-3 rounded mb-4 break-all font-mono">${url}</div>
+                    <div class="flex gap-2 justify-center mb-4">
+                        <button onclick="copyToClipboard('${url}')" class="bg-white text-green-500 px-4 py-2 rounded font-semibold hover:bg-gray-100 flex-1">
+                            📋 Copiar Enlace
+                        </button>
+                        <button onclick="shareViaWhatsApp('${url}')" class="bg-green-600 text-white px-4 py-2 rounded font-semibold hover:bg-green-700 flex-1">
+                            📱 WhatsApp
+                        </button>
+                    </div>
+                    <button onclick="closeShareableLink()" class="text-sm underline opacity-80 hover:opacity-100">
+                        ✕ Cerrar
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(linkDisplay);
+            
+            // Auto close after 15 seconds
+            setTimeout(() => {
+                closeShareableLink();
+            }, 15000);
+        }
+
+        function closeShareableLink() {
+            const linkDisplay = document.getElementById('shareable-link-display');
+            if (linkDisplay) {
+                linkDisplay.style.opacity = '0';
+                linkDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    if (document.body.contains(linkDisplay)) {
+                        linkDisplay.remove();
+                    }
+                }, 300);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showSaveNotification('📋 ¡Enlace copiado! Ahora puedes pegarlo donde quieras');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showSaveNotification('📋 ¡Enlace copiado! Ahora puedes pegarlo donde quieras');
+            });
+        }
+
+        function shareViaWhatsApp(url) {
+            const message = `🏫 ¡Accede al sistema del Liceo Exploradores de Sueños!\n\n🌐 Enlace universal: ${url}\n\n✅ Funciona desde cualquier dispositivo\n📱 Acceso desde casa, trabajo o donde estés`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // UI Helper functions
+        function showSaveNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+            notification.className = `fixed top-4 left-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300`;
+            notification.innerHTML = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-100%)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        // External links
+        function openWhatsApp() {
+            window.open('https://wa.me/573135649661', '_blank');
+        }
+
+        function openLocation() {
+            window.open('https://maps.google.com/?q=Carrera+13+8-48+Callejón+Betania+Villa+Gorgona+Candelaria', '_blank');
+        }
+
+        // Navigation functions
+        function showWelcome() {
+            hideAllSections();
+            document.getElementById('welcome-section').classList.remove('hidden');
+        }
+
+        function showLogin(userType) {
+            hideAllSections();
+            document.getElementById('login-section').classList.remove('hidden');
+            
+            const titles = {
+                'admin': '👨‍💼 Acceso Administrador',
+                'teacher': '👩‍🏫 Acceso Profesores',
+                'parent': '👨‍👩‍👧‍👦 Acceso Padres'
+            };
+            
+            document.getElementById('login-title').textContent = titles[userType];
+            document.getElementById('login-form').setAttribute('data-user-type', userType);
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function hideAllSections() {
+            const sections = ['welcome-section', 'login-section', 'admin-dashboard', 'teacher-dashboard', 'parent-dashboard'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+            
+            // Hide all subsections
+            const subsections = ['students-management', 'teachers-management', 'schedule-management', 'reports-management', 'grades-entry', 'view-schedule', 'student-grades', 'student-attendance', 'rate-app'];
+            subsections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element) element.classList.add('hidden');
+            });
+        }
+
+        function showSection(sectionId) {
+            // Hide all subsections first
+            const subsections = ['students-management', 'teachers-management', 'schedule-management', 'reports-management', 'grades-entry', 'view-schedule', 'student-grades', 'student-attendance', 'rate-app'];
+            subsections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element) element.classList.add('hidden');
+            });
+            
+            // Show requested section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Load section-specific data
+            if (sectionId === 'students-management') {
+                loadStudentsList();
+            } else if (sectionId === 'teachers-management') {
+                loadTeachersList();
+            } else if (sectionId === 'schedule-management' || sectionId === 'view-schedule') {
+                loadEventsList();
+            } else if (sectionId === 'reports-management') {
+                loadStudentsForReports();
+            } else if (sectionId === 'student-grades') {
+                loadParentStudentGrades();
+            } else if (sectionId === 'student-attendance') {
+                loadParentStudentAttendance();
+            }
+        }
+
+        // Login handling
+        function handleLogin(event) {
+            event.preventDefault();
+            const userType = event.target.getAttribute('data-user-type');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            let loginSuccess = false;
+            
+            if (userType === 'admin') {
+                if (username === adminCredentials.username && password === adminCredentials.password) {
+                    loginSuccess = true;
+                    currentUser = { username: username, type: 'admin' };
+                }
+            } else if (userType === 'teacher') {
+                // Check teachers in data
+                const teachers = Object.values(schoolData.teachers || {});
+                const teacher = teachers.find(t => t.username === username && t.password === password);
+                if (teacher) {
+                    loginSuccess = true;
+                    currentUser = teacher;
+                }
+            } else if (userType === 'parent') {
+                // Check students in data (parents use student document as both username and password)
+                const students = Object.values(schoolData.students || {});
+                const student = students.find(s => s.document === username && s.document === password);
+                if (student) {
+                    loginSuccess = true;
+                    currentUser = { student: student, type: 'parent' };
+                }
+            }
+            
+            if (loginSuccess) {
+                currentUserType = userType;
+                hideAllSections();
+                document.getElementById(userType + '-dashboard').classList.remove('hidden');
+                document.getElementById('login-error').classList.add('hidden');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            showWelcome();
+        }
+
+        // Student management
+        function addStudent(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            const student = {
+                name: form.children[0].children[0].value,
+                document: form.children[0].children[1].value,
+                grade: form.children[0].children[2].value,
+                parent: form.children[0].children[3].value,
+                createdAt: new Date().toISOString()
+            };
+            
+            const id = generateId();
+            schoolData.students[id] = student;
+            
+            if (saveToURL()) {
+                loadStudentsList();
+                form.reset();
+                showSaveNotification('✅ Estudiante agregado correctamente');
+            }
+        }
+
+        function loadStudentsList() {
+            const container = document.getElementById('students-list');
+            container.innerHTML = '';
+            
+            Object.entries(schoolData.students || {}).forEach(([id, student]) => {
+                const studentDiv = document.createElement('div');
+                studentDiv.className = 'bg-white p-4 rounded-lg mb-3 border';
+                studentDiv.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h5 class="font-semibold">${student.name}</h5>
+                            <p class="text-sm text-gray-600">Doc: ${student.document} | Grado: ${student.grade}</p>
+                            <p class="text-sm text-gray-600">Padre: ${student.parent}</p>
+                        </div>
+                        <button onclick="deleteStudent('${id}')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                `;
+                container.appendChild(studentDiv);
+            });
+        }
+
+        function deleteStudent(studentId) {
+            if (confirm('¿Está seguro de eliminar este estudiante?')) {
+                delete schoolData.students[studentId];
+                saveToURL();
+                loadStudentsList();
+            }
+        }
+
+        // Teacher management
+        function addTeacher(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            // Get selected subjects
+            const subjectCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+            const subjects = Array.from(subjectCheckboxes).map(cb => cb.value);
+            
+            const teacher = {
+                name: form.children[0].children[0].value,
+                document: form.children[0].children[1].value,
+                username: form.children[0].children[2].value,
+                password: form.children[0].children[3].value,
+                phone: form.children[0].children[4].value,
+                coordinator: form.children[0].children[5].value,
+                subjects: subjects,
+                createdAt: new Date().toISOString()
+            };
+            
+            const id = generateId();
+            schoolData.teachers[id] = teacher;
+            
+            if (saveToURL()) {
+                loadTeachersList();
+                form.reset();
+                showSaveNotification('✅ Profesor agregado correctamente');
+            }
+        }
+
+        function loadTeachersList() {
+            const container = document.getElementById('teachers-list');
+            container.innerHTML = '';
+            
+            Object.entries(schoolData.teachers || {}).forEach(([id, teacher]) => {
+                const teacherDiv = document.createElement('div');
+                teacherDiv.className = 'bg-white p-4 rounded-lg mb-3 border';
+                teacherDiv.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h5 class="font-semibold">${teacher.name}</h5>
+                            <p class="text-sm text-gray-600">Usuario: ${teacher.username}</p>
+                            <p class="text-sm text-gray-600">Teléfono: ${teacher.phone || 'N/A'}</p>
+                            <p class="text-sm text-gray-600">Coordinador: ${teacher.coordinator || 'N/A'}</p>
+                            <p class="text-sm text-gray-600">Áreas: ${teacher.subjects && teacher.subjects.length > 0 ? teacher.subjects.join(', ') : 'N/A'}</p>
+                        </div>
+                        <button onclick="deleteTeacher('${id}')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                `;
+                container.appendChild(teacherDiv);
+            });
+        }
+
+        function deleteTeacher(teacherId) {
+            if (confirm('¿Está seguro de eliminar este profesor?')) {
+                delete schoolData.teachers[teacherId];
+                saveToURL();
+                loadTeachersList();
+            }
+        }
+
+        // Event management
+        function addEvent(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            const newEvent = {
+                title: form.children[0].children[0].value,
+                description: form.children[0].children[1].value,
+                date: form.children[0].children[2].value,
+                time: form.children[0].children[3].value,
+                type: form.children[0].children[4].value,
+                createdAt: new Date().toISOString()
+            };
+            
+            const id = generateId();
+            schoolData.events[id] = newEvent;
+            
+            if (saveToURL()) {
+                loadEventsList();
+                form.reset();
+                showSaveNotification('✅ Evento agregado al cronograma');
+            }
+        }
+
+        function loadEventsList() {
+            const containers = ['events-list', 'teacher-events-list'];
+            
+            containers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '';
+                    
+                    const events = Object.entries(schoolData.events || {});
+                    events.sort((a, b) => new Date(a[1].date) - new Date(b[1].date)).forEach(([id, event]) => {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.className = 'bg-white p-4 rounded-lg mb-3 border';
+                        eventDiv.innerHTML = `
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h5 class="font-semibold text-school-blue">${event.title}</h5>
+                                    <p class="text-sm text-gray-600 mb-2">${event.description}</p>
+                                    <p class="text-sm font-medium">📅 ${event.date} ⏰ ${event.time}</p>
+                                    <span class="inline-block mt-2 px-2 py-1 bg-school-yellow text-school-blue text-xs rounded-full">
+                                        ${event.type}
+                                    </span>
+                                </div>
+                                ${containerId === 'events-list' ? `
+                                    <button onclick="deleteEvent('${id}')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        🗑️
+                                    </button>
+                                ` : ''}
+                            </div>
+                        `;
+                        container.appendChild(eventDiv);
+                    });
+                }
+            });
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('¿Está seguro de eliminar este evento?')) {
+                delete schoolData.events[eventId];
+                saveToURL();
+                loadEventsList();
+            }
+        }
+
+        // Grades management
+        function loadStudentsForGrades() {
+            const grade = document.getElementById('grade-select').value;
+            const subject = document.getElementById('subject-select').value;
+            
+            if (!grade || !subject) {
+                alert('⚠️ Por favor seleccione grado y materia');
+                return;
+            }
+            
+            const students = Object.entries(schoolData.students || {}).filter(([id, s]) => s.grade === grade);
+            const container = document.getElementById('students-grades');
+            
+            if (students.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-600">No hay estudiantes en este grado</p>';
+                container.classList.remove('hidden');
+                return;
+            }
+            
+            container.innerHTML = `
+                <h4 class="text-xl font-semibold mb-4">📝 Notas para ${subject} - ${grade}</h4>
+                <form onsubmit="saveGrades(event)">
+                    <div class="grid grid-cols-1 gap-4">
+                        ${students.map(([id, student]) => {
+                            const existingGrade = schoolData.grades[id] && schoolData.grades[id][subject];
+                            return `
+                                <div class="bg-white p-4 rounded-lg border">
+                                    <h5 class="font-semibold mb-3">${student.name}</h5>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Asistencia (25%)</label>
+                                            <input type="number" min="0" max="5" step="0.1" 
+                                                   name="attendance_${id}" 
+                                                   value="${existingGrade ? existingGrade.attendance : ''}"
+                                                   class="w-full px-3 py-2 border rounded" 
+                                                   placeholder="0.0">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Cuaderno (25%)</label>
+                                            <input type="number" min="0" max="5" step="0.1" 
+                                                   name="notebook_${id}" 
+                                                   value="${existingGrade ? existingGrade.notebook : ''}"
+                                                   class="w-full px-3 py-2 border rounded" 
+                                                   placeholder="0.0">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Trabajo (25%)</label>
+                                            <input type="number" min="0" max="5" step="0.1" 
+                                                   name="work_${id}" 
+                                                   value="${existingGrade ? existingGrade.work : ''}"
+                                                   class="w-full px-3 py-2 border rounded" 
+                                                   placeholder="0.0">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Evaluación (25%)</label>
+                                            <input type="number" min="0" max="5" step="0.1" 
+                                                   name="evaluation_${id}" 
+                                                   value="${existingGrade ? existingGrade.evaluation : ''}"
+                                                   class="w-full px-3 py-2 border rounded" 
+                                                   placeholder="0.0">
+                                        </div>
+                                    </div>
+                                    ${existingGrade ? `
+                                        <div class="mt-3 p-2 bg-blue-50 rounded">
+                                            <span class="text-sm font-medium">Nota Final: </span>
+                                            <span class="text-lg font-bold ${existingGrade.final >= 3.0 ? 'text-green-600' : 'text-red-600'}">
+                                                ${existingGrade.final}
+                                            </span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <button type="submit" class="mt-6 btn-primary text-white px-6 py-3 rounded-lg">
+                        ✅ Guardar Notas
+                    </button>
+                </form>
+            `;
+            
+            container.classList.remove('hidden');
+        }
+
+        function saveGrades(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const grade = document.getElementById('grade-select').value;
+            const subject = document.getElementById('subject-select').value;
+            
+            const students = Object.entries(schoolData.students || {}).filter(([id, s]) => s.grade === grade);
+            
+            for (const [studentId, student] of students) {
+                const attendance = parseFloat(formData.get(`attendance_${studentId}`)) || 0;
+                const notebook = parseFloat(formData.get(`notebook_${studentId}`)) || 0;
+                const work = parseFloat(formData.get(`work_${studentId}`)) || 0;
+                const evaluation = parseFloat(formData.get(`evaluation_${studentId}`)) || 0;
+                
+                const finalGrade = (attendance * 0.25) + (notebook * 0.25) + (work * 0.25) + (evaluation * 0.25);
+                
+                if (!schoolData.grades[studentId]) {
+                    schoolData.grades[studentId] = {};
+                }
+                
+                schoolData.grades[studentId][subject] = {
+                    attendance: attendance,
+                    notebook: notebook,
+                    work: work,
+                    evaluation: evaluation,
+                    final: Math.round(finalGrade * 10) / 10,
+                    date: new Date().toISOString()
+                };
+            }
+            
+            if (saveToURL()) {
+                // Reload the form to show updated grades
+                loadStudentsForGrades();
+                showSaveNotification('✅ Notas guardadas correctamente');
+            }
+        }
+
+        // Reports management
+        function loadStudentsForReports() {
+            const select = document.getElementById('student-select');
+            select.innerHTML = '<option value="">Seleccionar estudiante</option>';
+            
+            Object.entries(schoolData.students || {}).forEach(([id, student]) => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = `${student.name} - ${student.grade}`;
+                select.appendChild(option);
+            });
+        }
+
+        function generateReport() {
+            const studentId = document.getElementById('student-select').value;
+            if (!studentId) {
+                alert('⚠️ Por favor seleccione un estudiante');
+                return;
+            }
+            
+            const student = schoolData.students[studentId];
+            const grades = schoolData.grades[studentId] || {};
+            
+            const subjects = ['español', 'matematicas', 'biologia', 'sociales', 'artistica', 'religion', 'danzas', 'musica', 'tecnologia', 'ortografia', 'comprension', 'ingles', 'educacion_fisica', 'catedra'];
+            
+            let totalGrades = 0;
+            let subjectCount = 0;
+            
+            const reportHTML = `
+                <div class="text-center mb-6">
+                    <h4 class="text-2xl font-bold text-school-blue">📋 Boletín de Calificaciones</h4>
+                    <h5 class="text-xl font-semibold mt-2">${student.name}</h5>
+                    <p class="text-gray-600">Grado: ${student.grade} | Documento: ${student.document}</p>
+                    <p class="text-sm text-gray-500">Generado: ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    ${subjects.map(subject => {
+                        const grade = grades[subject];
+                        if (grade) {
+                            totalGrades += grade.final;
+                            subjectCount++;
+                            return `
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <h6 class="font-semibold capitalize">${subject.replace('_', ' ')}</h6>
+                                        <span class="text-2xl font-bold ${grade.final >= 3.0 ? 'text-green-600' : 'text-red-600'}">
+                                            ${grade.final}
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-2 mt-2 text-sm">
+                                        <div>Asistencia: ${grade.attendance}</div>
+                                        <div>Cuaderno: ${grade.notebook}</div>
+                                        <div>Trabajo: ${grade.work}</div>
+                                        <div>Evaluación: ${grade.evaluation}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        return `
+                            <div class="bg-gray-100 p-4 rounded-lg opacity-50">
+                                <div class="flex justify-between items-center">
+                                    <h6 class="font-semibold capitalize">${subject.replace('_', ' ')}</h6>
+                                    <span class="text-gray-500">Sin calificar</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                ${subjectCount > 0 ? `
+                    <div class="mt-6 p-4 bg-school-blue text-white rounded-lg text-center">
+                        <h5 class="text-xl font-bold">Promedio General: ${Math.round((totalGrades / subjectCount) * 10) / 10}</h5>
+                        <p class="mt-2">${(totalGrades / subjectCount) >= 3.0 ? '✅ Aprobado' : '❌ Necesita refuerzo'}</p>
+                    </div>
+                ` : ''}
+                
+                <div class="mt-6 text-center">
+                    <button onclick="printReport()" class="btn-primary text-white px-6 py-3 rounded-lg mr-4">
+                        🖨️ Imprimir Boletín
+                    </button>
+                    <button onclick="downloadReport('${student.name}')" class="bg-green-500 text-white px-6 py-3 rounded-lg">
+                        📥 Descargar PDF
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('student-report').innerHTML = reportHTML;
+            document.getElementById('student-report').classList.remove('hidden');
+        }
+
+        function printReport() {
+            const reportContent = document.getElementById('student-report').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Boletín de Calificaciones</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            .text-center { text-align: center; }
+                            .font-bold { font-weight: bold; }
+                            .text-2xl { font-size: 1.5rem; }
+                            .text-xl { font-size: 1.25rem; }
+                            .mb-6 { margin-bottom: 1.5rem; }
+                            .mb-4 { margin-bottom: 1rem; }
+                            .grid { display: grid; }
+                            .gap-4 { gap: 1rem; }
+                            .bg-gray-50 { background-color: #f9fafb; }
+                            .p-4 { padding: 1rem; }
+                            .rounded-lg { border-radius: 0.5rem; }
+                            .text-green-600 { color: #059669; }
+                            .text-red-600 { color: #dc2626; }
+                            .text-school-blue { color: #1e3a8a; }
+                        </style>
+                    </head>
+                    <body>
+                        ${reportContent.replace(/<button[^>]*>.*?<\/button>/g, '')}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function downloadReport(studentName) {
+            alert(`📥 Función de descarga disponible. El boletín de ${studentName} se puede imprimir usando el botón de imprimir.`);
+        }
+
+        // Parent dashboard functions
+        function loadParentStudentGrades() {
+            const student = currentUser.student;
+            const studentId = Object.keys(schoolData.students || {}).find(id => 
+                schoolData.students[id].document === student.document
+            );
+            
+            const grades = schoolData.grades[studentId] || {};
+            
+            const subjects = ['español', 'matematicas', 'biologia', 'sociales', 'artistica', 'religion', 'danzas', 'musica', 'tecnologia', 'ortografia', 'comprension', 'ingles', 'educacion_fisica', 'catedra'];
+            
+            let totalGrades = 0;
+            let subjectCount = 0;
+            
+            const gradesHTML = `
+                <div class="text-center mb-6">
+                    <h4 class="text-2xl font-bold text-school-blue">📊 Notas de ${student.name}</h4>
+                    <p class="text-gray-600">Grado: ${student.grade}</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${subjects.map(subject => {
+                        const grade = grades[subject];
+                        if (grade) {
+                            totalGrades += grade.final;
+                            subjectCount++;
+                            return `
+                                <div class="bg-white p-4 rounded-lg border">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h6 class="font-semibold capitalize">${subject.replace('_', ' ')}</h6>
+                                        <span class="text-xl font-bold ${grade.final >= 3.0 ? 'text-green-600' : 'text-red-600'}">
+                                            ${grade.final}
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                                        <div>Asistencia: ${grade.attendance}</div>
+                                        <div>Cuaderno: ${grade.notebook}</div>
+                                        <div>Trabajo: ${grade.work}</div>
+                                        <div>Evaluación: ${grade.evaluation}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        return `
+                            <div class="bg-gray-100 p-4 rounded-lg border opacity-50">
+                                <h6 class="font-semibold capitalize">${subject.replace('_', ' ')}</h6>
+                                <p class="text-gray-500 text-sm">Sin calificar</p>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                ${subjectCount > 0 ? `
+                    <div class="mt-6 p-4 bg-school-blue text-white rounded-lg text-center">
+                        <h5 class="text-xl font-bold">Promedio General: ${Math.round((totalGrades / subjectCount) * 10) / 10}</h5>
+                        <p class="mt-2">${(totalGrades / subjectCount) >= 3.0 ? '✅ Rendimiento satisfactorio' : '⚠️ Necesita apoyo adicional'}</p>
+                    </div>
+                ` : `
+                    <div class="mt-6 p-4 bg-gray-200 rounded-lg text-center">
+                        <p class="text-gray-600">Aún no hay calificaciones disponibles</p>
+                    </div>
+                `}
+            `;
+            
+            document.getElementById('parent-student-info').innerHTML = gradesHTML;
+        }
+
+        function loadParentStudentAttendance() {
+            const student = currentUser.student;
+            
+            // Generate sample attendance data
+            const attendanceHTML = `
+                <div class="text-center mb-6">
+                    <h4 class="text-2xl font-bold text-school-blue">📅 Asistencia de ${student.name}</h4>
+                    <p class="text-gray-600">Grado: ${student.grade}</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-green-100 p-6 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-green-600">85%</div>
+                        <div class="text-green-700 font-semibold">Asistencia General</div>
+                    </div>
+                    <div class="bg-blue-100 p-6 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-blue-600">17</div>
+                        <div class="text-blue-700 font-semibold">Días Asistidos</div>
+                    </div>
+                    <div class="bg-red-100 p-6 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-red-600">3</div>
+                        <div class="text-red-700 font-semibold">Días Faltados</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-white p-4 rounded-lg border">
+                    <h5 class="font-semibold mb-3">📊 Resumen Mensual</h5>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>Enero 2024</span>
+                            <span class="font-semibold text-green-600">90% ✅</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Febrero 2024</span>
+                            <span class="font-semibold text-green-600">88% ✅</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Marzo 2024</span>
+                            <span class="font-semibold text-yellow-600">75% ⚠️</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('parent-attendance-info').innerHTML = attendanceHTML;
+        }
+
+        // Rating system
+        function setRating(rating) {
+            selectedRating = rating;
+            document.getElementById('rating-value').value = rating;
+            
+            const stars = document.querySelectorAll('.rating-star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        function submitRating(event) {
+            event.preventDefault();
+            const form = event.target;
+            const rating = parseInt(document.getElementById('rating-value').value);
+            const comment = form.querySelector('textarea').value;
+            
+            if (rating === 0) {
+                alert('⚠️ Por favor seleccione una calificación');
+                return;
+            }
+            
+            const newRating = {
+                student: currentUser.student.name,
+                rating: rating,
+                comment: comment,
+                date: new Date().toISOString()
+            };
+            
+            const id = generateId();
+            schoolData.ratings[id] = newRating;
+            
+            if (saveToURL()) {
+                alert('✅ ¡Gracias por su calificación!');
+                form.reset();
+                setRating(0);
+            }
+        }
+
+        // Data export function
+        function exportData() {
+            const dataStr = JSON.stringify(schoolData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `liceo_exploradores_backup_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showSaveNotification('📥 Datos exportados exitosamente');
+        }
+
+        // Initialize the application
+        function initApp() {
+            console.log('🚀 Iniciando sistema del Liceo Exploradores de Sueños');
+            loadFromURL();
+            showWelcome();
+        }
+
+        // Start the application when page loads
+        window.onload = initApp;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c0e05561ba31e0',t:'MTc1NzM1OTk5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
 
