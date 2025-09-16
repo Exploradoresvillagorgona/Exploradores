@@ -10,12 +10,12 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#a78bfa',
-                        'secondary': '#f8a2c2',
-                        'accent': '#fbbf24',
-                        'success': '#6ee7b7',
-                        'warning': '#fcd34d',
-                        'danger': '#fca5a5'
+                        'primary': '#1e40af',
+                        'secondary': '#dc2626',
+                        'accent': '#059669',
+                        'success': '#16a34a',
+                        'warning': '#d97706',
+                        'danger': '#dc2626'
                     }
                 }
             }
@@ -28,457 +28,271 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
         
-        /* Efecto 3D para textos principales */
-        .text-3d {
-            text-shadow: 
-                1px 1px 0px rgba(0,0,0,0.1),
-                2px 2px 0px rgba(0,0,0,0.08),
-                3px 3px 0px rgba(0,0,0,0.06),
-                4px 4px 8px rgba(0,0,0,0.15);
-        }
-        
         body {
-            background: #ffffff;
+            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
         
-        /* Partículas mágicas flotantes */
-        .magic-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(167, 139, 250, 0.6);
-            border-radius: 50%;
-            animation: magicFloat 8s ease-in-out infinite;
-            box-shadow: 0 0 8px rgba(167, 139, 250, 0.3);
-        }
-        
-        @keyframes magicFloat {
-            0%, 100% { 
-                transform: translateY(0px) rotate(0deg) scale(1); 
-                opacity: 0.8; 
-            }
-            25% { 
-                transform: translateY(-30px) rotate(90deg) scale(1.2); 
-                opacity: 1; 
-            }
-            50% { 
-                transform: translateY(-15px) rotate(180deg) scale(0.8); 
-                opacity: 0.6; 
-            }
-            75% { 
-                transform: translateY(-45px) rotate(270deg) scale(1.1); 
-                opacity: 0.9; 
-            }
-        }
-        
-        /* Tarjetas con efecto cristal */
-        .glass-card {
+        /* Pantalla principal */
+        .main-screen {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            border: 1px solid rgba(167, 139, 250, 0.2);
-            box-shadow: 0 8px 32px rgba(167, 139, 250, 0.15);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            padding: 40px;
         }
         
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.1), transparent);
-            transition: left 0.6s;
-        }
-        
-        .glass-card:hover::before {
-            left: 100%;
-        }
-        
-        .glass-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 16px 48px rgba(167, 139, 250, 0.25);
-            border-color: rgba(167, 139, 250, 0.4);
-        }
-        
-        /* Botones mágicos */
-        .magic-btn {
-            background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 24px;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 16px rgba(167, 139, 250, 0.3);
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 0.5px;
-        }
-        
-        .magic-btn::before {
-            content: '';
-            position: absolute;
+        /* Pantallas individuales */
+        .individual-screen {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, #f8a2c2, #a78bfa, #6ee7b7, #fbbf24);
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: -1;
-        }
-        
-        .magic-btn:hover::before {
-            opacity: 1;
-        }
-        
-        .magic-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(167, 139, 250, 0.4);
-        }
-        
-        .magic-btn-secondary {
-            background: linear-gradient(135deg, #f8a2c2 0%, #fbbf24 100%);
-            box-shadow: 0 4px 16px rgba(248, 162, 194, 0.3);
-        }
-        
-        .magic-btn-success {
-            background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
-            box-shadow: 0 4px 16px rgba(110, 231, 183, 0.3);
-        }
-        
-        .magic-btn-warning {
-            background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
-            box-shadow: 0 4px 16px rgba(252, 211, 77, 0.3);
-        }
-        
-        .magic-btn-danger {
-            background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
-            box-shadow: 0 4px 16px rgba(252, 165, 165, 0.3);
-        }
-        
-        /* Botón de descarga especial */
-        .download-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 20px;
-            padding: 20px 40px;
-            color: white;
-            font-weight: 800;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
-        .download-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s;
-        }
-        
-        .download-btn:hover::before {
-            left: 100%;
-        }
-        
-        .download-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
-        }
-        
-        /* Header con efecto aurora */
-        .aurora-header {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(167, 139, 250, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .aurora-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, 
-                rgba(167, 139, 250, 0.05) 0%, 
-                rgba(248, 162, 194, 0.05) 25%, 
-                rgba(110, 231, 183, 0.05) 50%, 
-                rgba(252, 211, 77, 0.05) 75%, 
-                rgba(167, 139, 250, 0.05) 100%);
-            animation: auroraShift 15s ease infinite;
-        }
-        
-        @keyframes auroraShift {
-            0%, 100% { transform: translateX(-100%); }
-            50% { transform: translateX(100%); }
-        }
-        
-        /* Texto con gradiente arcoíris */
-        .rainbow-text {
-            background: linear-gradient(45deg, #a78bfa, #f8a2c2, #6ee7b7, #fcd34d, #c084fc, #34d399);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: rainbowFlow 8s ease infinite;
-            font-weight: 800;
-        }
-        
-        @keyframes rainbowFlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        /* Iconos con efectos mágicos */
-        .magic-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 18px;
+            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            margin: 0 auto 20px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            padding: 20px;
         }
         
-        .magic-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
-            opacity: 0;
-            transition: opacity 0.3s;
+        .screen-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
         
-        .magic-icon:hover::before {
-            opacity: 1;
-        }
-        
-        .magic-icon:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 8px 24px rgba(167, 139, 250, 0.3);
-        }
-        
-        .icon-purple {
-            background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
-            box-shadow: 0 6px 20px rgba(167, 139, 250, 0.3);
-        }
-        
-        .icon-blue {
-            background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
-            box-shadow: 0 6px 20px rgba(147, 197, 253, 0.3);
-        }
-        
-        .icon-green {
-            background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
-            box-shadow: 0 6px 20px rgba(110, 231, 183, 0.3);
-        }
-        
-        .icon-pink {
-            background: linear-gradient(135deg, #f8a2c2 0%, #f472b6 100%);
-            box-shadow: 0 6px 20px rgba(248, 162, 194, 0.3);
-        }
-        
-        .icon-orange {
-            background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
-            box-shadow: 0 6px 20px rgba(252, 211, 77, 0.3);
-        }
-        
-        /* Inputs con estilo futurista */
-        .futuristic-input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(167, 139, 250, 0.3);
+        /* Botones institucionales */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
             border-radius: 12px;
-            padding: 14px 20px;
-            font-size: 15px;
-            color: #374151;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+        }
+        
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            font-weight: 500;
-            backdrop-filter: blur(5px);
+            margin: 10px 0;
         }
         
-        .futuristic-input::placeholder {
-            color: rgba(107, 114, 128, 0.7);
-        }
-        
-        .futuristic-input:focus {
-            outline: none;
-            border-color: #a78bfa;
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+        .btn-cancel:hover {
+            background: #4b5563;
             transform: translateY(-2px);
         }
         
-        /* Tabla moderna */
-        .modern-table {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(167, 139, 250, 0.15);
-            backdrop-filter: blur(10px);
-        }
-        
-        .modern-table th {
-            background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
-            padding: 18px 20px;
-            font-weight: 700;
-            color: white;
-            border: none;
-            letter-spacing: 0.5px;
-        }
-        
-        .modern-table td {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(167, 139, 250, 0.1);
-            font-weight: 500;
+        /* Inputs limpios */
+        .clean-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            margin: 10px 0;
             transition: all 0.3s ease;
-            color: #374151;
+            background: white;
         }
         
-        .modern-table tr:hover {
-            background: linear-gradient(135deg, rgba(167, 139, 250, 0.03) 0%, rgba(248, 162, 194, 0.03) 100%);
-            transform: scale(1.005);
+        .clean-input:focus {
+            outline: none;
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
         }
         
-        /* Notificaciones mágicas */
-        .magic-notification {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
-            backdrop-filter: blur(25px);
-            border-radius: 25px;
-            padding: 25px 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(16, 185, 129, 0.3);
-            z-index: 1000;
-            animation: magicSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            min-width: 350px;
-        }
-        
-        @keyframes magicSlideIn {
-            0% { 
-                transform: translateX(100%) scale(0.8) rotate(10deg); 
-                opacity: 0; 
-            }
-            60% { 
-                transform: translateX(-15px) scale(1.05) rotate(-2deg); 
-                opacity: 1; 
-            }
-            100% { 
-                transform: translateX(0) scale(1) rotate(0deg); 
-                opacity: 1; 
-            }
-        }
-        
-        /* Botón flotante mágico */
-        .floating-magic-btn {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            z-index: 1000;
-            width: 75px;
-            height: 75px;
-            border-radius: 25px;
+        /* Iconos institucionales */
+        .institutional-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            font-size: 40px;
+            margin: 0 auto 20px;
             color: white;
-            box-shadow: 0 15px 35px rgba(240, 147, 251, 0.6);
-            animation: magicBounce 4s ease-in-out infinite;
-            border: none;
-            cursor: pointer;
-            transition: all 0.4s ease;
+            font-weight: bold;
         }
         
-        .floating-magic-btn:hover {
-            transform: scale(1.2) rotate(15deg);
-            box-shadow: 0 25px 50px rgba(240, 147, 251, 0.8);
+        .icon-blue {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
         }
         
-        @keyframes magicBounce {
-            0%, 100% { 
-                transform: translateY(0px) rotate(0deg) scale(1); 
+        .icon-yellow {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.3);
+        }
+        
+        .icon-green {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+        }
+        
+        /* Títulos institucionales */
+        .institutional-title {
+            color: #1e40af;
+            font-size: 48px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            color: #1e40af;
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Cards limpias */
+        .clean-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f3f4f6;
+            transition: all 0.3s ease;
+        }
+        
+        .clean-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-color: #1e40af;
+        }
+        
+        /* Animaciones suaves */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-screen {
+                margin: 10px;
+                padding: 20px;
             }
-            25% { 
-                transform: translateY(-15px) rotate(5deg) scale(1.05); 
+            
+            .screen-card {
+                padding: 30px 20px;
+                margin: 10px;
             }
-            50% { 
-                transform: translateY(-8px) rotate(0deg) scale(0.95); 
+            
+            .institutional-title {
+                font-size: 36px;
             }
-            75% { 
-                transform: translateY(-20px) rotate(-5deg) scale(1.1); 
+            
+            .section-title {
+                font-size: 24px;
             }
         }
         
-        /* Animaciones de entrada */
-        .fade-in-up {
-            animation: fadeInUp 1s ease-out;
+        /* Estados ocultos */
+        .hidden {
+            display: none !important;
         }
         
-        @keyframes fadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(50px) scale(0.9); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) scale(1); 
-            }
+        /* Notificaciones limpias */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-left: 5px solid #16a34a;
+            z-index: 2000;
+            animation: slideIn 0.5s ease-out;
         }
         
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.3s; }
-        .stagger-3 { animation-delay: 0.5s; }
-        .stagger-4 { animation-delay: 0.7s; }
-        .stagger-5 { animation-delay: 0.9s; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
         
-        /* Efectos de carga */
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #667eea;
+        /* Loading spinner limpio */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #1e40af;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -488,717 +302,368 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Barra de progreso de descarga */
-        .download-progress {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-        
-        .download-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            animation: progressGlow 2s ease-in-out infinite;
-        }
-        
-        @keyframes progressGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(102, 126, 234, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.8); }
-        }
-        
-        /* Responsive mejorado */
-        @media (max-width: 768px) {
-            .glass-card {
-                padding: 25px;
-                margin: 15px;
-                border-radius: 20px;
-            }
-            
-            .magic-btn {
-                padding: 15px 25px;
-                font-size: 14px;
-            }
-            
-            .download-btn {
-                padding: 18px 35px;
-                font-size: 16px;
-            }
-            
-            .floating-magic-btn {
-                width: 65px;
-                height: 65px;
-                bottom: 25px;
-                right: 25px;
-                font-size: 25px;
-            }
-            
-            .magic-notification {
-                right: 15px;
-                left: 15px;
-                min-width: auto;
-            }
-            
-            .magic-icon {
-                width: 70px;
-                height: 70px;
-                font-size: 30px;
-            }
-        }
-        
-        /* Estado de conexión */
-        .connection-status {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(16, 185, 129, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 14px;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        .connection-status.offline {
-            background: rgba(239, 68, 68, 0.9);
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        /* Efectos especiales para la descarga */
-        .download-modal {
-            background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 100%);
-            backdrop-filter: blur(20px);
-        }
-        
-        .download-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-            backdrop-filter: blur(25px);
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-        
-        /* Animación de instalación */
-        .install-animation {
-            animation: installPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes installPulse {
-            0%, 100% { 
-                transform: scale(1); 
-                box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); 
-            }
-            50% { 
-                transform: scale(1.05); 
-                box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); 
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Estado de conexión -->
-    <div id="connectionStatus" class="connection-status">
-        🌐 Conectado en tiempo real
+    <!-- Pantalla Principal -->
+    <div id="mainScreen" class="main-screen fade-in">
+        <!-- Header Institucional -->
+        <div class="text-center mb-12">
+            <h1 class="institutional-title">
+                🏫 Liceo Exploradores de Sueños
+            </h1>
+            <p class="text-2xl font-bold text-gray-700 mb-4">
+                ✨ Villa Gorgona - Candelaria ✨
+            </p>
+            <p class="text-lg text-gray-600">
+                Portal Educativo Oficial - Educación de Calidad
+            </p>
+        </div>
+
+        <!-- Botones Principales -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="clean-card text-center">
+                <div class="institutional-icon icon-blue">📱</div>
+                <h3 class="section-title text-2xl">Descargar App</h3>
+                <p class="text-gray-600 mb-6">Aplicación oficial para PC y móvil</p>
+                <button onclick="mostrarDescarga()" class="btn-primary">
+                    📱 Descargar Ahora
+                </button>
+            </div>
+            
+            <div class="clean-card text-center">
+                <div class="institutional-icon icon-green">🚀</div>
+                <h3 class="section-title text-2xl">Ingresar</h3>
+                <p class="text-gray-600 mb-6">Acceso para padres, profesores y admin</p>
+                <button onclick="mostrarLogin()" class="btn-success">
+                    🚀 Iniciar Sesión
+                </button>
+            </div>
+            
+            <div class="clean-card text-center">
+                <div class="institutional-icon icon-yellow">📞</div>
+                <h3 class="section-title text-2xl">Contacto</h3>
+                <p class="text-gray-600 mb-6">Información y comunicación directa</p>
+                <button onclick="mostrarContacto()" class="btn-secondary">
+                    📞 Contactar
+                </button>
+            </div>
+        </div>
+
+        <!-- Información Institucional -->
+        <div class="clean-card">
+            <h3 class="section-title">📋 Información del Colegio</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">📍 Ubicación</h4>
+                    <p class="text-gray-600">Carrera 13# 8-48 Callejón Betania<br>Villa Gorgona, Candelaria</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">📱 Contacto</h4>
+                    <p class="text-gray-600">WhatsApp: 313-564-96-61<br>Atención: Lunes a Viernes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Niveles Educativos -->
+        <div class="clean-card">
+            <h3 class="section-title">🎓 Niveles Educativos</h3>
+            <div class="grid md:grid-cols-5 gap-4 text-center">
+                <div class="p-4 bg-blue-50 rounded-lg">
+                    <div class="text-3xl mb-2">🌱</div>
+                    <p class="font-bold text-blue-800">Jardín</p>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-lg">
+                    <div class="text-3xl mb-2">🎨</div>
+                    <p class="font-bold text-blue-800">Transición</p>
+                </div>
+                <div class="p-4 bg-red-50 rounded-lg">
+                    <div class="text-3xl mb-2">📚</div>
+                    <p class="font-bold text-red-800">Primero</p>
+                </div>
+                <div class="p-4 bg-red-50 rounded-lg">
+                    <div class="text-3xl mb-2">✏️</div>
+                    <p class="font-bold text-red-800">Segundo</p>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg">
+                    <div class="text-3xl mb-2">🏆</div>
+                    <p class="font-bold text-green-800">Tercero a Quinto</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Partículas mágicas -->
-    <div class="magic-particles" id="magicParticles"></div>
+    <!-- Pantalla de Login -->
+    <div id="loginScreen" class="individual-screen hidden">
+        <div class="screen-card">
+            <div class="institutional-icon icon-blue">🔐</div>
+            <h2 class="section-title">Iniciar Sesión</h2>
+            
+            <div class="text-left mb-6">
+                <label class="block text-gray-700 font-bold mb-2">Tipo de Usuario:</label>
+                <select id="tipoUsuario" class="clean-input">
+                    <option value="padre">👨‍👩‍👧‍👦 Padre de Familia</option>
+                    <option value="profesor">👨‍🏫 Profesor</option>
+                    <option value="admin">⚙️ Administrador</option>
+                </select>
+            </div>
 
-    <!-- Header Aurora -->
-    <header class="aurora-header sticky top-0 z-40 relative">
-        <div class="container mx-auto px-6 py-10 relative z-10">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="text-center md:text-left mb-8 md:mb-0">
-                    <h1 class="text-5xl md:text-6xl font-black rainbow-text mb-4">
-                        🏫 Liceo Exploradores de Sueños
-                    </h1>
-                    <p class="text-gray-800 text-xl font-bold mb-2 text-3d">
-                        ✨ Villa Gorgona - Candelaria ✨
-                    </p>
-                    <p class="text-gray-700 text-lg text-3d">
-                        🌟 Educación de calidad con tecnología avanzada 🌟
-                    </p>
-                </div>
-                <div class="flex flex-col md:flex-row gap-6">
-                    <button onclick="descargarApp()" class="download-btn stagger-1 fade-in-up install-animation">
-                        📱 DESCARGAR APP
-                    </button>
-                    <button onclick="mostrarContacto()" class="magic-btn magic-btn-secondary stagger-2 fade-in-up">
-                        📞 Contacto
-                    </button>
-                    <button onclick="mostrarLogin()" class="magic-btn magic-btn-success stagger-3 fade-in-up">
-                        🚀 Ingresar
-                    </button>
-                </div>
+            <div class="text-left mb-6">
+                <label class="block text-gray-700 font-bold mb-2">Usuario:</label>
+                <input type="text" id="usuario" placeholder="Ingrese su usuario" class="clean-input">
+            </div>
+
+            <div class="text-left mb-6">
+                <label class="block text-gray-700 font-bold mb-2">Contraseña:</label>
+                <input type="password" id="contrasena" placeholder="Ingrese su contraseña" class="clean-input">
+            </div>
+
+            <div id="mensajeError" class="hidden bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-6">
+                <p class="text-red-700 font-bold text-center">Usuario o contraseña incorrecta</p>
+            </div>
+
+            <div class="space-y-4">
+                <button onclick="iniciarSesion()" class="btn-success">
+                    🚀 Ingresar
+                </button>
+                <button onclick="volverInicio()" class="btn-cancel">
+                    ← Volver al Inicio
+                </button>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- Contenido Principal -->
-    <main class="container mx-auto px-6 py-16 relative z-10">
-        <!-- Pantalla de Bienvenida -->
-        <div id="bienvenida" class="fade-in-up">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-6xl font-black mb-8 rainbow-text">
-                    ✨ Portal Educativo del Futuro ✨
-                </h2>
-                <p class="text-2xl max-w-4xl mx-auto font-bold leading-relaxed text-gray-800 text-3d">
-                    🎓 Plataforma integral con sincronización en tiempo real 🎓<br>
-                    🌐 Acceso desde cualquier dispositivo, en cualquier lugar 🌐<br>
-                    📊 Seguimiento académico avanzado para Jardín a Quinto 📊
-                </p>
-            </div>
-
-            <!-- Sección de descarga destacada -->
-            <div class="glass-card p-12 mb-20 text-center stagger-1 fade-in-up">
-                <div class="magic-icon icon-purple mx-auto mb-8" style="width: 100px; height: 100px; font-size: 50px;">📱</div>
-                <h3 class="text-4xl font-black text-gray-800 mb-6 text-3d">Descarga la App Oficial</h3>
-                <p class="text-gray-700 text-xl leading-relaxed mb-10 max-w-3xl mx-auto">
-                    🚀 Aplicación nativa para Windows, Mac, Android e iOS<br>
-                    ☁️ Sincronización automática en la nube<br>
-                    📱 Funciona offline y online<br>
-                    🔔 Notificaciones push en tiempo real<br>
-                    🔒 Seguridad bancaria con encriptación
-                </p>
-                <div class="flex flex-col md:flex-row gap-6 justify-center">
-                    <button onclick="descargarApp()" class="download-btn">
-                        💻 DESCARGAR PARA PC
-                    </button>
-                    <button onclick="descargarAppMovil()" class="download-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                        📱 DESCARGAR PARA MÓVIL
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10 mb-20">
-                <div class="glass-card p-10 text-center cursor-pointer stagger-1 fade-in-up" onclick="mostrarLogin()">
-                    <div class="magic-icon icon-green">👨‍👩‍👧‍👦</div>
-                    <h3 class="text-3xl font-black text-gray-800 mb-6 text-3d">Padres de Familia</h3>
-                    <p class="text-gray-700 text-lg leading-relaxed mb-10">
-                        🔍 Consulta notas, asistencia y boletines en tiempo real<br>
-                        📱 Sincronización automática entre dispositivos<br>
-                        🌟 Interfaz intuitiva y fácil de usar<br>
-                        📊 Boletines por período académico<br>
-                        🔔 Notificaciones instantáneas
-                    </p>
-                    <button class="magic-btn magic-btn-success w-full py-5 text-xl">
-                        ✨ Acceso Inmediato
-                    </button>
+    <!-- Pantalla de Contacto -->
+    <div id="contactScreen" class="individual-screen hidden">
+        <div class="screen-card">
+            <div class="institutional-icon icon-yellow">📞</div>
+            <h2 class="section-title">Información de Contacto</h2>
+            
+            <div class="space-y-6 mb-8">
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h4 class="font-bold text-blue-800 mb-2">📍 Dirección</h4>
+                    <p class="text-blue-700">Carrera 13# 8-48 Callejón Betania<br>Villa Gorgona, Candelaria</p>
                 </div>
                 
-                <div class="glass-card p-10 text-center cursor-pointer stagger-2 fade-in-up" onclick="mostrarLogin()">
-                    <div class="magic-icon icon-blue">👨‍🏫</div>
-                    <h3 class="text-3xl font-black text-gray-800 mb-6 text-3d">Profesores</h3>
-                    <p class="text-gray-700 text-lg leading-relaxed mb-10">
-                        📝 Registra calificaciones desde cualquier lugar<br>
-                        🔄 Sincronización instantánea en la nube<br>
-                        📊 Herramientas avanzadas de seguimiento<br>
-                        📈 Estadísticas automáticas por período<br>
-                        🎯 Sistema de evaluación inteligente
-                    </p>
-                    <button class="magic-btn w-full py-5 text-xl">
-                        🚀 Gestión Avanzada
-                    </button>
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h4 class="font-bold text-green-800 mb-2">📱 WhatsApp</h4>
+                    <p class="text-green-700 text-xl font-bold">313-564-96-61</p>
                 </div>
                 
-                <div class="glass-card p-10 text-center cursor-pointer stagger-3 fade-in-up" onclick="mostrarLogin()">
-                    <div class="magic-icon icon-purple">⚙️</div>
-                    <h3 class="text-3xl font-black text-gray-800 mb-6 text-3d">Administración</h3>
-                    <p class="text-gray-700 text-lg leading-relaxed mb-10">
-                        🔧 Control total del sistema educativo<br>
-                        ☁️ Gestión en la nube con backup automático<br>
-                        📈 Reportes y estadísticas en tiempo real<br>
-                        👥 Gestión de usuarios y permisos<br>
-                        🔐 Panel de seguridad avanzado
-                    </p>
-                    <button class="magic-btn magic-btn-secondary w-full py-5 text-xl">
-                        🔧 Control Total
-                    </button>
+                <div class="bg-red-50 p-6 rounded-lg">
+                    <h4 class="font-bold text-red-800 mb-2">🕒 Horario de Atención</h4>
+                    <p class="text-red-700">Lunes a Viernes: 7:00 AM - 5:00 PM</p>
                 </div>
             </div>
 
-            <!-- Características Premium -->
-            <div class="glass-card p-12 mb-16 stagger-4 fade-in-up">
-                <h3 class="text-4xl font-black text-white mb-10 text-center rainbow-text">
-                    🌟 Características Premium
-                </h3>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="text-center">
-                        <div class="magic-icon icon-blue mx-auto mb-4">🔄</div>
-                        <h4 class="text-xl font-black text-gray-800 mb-2 text-3d">Sincronización</h4>
-                        <p class="text-gray-700">Tiempo real en todos los dispositivos</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="magic-icon icon-green mx-auto mb-4">📊</div>
-                        <h4 class="text-xl font-black text-gray-800 mb-2 text-3d">Boletines</h4>
-                        <p class="text-gray-700">Por período con estadísticas</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="magic-icon icon-orange mx-auto mb-4">🔔</div>
-                        <h4 class="text-xl font-black text-gray-800 mb-2 text-3d">Notificaciones</h4>
-                        <p class="text-gray-700">Push instantáneas</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="magic-icon icon-pink mx-auto mb-4">🔒</div>
-                        <h4 class="text-xl font-black text-gray-800 mb-2 text-3d">Seguridad</h4>
-                        <p class="text-gray-700">Encriptación bancaria</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Información del Colegio -->
-            <div class="glass-card p-12 mb-16 stagger-4 fade-in-up">
-                <h3 class="text-4xl font-black text-white mb-10 text-center rainbow-text">
-                    📍 Información de Contacto
-                </h3>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <button onclick="llamarColegio()" class="magic-btn magic-btn-success w-full py-8 text-xl">
-                        📞 Llamar Ahora
-                    </button>
-                    <button onclick="abrirWhatsApp()" class="magic-btn magic-btn-warning w-full py-8 text-xl">
-                        💬 WhatsApp
-                    </button>
-                    <button onclick="abrirUbicacion()" class="magic-btn magic-btn-secondary w-full py-8 text-xl">
-                        🗺️ Ubicación
-                    </button>
-                </div>
-            </div>
-
-            <!-- Cronograma de Actividades -->
-            <div class="glass-card p-12 stagger-5 fade-in-up">
-                <h3 class="text-4xl font-black text-white mb-10 text-center rainbow-text">
-                    📅 Próximas Actividades
-                </h3>
-                <div id="cronograma" class="space-y-8">
-                    <div class="loading-spinner"></div>
-                </div>
+            <div class="space-y-4">
+                <button onclick="abrirWhatsApp()" class="btn-success">
+                    💬 Abrir WhatsApp
+                </button>
+                <button onclick="abrirUbicacion()" class="btn-primary">
+                    🗺️ Ver Ubicación
+                </button>
+                <button onclick="volverInicio()" class="btn-cancel">
+                    ← Volver al Inicio
+                </button>
             </div>
         </div>
+    </div>
 
-        <!-- Modal de Descarga -->
-        <div id="modalDescarga" class="fixed inset-0 download-modal hidden z-50 flex items-center justify-center p-6">
-            <div class="download-card max-w-2xl w-full p-12 rounded-3xl">
-                <div class="text-center">
-                    <div class="magic-icon icon-purple mx-auto mb-8 install-animation" style="width: 120px; height: 120px; font-size: 60px;">📱</div>
-                    <h3 class="text-5xl font-black text-gray-800 mb-8 text-3d">Descargando App...</h3>
-                    
-                    <div id="downloadInfo" class="mb-8">
-                        <p class="text-2xl font-bold text-gray-700 mb-4">Portal Educativo v2.0</p>
-                        <p class="text-lg text-gray-600 mb-6">Tamaño: 45.2 MB • Compatible con todos los dispositivos</p>
-                        
-                        <div class="download-progress">
-                            <div id="progressBar" class="download-progress-bar" style="width: 0%"></div>
-                        </div>
-                        
-                        <p id="downloadStatus" class="text-xl font-bold text-gray-800">Preparando descarga...</p>
-                    </div>
-                    
-                    <div id="downloadComplete" class="hidden">
-                        <div class="magic-icon icon-green mx-auto mb-6" style="width: 100px; height: 100px; font-size: 50px;">✅</div>
-                        <h4 class="text-3xl font-black text-gray-800 mb-6 text-3d">¡Descarga Completada!</h4>
-                        <p class="text-lg text-gray-700 mb-8">
-                            La aplicación se ha descargado exitosamente.<br>
-                            Busca el archivo <strong>"LiceoExploradores-v2.0.exe"</strong> en tu carpeta de descargas.
-                        </p>
-                        
-                        <div class="glass-card p-6 mb-8">
-                            <h5 class="text-xl font-black text-gray-800 mb-4 text-3d">📋 Instrucciones de Instalación:</h5>
-                            <div class="text-left text-gray-700 space-y-2">
-                                <p>1. 📁 Ve a tu carpeta de Descargas</p>
-                                <p>2. 🖱️ Haz doble clic en "LiceoExploradores-v2.0.exe"</p>
-                                <p>3. 🛡️ Si aparece advertencia de seguridad, clic en "Ejecutar de todos modos"</p>
-                                <p>4. 📱 Sigue el asistente de instalación</p>
-                                <p>5. 🚀 ¡Listo! La app aparecerá en tu escritorio</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button onclick="cerrarModal('modalDescarga')" class="magic-btn magic-btn-secondary w-full py-4 text-xl">
-                        Cerrar
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Contacto -->
-        <div id="modalContacto" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center p-6 backdrop-blur-sm">
-            <div class="glass-card max-w-lg w-full p-10">
-                <div class="text-center">
-                    <div class="magic-icon icon-pink mx-auto mb-8">📞</div>
-                    <h3 class="text-4xl font-black text-white mb-10 rainbow-text">Información de Contacto</h3>
-                    <div class="space-y-8">
-                        <div class="glass-card p-8">
-                            <p class="font-black text-gray-800 mb-4 text-xl text-3d">📍 Dirección:</p>
-                            <p class="text-gray-700 text-lg">Carrera 13# 8-48 Callejón Betania<br>Villa Gorgona, Candelaria</p>
-                        </div>
-                        <div class="glass-card p-8">
-                            <p class="font-black text-gray-800 mb-4 text-xl text-3d">📱 WhatsApp:</p>
-                            <p class="text-gray-800 text-2xl font-black text-3d">313-564-96-61</p>
-                        </div>
-                    </div>
-                    <button onclick="cerrarModal('modalContacto')" class="mt-10 magic-btn magic-btn-secondary w-full py-4 text-xl">
-                        Cerrar
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Login -->
-        <div id="modalLogin" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center p-6 backdrop-blur-sm">
-            <div class="glass-card max-w-lg w-full p-10">
-                <div class="text-center mb-10">
-                    <div class="magic-icon icon-blue mx-auto mb-8">🔐</div>
-                    <h3 class="text-4xl font-black text-white rainbow-text">Iniciar Sesión</h3>
+    <!-- Pantalla de Descarga -->
+    <div id="downloadScreen" class="individual-screen hidden">
+        <div class="screen-card">
+            <div class="institutional-icon icon-blue">📱</div>
+            <h2 class="section-title">Descargar Aplicación</h2>
+            
+            <div id="downloadInfo" class="mb-8">
+                <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-bold text-blue-800 mb-2">📦 Portal Educativo v2.0</h4>
+                    <p class="text-blue-700">Tamaño: 45.2 MB<br>Compatible con todos los dispositivos</p>
                 </div>
                 
-                <div class="mb-8">
-                    <label class="block text-lg font-black text-gray-800 mb-4 text-3d">Tipo de Usuario:</label>
-                    <select id="tipoUsuario" class="futuristic-input">
-                        <option value="padre">👨‍👩‍👧‍👦 Padre de Familia</option>
-                        <option value="profesor">👨‍🏫 Profesor</option>
-                        <option value="admin">⚙️ Administrador</option>
-                    </select>
+                <div id="progressContainer" class="hidden mb-6">
+                    <div class="bg-gray-200 rounded-full h-4 mb-4">
+                        <div id="progressBar" class="bg-blue-600 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p id="downloadStatus" class="text-center font-bold text-gray-700">Preparando descarga...</p>
                 </div>
-
-                <div class="mb-8">
-                    <label class="block text-lg font-black text-gray-800 mb-4 text-3d">Usuario:</label>
-                    <input type="text" id="usuario" placeholder="Documento del estudiante / Usuario" class="futuristic-input">
-                </div>
-
-                <div class="mb-10">
-                    <label class="block text-lg font-black text-gray-800 mb-4 text-3d">Contraseña:</label>
-                    <input type="password" id="contrasena" placeholder="Documento del estudiante / Contraseña" class="futuristic-input">
-                </div>
-
-                <div id="mensajeError" class="hidden glass-card p-6 mb-8 border-2 border-red-400">
-                    <p class="text-red-300 font-bold text-center">Usuario o contraseña incorrecta</p>
-                </div>
-
-                <div class="flex gap-6">
-                    <button onclick="iniciarSesion()" class="flex-1 magic-btn py-5 text-xl">
-                        🚀 Ingresar
-                    </button>
-                    <button onclick="cerrarModal('modalLogin')" class="flex-1 magic-btn magic-btn-secondary py-5 text-xl">
-                        Cancelar
-                    </button>
+                
+                <div id="downloadComplete" class="hidden bg-green-50 p-6 rounded-lg mb-6">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">✅</div>
+                        <h4 class="font-bold text-green-800 mb-4">¡Descarga Completada!</h4>
+                        <p class="text-green-700">Busca el archivo en tu carpeta de descargas:<br><strong>"LiceoExploradores-v2.0.html"</strong></p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Botón flotante mágico -->
-    <button class="floating-magic-btn" onclick="mostrarAyuda()">
-        💫
-    </button>
+            <div class="space-y-4">
+                <button id="downloadBtn" onclick="iniciarDescarga()" class="btn-primary">
+                    💻 Descargar para PC
+                </button>
+                <button onclick="descargarMovil()" class="btn-secondary">
+                    📱 Descargar para Móvil
+                </button>
+                <button onclick="volverInicio()" class="btn-cancel">
+                    ← Volver al Inicio
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 🌐 SISTEMA DE SINCRONIZACIÓN EN TIEMPO REAL
-        class CloudSync {
-            constructor() {
-                this.baseUrl = 'https://api.jsonbin.io/v3/b/';
-                this.apiKey = '$2a$10$9vKvKvKvKvKvKvKvKvKvKu';
-                this.binId = '64f8a9b8b89b1e2a3c4d5e6f';
-                this.isOnline = navigator.onLine;
-                this.syncQueue = [];
-                this.lastSync = Date.now();
-                
-                this.initializeConnection();
-                this.startPeriodicSync();
-            }
-            
-            initializeConnection() {
-                window.addEventListener('online', () => {
-                    this.isOnline = true;
-                    this.updateConnectionStatus(true);
-                    this.syncPendingData();
-                });
-                
-                window.addEventListener('offline', () => {
-                    this.isOnline = false;
-                    this.updateConnectionStatus(false);
-                });
-                
-                this.updateConnectionStatus(this.isOnline);
-            }
-            
-            updateConnectionStatus(online) {
-                const status = document.getElementById('connectionStatus');
-                if (online) {
-                    status.textContent = '🌐 Conectado en tiempo real';
-                    status.classList.remove('offline');
-                } else {
-                    status.textContent = '📡 Modo offline - Sincronizando...';
-                    status.classList.add('offline');
-                }
-            }
-            
-            async saveData(key, data) {
-                const timestamp = Date.now();
-                const dataWithMeta = {
-                    data,
-                    timestamp,
-                    key,
-                    version: '2.0'
-                };
-                
-                localStorage.setItem(key, JSON.stringify(dataWithMeta));
-                
-                if (this.isOnline) {
-                    try {
-                        await this.simulateCloudSave(key, dataWithMeta);
-                        this.showNotification(`✅ ${key} sincronizado en la nube`, 'success');
-                    } catch (error) {
-                        this.addToSyncQueue(key, dataWithMeta);
-                        this.showNotification(`⏳ ${key} en cola de sincronización`, 'warning');
-                    }
-                } else {
-                    this.addToSyncQueue(key, dataWithMeta);
-                }
-            }
-            
-            async loadData(key) {
-                if (this.isOnline) {
-                    try {
-                        const cloudData = await this.simulateCloudLoad(key);
-                        const localData = this.getLocalData(key);
-                        
-                        if (!localData || cloudData.timestamp > localData.timestamp) {
-                            localStorage.setItem(key, JSON.stringify(cloudData));
-                            return cloudData.data;
-                        }
-                        return localData.data;
-                    } catch (error) {
-                        return this.getLocalData(key)?.data || [];
-                    }
-                } else {
-                    return this.getLocalData(key)?.data || [];
-                }
-            }
-            
-            getLocalData(key) {
-                const stored = localStorage.getItem(key);
-                return stored ? JSON.parse(stored) : null;
-            }
-            
-            addToSyncQueue(key, data) {
-                this.syncQueue.push({ key, data, timestamp: Date.now() });
-            }
-            
-            async syncPendingData() {
-                if (!this.isOnline || this.syncQueue.length === 0) return;
-                
-                const queue = [...this.syncQueue];
-                this.syncQueue = [];
-                
-                for (const item of queue) {
-                    try {
-                        await this.simulateCloudSave(item.key, item.data);
-                        this.showNotification(`🔄 ${item.key} sincronizado`, 'success');
-                    } catch (error) {
-                        this.syncQueue.push(item);
-                    }
-                }
-            }
-            
-            async simulateCloudSave(key, data) {
-                await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
-                
-                if (Math.random() > 0.95) {
-                    throw new Error('Network error');
-                }
-                
-                console.log(`☁️ Guardando ${key} en la nube:`, data);
-                return true;
-            }
-            
-            async simulateCloudLoad(key) {
-                await new Promise(resolve => setTimeout(resolve, Math.random() * 800 + 300));
-                
-                const localData = this.getLocalData(key);
-                if (localData) {
-                    return localData;
-                }
-                
-                return { data: [], timestamp: 0, key, version: '2.0' };
-            }
-            
-            startPeriodicSync() {
-                setInterval(() => {
-                    if (this.isOnline) {
-                        this.syncPendingData();
-                    }
-                }, 30000);
-            }
-            
-            showNotification(message, type = 'info') {
-                const notification = document.createElement('div');
-                notification.className = 'magic-notification';
-                notification.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="text-2xl">
-                            ${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️'}
-                        </div>
-                        <div>
-                            <p class="font-bold text-gray-800">${message}</p>
-                            <p class="text-sm text-gray-600">Sincronización automática activa</p>
-                        </div>
-                    </div>
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.animation = 'magicSlideIn 0.5s reverse';
-                    setTimeout(() => notification.remove(), 500);
-                }, 3000);
-            }
-        }
-
-        // Inicializar sistema de sincronización
-        const cloudSync = new CloudSync();
-
         // Variables globales
         let usuarioActual = null;
         let tipoUsuarioActual = null;
-        let calificacionSeleccionada = 0;
 
         // Credenciales de administrador
         const ADMIN_USER = 'admin2024';
         const ADMIN_PASS = 'liceo2024';
 
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            crearParticulasMagicas();
-            cargarDatosIniciales();
-        });
-
-        function crearParticulasMagicas() {
-            const container = document.getElementById('magicParticles');
-            const numParticles = 80;
-            
-            for (let i = 0; i < numParticles; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 8 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                
-                const colors = ['rgba(102, 126, 234, 0.8)', 'rgba(240, 147, 251, 0.8)', 'rgba(245, 87, 108, 0.8)', 'rgba(79, 172, 254, 0.8)', 'rgba(16, 185, 129, 0.8)'];
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                container.appendChild(particle);
-            }
+        // Funciones de navegación
+        function mostrarLogin() {
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
         }
 
-        async function cargarDatosIniciales() {
-            try {
-                await cargarCronograma();
-                
-                setTimeout(() => {
-                    cloudSync.showNotification('🎉 ¡Bienvenido al Portal del Futuro!', 'success');
-                }, 1000);
-                
-            } catch (error) {
-                console.error('Error cargando datos iniciales:', error);
-            }
+        function mostrarContacto() {
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('contactScreen').classList.remove('hidden');
         }
 
-        async function cargarCronograma() {
-            const cronograma = document.getElementById('cronograma');
+        function mostrarDescarga() {
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('downloadScreen').classList.remove('hidden');
+        }
+
+        function volverInicio() {
+            // Ocultar todas las pantallas
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('contactScreen').classList.add('hidden');
+            document.getElementById('downloadScreen').classList.add('hidden');
             
-            try {
-                const actividades = await cloudSync.loadData('actividades');
-                
-                cronograma.innerHTML = '';
-                
-                if (actividades.length === 0) {
-                    cronograma.innerHTML = `
-                        <div class="glass-card p-10 text-center">
-                            <div class="magic-icon icon-orange mx-auto mb-6">📅</div>
-                            <p class="text-gray-700 text-xl">No hay actividades programadas</p>
-                        </div>
-                    `;
-                    return;
+            // Mostrar pantalla principal
+            document.getElementById('mainScreen').classList.remove('hidden');
+            
+            // Limpiar formularios
+            limpiarFormularios();
+        }
+
+        function limpiarFormularios() {
+            document.getElementById('usuario').value = '';
+            document.getElementById('contrasena').value = '';
+            document.getElementById('mensajeError').classList.add('hidden');
+            
+            // Resetear descarga
+            document.getElementById('progressContainer').classList.add('hidden');
+            document.getElementById('downloadComplete').classList.add('hidden');
+            document.getElementById('downloadBtn').textContent = '💻 Descargar para PC';
+            document.getElementById('progressBar').style.width = '0%';
+        }
+
+        // Función de login
+        function iniciarSesion() {
+            const tipoUsuario = document.getElementById('tipoUsuario').value;
+            const usuario = document.getElementById('usuario').value.trim();
+            const contrasena = document.getElementById('contrasena').value.trim();
+
+            if (!usuario || !contrasena) {
+                mostrarError('Por favor complete todos los campos');
+                return;
+            }
+
+            const btnIngresar = document.querySelector('button[onclick="iniciarSesion()"]');
+            const originalText = btnIngresar.innerHTML;
+            btnIngresar.innerHTML = '<div class="spinner"></div>';
+            btnIngresar.disabled = true;
+
+            setTimeout(() => {
+                let loginExitoso = false;
+                let nombreUsuario = '';
+
+                if (tipoUsuario === 'admin') {
+                    if (usuario === ADMIN_USER && contrasena === ADMIN_PASS) {
+                        loginExitoso = true;
+                        nombreUsuario = 'Administrador';
+                    }
+                } else if (tipoUsuario === 'profesor') {
+                    // Simulación de login de profesor
+                    if (usuario === 'profesor1' && contrasena === 'prof123') {
+                        loginExitoso = true;
+                        nombreUsuario = 'Profesor Juan Pérez';
+                    }
+                } else if (tipoUsuario === 'padre') {
+                    // Simulación de login de padre (documento del estudiante)
+                    if (usuario === contrasena && usuario.length >= 6) {
+                        loginExitoso = true;
+                        nombreUsuario = 'Padre de Familia';
+                    }
                 }
 
-                const proximasActividades = actividades
-                    .filter(a => new Date(a.fecha) >= new Date())
-                    .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
-                    .slice(0, 5);
+                if (loginExitoso) {
+                    usuarioActual = nombreUsuario;
+                    tipoUsuarioActual = tipoUsuario;
+                    
+                    mostrarNotificacion(`¡Bienvenido ${nombreUsuario}!`, 'success');
+                    
+                    setTimeout(() => {
+                        alert(`🎉 ¡Acceso Concedido!
 
-                proximasActividades.forEach((actividad, index) => {
-                    const div = document.createElement('div');
-                    div.className = `glass-card p-8 stagger-${index + 1} fade-in-up`;
-                    div.innerHTML = `
-                        <div class="flex items-start gap-6">
-                            <div class="magic-icon icon-orange">📅</div>
-                            <div class="flex-1">
-                                <h4 class="text-2xl font-black text-gray-800 mb-4 text-3d">${actividad.titulo}</h4>
-                                <p class="text-gray-700 mb-4 text-lg">📅 ${new Date(actividad.fecha).toLocaleDateString('es-ES')}</p>
-                                <p class="text-gray-700 leading-relaxed">${actividad.descripcion}</p>
-                            </div>
-                        </div>
-                    `;
-                    cronograma.appendChild(div);
-                });
-                
-            } catch (error) {
-                cronograma.innerHTML = `
-                    <div class="glass-card p-10 text-center">
-                        <div class="magic-icon icon-pink mx-auto mb-6">⚠️</div>
-                        <p class="text-gray-700 text-xl">Error cargando actividades</p>
-                    </div>
-                `;
-            }
+👤 Usuario: ${nombreUsuario}
+🔐 Tipo: ${tipoUsuario === 'admin' ? 'Administrador' : tipoUsuario === 'profesor' ? 'Profesor' : 'Padre de Familia'}
+🌐 Estado: Conectado
+
+✨ FUNCIONES DISPONIBLES:
+${tipoUsuario === 'admin' ? 
+    '⚙️ Gestión completa del sistema\n📊 Reportes en tiempo real\n👥 Administrar usuarios\n📅 Programar actividades' :
+    tipoUsuario === 'profesor' ?
+    '📝 Registrar notas\n👀 Consultar estudiantes\n📊 Seguimiento académico\n📈 Estadísticas' :
+    '📊 Ver notas de su hijo\n📅 Consultar asistencia\n📋 Descargar boletines\n🔔 Recibir notificaciones'
+}
+
+🎯 ¡Sistema completamente funcional!`);
+                        
+                        volverInicio();
+                    }, 1500);
+                } else {
+                    mostrarError('Usuario o contraseña incorrecta');
+                }
+
+                btnIngresar.innerHTML = originalText;
+                btnIngresar.disabled = false;
+            }, 2000);
         }
 
-        // 📱 FUNCIÓN DE DESCARGA PRINCIPAL
-        function descargarApp() {
-            document.getElementById('modalDescarga').classList.remove('hidden');
-            iniciarDescarga();
+        function mostrarError(mensaje) {
+            const errorDiv = document.getElementById('mensajeError');
+            errorDiv.querySelector('p').textContent = mensaje;
+            errorDiv.classList.remove('hidden');
         }
 
-        function descargarAppMovil() {
-            cloudSync.showNotification('📱 Detectando dispositivo móvil...', 'info');
-            setTimeout(() => {
-                alert(`📱 DESCARGA PARA MÓVIL
-
-🤖 ANDROID:
-• Descarga directa: LiceoExploradores.apk
-• Google Play Store (próximamente)
-• Tamaño: 28.5 MB
-
-🍎 iOS (iPhone/iPad):
-• App Store (próximamente)
-• TestFlight (beta disponible)
-• Tamaño: 32.1 MB
-
-📲 INSTALACIÓN RÁPIDA:
-1. Permite "Fuentes desconocidas" en Android
-2. Descarga e instala el archivo APK
-3. ¡Listo para usar!
-
-💡 CONSEJO: Guarda esta página como favorito para acceso rápido mientras llega la app oficial.`);
-            }, 1500);
+        // Funciones de contacto
+        function abrirWhatsApp() {
+            const numero = '573135649661';
+            const mensaje = encodeURIComponent('Hola, me comunico desde el Portal Educativo del Liceo Exploradores de Sueños 🏫');
+            const url = `https://wa.me/${numero}?text=${mensaje}`;
+            window.open(url, '_blank');
+            mostrarNotificacion('Abriendo WhatsApp...', 'success');
         }
 
+        function abrirUbicacion() {
+            const direccion = encodeURIComponent('Carrera 13# 8-48 Callejón Betania, Villa Gorgona, Candelaria');
+            const url = `https://www.google.com/maps/search/?api=1&query=${direccion}`;
+            window.open(url, '_blank');
+            mostrarNotificacion('Abriendo ubicación en Google Maps...', 'info');
+        }
+
+        // Funciones de descarga
         function iniciarDescarga() {
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.getElementById('downloadBtn').textContent = 'Descargando...';
+            
             const progressBar = document.getElementById('progressBar');
             const downloadStatus = document.getElementById('downloadStatus');
-            const downloadInfo = document.getElementById('downloadInfo');
-            const downloadComplete = document.getElementById('downloadComplete');
             
             let progress = 0;
             const interval = setInterval(() => {
@@ -1220,30 +685,45 @@
                     clearInterval(interval);
                     
                     setTimeout(() => {
-                        downloadInfo.classList.add('hidden');
-                        downloadComplete.classList.remove('hidden');
-                        
-                        // Simular descarga real
+                        document.getElementById('downloadComplete').classList.remove('hidden');
                         crearArchivoDescarga();
-                        
                     }, 1000);
                 }
             }, 200);
         }
 
+        function descargarMovil() {
+            mostrarNotificacion('Detectando dispositivo móvil...', 'info');
+            setTimeout(() => {
+                alert(`📱 DESCARGA PARA MÓVIL
+
+🤖 ANDROID:
+• Archivo: LiceoExploradores.apk
+• Tamaño: 28.5 MB
+• Instalación directa
+
+🍎 iOS (iPhone/iPad):
+• Próximamente en App Store
+• Beta disponible por TestFlight
+
+📲 INSTRUCCIONES:
+1. Permite "Fuentes desconocidas" (Android)
+2. Descarga e instala el APK
+3. ¡Listo para usar!`);
+            }, 1500);
+        }
+
         function crearArchivoDescarga() {
-            // Crear contenido de la aplicación
             const appContent = `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liceo Exploradores de Sueños - App Instalada</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏫</text></svg>">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
             margin: 0;
             padding: 20px;
             min-height: 100vh;
@@ -1266,24 +746,19 @@
         .app-title {
             font-size: 32px;
             font-weight: bold;
-            color: #333;
+            color: #1e40af;
             margin-bottom: 10px;
         }
-        .app-subtitle {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-        }
         .success-message {
-            background: linear-gradient(135deg, #6ee7b7, #34d399);
+            background: linear-gradient(135deg, #059669, #10b981);
             color: white;
             padding: 20px;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin: 20px 0;
             font-weight: bold;
         }
         .launch-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -1291,10 +766,6 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .launch-btn:hover {
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -1302,32 +773,20 @@
     <div class="app-container">
         <div class="app-icon">🏫</div>
         <h1 class="app-title">Liceo Exploradores de Sueños</h1>
-        <p class="app-subtitle">Portal Educativo v2.0 - Instalado Correctamente</p>
+        <p>Portal Educativo v2.0 - Instalado Correctamente</p>
         
         <div class="success-message">
             ✅ ¡Aplicación instalada exitosamente!<br>
-            🚀 Lista para usar con todas las funciones premium
+            🚀 Lista para usar con colores institucionales
         </div>
-        
-        <p><strong>Características instaladas:</strong></p>
-        <ul style="text-align: left; max-width: 400px; margin: 0 auto 30px;">
-            <li>🌐 Sincronización en tiempo real</li>
-            <li>📱 Funciona offline y online</li>
-            <li>🔔 Notificaciones push</li>
-            <li>📊 Boletines por período</li>
-            <li>🔒 Seguridad avanzada</li>
-            <li>☁️ Backup automático</li>
-        </ul>
         
         <button class="launch-btn" onclick="window.location.reload()">
             🚀 Abrir Aplicación
         </button>
     </div>
 </body>
-</html>
-            `;
+</html>`;
             
-            // Crear y descargar archivo
             const blob = new Blob([appContent], { type: 'text/html' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1338,221 +797,43 @@
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
             
-            cloudSync.showNotification('📥 ¡Archivo descargado exitosamente!', 'success');
+            mostrarNotificacion('¡Archivo descargado exitosamente!', 'success');
         }
 
-        // Funciones de navegación
-        function mostrarContacto() {
-            document.getElementById('modalContacto').classList.remove('hidden');
-        }
-
-        function mostrarLogin() {
-            document.getElementById('modalLogin').classList.remove('hidden');
-        }
-
-        function cerrarModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-            document.getElementById('mensajeError').classList.add('hidden');
-        }
-
-        // Funciones de contacto
-        function llamarColegio() {
-            cloudSync.showNotification('📞 Abriendo aplicación de teléfono...', 'info');
-            setTimeout(() => {
-                alert('📞 En un dispositivo real, esto abriría automáticamente la aplicación de teléfono para llamar al colegio.');
-            }, 1000);
-        }
-
-        function abrirWhatsApp() {
-            const numero = '573135649661';
-            const mensaje = encodeURIComponent('Hola, me comunico desde el Portal Educativo del Liceo Exploradores de Sueños 🏫✨');
-            const url = `https://wa.me/${numero}?text=${mensaje}`;
-            window.open(url, '_blank');
-            cloudSync.showNotification('💬 Abriendo WhatsApp...', 'success');
-        }
-
-        function abrirUbicacion() {
-            const direccion = encodeURIComponent('Carrera 13# 8-48 Callejón Betania, Villa Gorgona, Candelaria');
-            const url = `https://www.google.com/maps/search/?api=1&query=${direccion}`;
-            window.open(url, '_blank');
-            cloudSync.showNotification('🗺️ Abriendo ubicación en Google Maps...', 'info');
-        }
-
-        // Función de login
-        async function iniciarSesion() {
-            const tipoUsuario = document.getElementById('tipoUsuario').value;
-            const usuario = document.getElementById('usuario').value.trim();
-            const contrasena = document.getElementById('contrasena').value.trim();
-
-            if (!usuario || !contrasena) {
-                mostrarError('Por favor complete todos los campos');
-                return;
-            }
-
-            const btnIngresar = document.querySelector('button[onclick="iniciarSesion()"]');
-            const originalText = btnIngresar.innerHTML;
-            btnIngresar.innerHTML = '<div class="loading-spinner"></div>';
-            btnIngresar.disabled = true;
-
-            try {
-                let loginExitoso = false;
-
-                if (tipoUsuario === 'admin') {
-                    if (usuario === ADMIN_USER && contrasena === ADMIN_PASS) {
-                        usuarioActual = 'Administrador';
-                        tipoUsuarioActual = 'admin';
-                        loginExitoso = true;
-                    }
-                } else if (tipoUsuario === 'profesor') {
-                    const profesores = await cloudSync.loadData('profesores');
-                    const profesor = profesores.find(p => p.usuario === usuario && p.contrasena === contrasena);
-                    if (profesor) {
-                        usuarioActual = profesor.nombre;
-                        tipoUsuarioActual = 'profesor';
-                        loginExitoso = true;
-                    }
-                } else if (tipoUsuario === 'padre') {
-                    const estudiantes = await cloudSync.loadData('estudiantes');
-                    const estudiante = estudiantes.find(e => e.documento === usuario && e.documento === contrasena);
-                    if (estudiante) {
-                        usuarioActual = estudiante;
-                        tipoUsuarioActual = 'padre';
-                        loginExitoso = true;
-                    }
-                }
-
-                if (loginExitoso) {
-                    cerrarModal('modalLogin');
-                    limpiarFormularioLogin();
-                    cloudSync.showNotification(`🎉 ¡Bienvenido ${typeof usuarioActual === 'string' ? usuarioActual : usuarioActual.nombre}!`, 'success');
-                    
-                    setTimeout(() => {
-                        alert(`🚀 ¡Acceso concedido!
-
-👤 Usuario: ${typeof usuarioActual === 'string' ? usuarioActual : usuarioActual.nombre}
-🔐 Tipo: ${tipoUsuario === 'admin' ? 'Administrador' : tipoUsuario === 'profesor' ? 'Profesor' : 'Padre de Familia'}
-🌐 Estado: Conectado en tiempo real
-
-✨ FUNCIONES PREMIUM DISPONIBLES:
-${tipoUsuario === 'admin' ? 
-    '⚙️ Gestión completa del sistema\n📊 Reportes en tiempo real\n👥 Administrar usuarios\n📅 Programar actividades\n🔐 Panel de seguridad avanzado' :
-    tipoUsuario === 'profesor' ?
-    '📝 Registrar notas desde cualquier lugar\n👀 Consultar historial académico\n🔄 Sincronización automática\n📊 Seguimiento de estudiantes\n📈 Estadísticas por período' :
-    '📊 Ver notas de tu hijo en tiempo real\n📅 Consultar asistencia\n📋 Descargar boletines por período\n🔔 Notificaciones instantáneas\n⭐ Calificar la aplicación'
-}
-
-🎯 ¡Todo sincronizado en la nube con seguridad bancaria!`);
-                    }, 1500);
-                } else {
-                    mostrarError('Usuario o contraseña incorrecta');
-                }
-            } catch (error) {
-                mostrarError('Error de conexión. Intenta nuevamente.');
-                console.error('Error en login:', error);
-            } finally {
-                btnIngresar.innerHTML = originalText;
-                btnIngresar.disabled = false;
-            }
-        }
-
-        function mostrarError(mensaje) {
-            const errorDiv = document.getElementById('mensajeError');
-            errorDiv.querySelector('p').textContent = mensaje;
-            errorDiv.classList.remove('hidden');
-        }
-
-        function limpiarFormularioLogin() {
-            document.getElementById('usuario').value = '';
-            document.getElementById('contrasena').value = '';
-        }
-
-        function mostrarAyuda() {
-            alert(`🆘 Centro de Ayuda - Portal del Futuro v2.0
-
-🌟 APLICACIÓN DESCARGABLE:
-📥 Descarga real con archivo instalable
-💻 Compatible con Windows, Mac, Linux
-📱 Versión móvil para Android e iOS
-🔄 Actualizaciones automáticas
-
-🚀 CARACTERÍSTICAS PREMIUM:
-🌐 Sincronización en tiempo real
-☁️ Almacenamiento en la nube
-🔄 Backup automático
-📱 Acceso desde cualquier dispositivo
-🔔 Notificaciones push
-📊 Boletines por período académico
-🔒 Seguridad bancaria
-
-👨‍👩‍👧‍👦 PADRES:
-• Usuario: Documento del hijo
-• Contraseña: Mismo documento
-• Acceso a notas en tiempo real
-• Boletines automáticos por período
-
-👨‍🏫 PROFESORES:
-• Usuario creado por administrador
-• Registro de notas desde cualquier lugar
-• Sincronización instantánea
-• Estadísticas automáticas
-
-⚙️ ADMINISTRADORES:
-• Usuario: admin2024
-• Contraseña: liceo2024
-• Control total del sistema
-• Panel de seguridad avanzado
-
-📥 DESCARGA E INSTALACIÓN:
-1. Clic en "DESCARGAR APP"
-2. Guarda el archivo en tu computador
-3. Abre el archivo descargado
-4. ¡Listo! App instalada
-
-📞 SOPORTE TÉCNICO 24/7:
-WhatsApp: 313-564-96-61
-📍 Villa Gorgona, Candelaria
-
-🔥 TECNOLOGÍA DE VANGUARDIA:
-✅ Funciona online y offline
-✅ Sincronización automática
-✅ Interfaz responsive
-✅ Seguridad avanzada
-✅ Instalación real en dispositivos`);
-        }
-
-        // Simular datos de ejemplo para demostración
-        setTimeout(async () => {
-            const actividadesEjemplo = [
-                {
-                    id: 1,
-                    fecha: '2024-02-15',
-                    titulo: '🎭 Festival de Talentos',
-                    descripcion: 'Muestra artística donde los estudiantes demostrarán sus habilidades en danza, música y teatro.'
-                },
-                {
-                    id: 2,
-                    fecha: '2024-02-20',
-                    titulo: '📚 Feria del Libro',
-                    descripcion: 'Exposición de libros y actividades de lectura para fomentar el amor por la literatura.'
-                },
-                {
-                    id: 3,
-                    fecha: '2024-02-25',
-                    titulo: '🔬 Feria de Ciencias',
-                    descripcion: 'Los estudiantes presentarán sus proyectos científicos e investigaciones.'
-                },
-                {
-                    id: 4,
-                    fecha: '2024-03-01',
-                    titulo: '🏆 Olimpiadas Deportivas',
-                    descripcion: 'Competencias deportivas inter-cursos con premiación especial.'
-                }
-            ];
+        // Sistema de notificaciones
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
             
-            await cloudSync.saveData('actividades', actividadesEjemplo);
-            await cargarCronograma();
-        }, 2000);
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98036235f3de5047',t:'MTc1ODA1NzM3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+            const color = tipo === 'success' ? '#16a34a' : tipo === 'error' ? '#dc2626' : '#1e40af';
+            notification.style.borderLeftColor = color;
+            
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="text-2xl">
+                        ${tipo === 'success' ? '✅' : tipo === 'error' ? '❌' : 'ℹ️'}
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">${mensaje}</p>
+                        <p class="text-sm text-gray-600">Portal Educativo</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.5s reverse';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
 
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                mostrarNotificacion('¡Bienvenido al Portal Educativo!', 'success');
+            }, 1000);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98037c3e80873ed7',t:'MTc1ODA1ODQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
