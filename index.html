@@ -693,24 +693,149 @@ ${tipoUsuario === 'admin' ?
         }
 
         function descargarMovil() {
-            mostrarNotificacion('Detectando dispositivo móvil...', 'info');
-            setTimeout(() => {
-                alert(`📱 DESCARGA PARA MÓVIL
+            // Iniciar el mismo proceso de descarga que PC pero para móvil
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.querySelector('button[onclick="descargarMovil()"]').textContent = 'Descargando para Móvil...';
+            
+            const progressBar = document.getElementById('progressBar');
+            const downloadStatus = document.getElementById('downloadStatus');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 12;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                
+                if (progress < 25) {
+                    downloadStatus.textContent = 'Detectando dispositivo móvil...';
+                } else if (progress < 50) {
+                    downloadStatus.textContent = 'Preparando versión móvil...';
+                } else if (progress < 75) {
+                    downloadStatus.textContent = 'Optimizando para tu dispositivo...';
+                } else if (progress < 95) {
+                    downloadStatus.textContent = 'Finalizando instalación...';
+                } else {
+                    downloadStatus.textContent = '¡Aplicación móvil lista!';
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        document.getElementById('downloadComplete').classList.remove('hidden');
+                        crearArchivoMovil();
+                        document.querySelector('button[onclick="descargarMovil()"]').textContent = '📱 Descargar para Móvil';
+                    }, 1000);
+                }
+            }, 300);
+        }
 
-🤖 ANDROID:
-• Archivo: LiceoExploradores.apk
-• Tamaño: 28.5 MB
-• Instalación directa
-
-🍎 iOS (iPhone/iPad):
-• Próximamente en App Store
-• Beta disponible por TestFlight
-
-📲 INSTRUCCIONES:
-1. Permite "Fuentes desconocidas" (Android)
-2. Descarga e instala el APK
-3. ¡Listo para usar!`);
-            }, 1500);
+        function crearArchivoMovil() {
+            const mobileAppContent = `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liceo Exploradores - App Móvil</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+        .mobile-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        .mobile-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        .mobile-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .mobile-btn {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .device-info {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="mobile-icon">📱</div>
+        <h1 class="mobile-title">Liceo Exploradores</h1>
+        <p style="color: #64748b; font-size: 14px;">Versión Móvil v2.0</p>
+        
+        <div class="mobile-success">
+            ✅ ¡App móvil instalada correctamente!<br>
+            📲 Optimizada para tu dispositivo
+        </div>
+        
+        <div class="device-info">
+            📱 <strong>Compatible con:</strong><br>
+            • Android 5.0+<br>
+            • iOS 12.0+<br>
+            • Navegadores móviles
+        </div>
+        
+        <button class="mobile-btn" onclick="window.location.reload()">
+            🚀 Abrir App Móvil
+        </button>
+        
+        <p style="font-size: 12px; color: #94a3b8; margin-top: 15px;">
+            💡 Agrega esta página a tu pantalla de inicio para acceso rápido
+        </p>
+    </div>
+</body>
+</html>`;
+            
+            const blob = new Blob([mobileAppContent], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LiceoExploradores-Movil-v2.0.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            mostrarNotificacion('¡App móvil descargada exitosamente!', 'success');
         }
 
         function crearArchivoDescarga() {
@@ -835,5 +960,5 @@ ${tipoUsuario === 'admin' ?
             }, 1000);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98037c3e80873ed7',t:'MTc1ODA1ODQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9803872d6614f7a8',t:'MTc1ODA1ODg4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
