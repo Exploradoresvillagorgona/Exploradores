@@ -1,1 +1,1893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎓 Liceo Exploradores de Sueños</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="background-color" content="#8b5cf6">
+    <meta name="description" content="Sistema completo de gestión escolar para el Liceo Exploradores de Sueños en Villa Gorgona, Candelaria. Gestiona estudiantes, profesores, calificaciones y asistencia.">
+    <meta name="keywords" content="liceo, colegio, gestión escolar, estudiantes, profesores, calificaciones, asistencia, Villa Gorgona, Candelaria">
+    <meta name="author" content="Liceo Exploradores de Sueños">
+    
+    <!-- Mobile Web App Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Liceo ES">
+    <meta name="application-name" content="Liceo Exploradores">
+    <meta name="msapplication-TileColor" content="#8b5cf6">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://liceo-exploradores.edu.co/">
+    <meta property="og:title" content="Liceo Exploradores de Sueños - Sistema Escolar">
+    <meta property="og:description" content="Sistema de gestión escolar completo para estudiantes, profesores y padres de familia.">
+    <meta property="og:site_name" content="Liceo Exploradores de Sueños">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://liceo-exploradores.edu.co/">
+    <meta property="twitter:title" content="Liceo Exploradores de Sueños">
+    <meta property="twitter:description" content="Sistema de gestión escolar completo">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'school-blue': '#1e40af',
+                        'school-yellow': '#f59e0b',
+                        'school-green': '#10b981',
+                        'school-purple': '#8b5cf6',
+                        'school-pink': '#ec4899',
+                        'school-orange': '#f97316'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .gradient-green {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .gradient-yellow {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-contact {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .floating-calendar {
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .floating-maps {
+            position: fixed;
+            bottom: 230px;
+            right: 20px;
+            z-index: 1000;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s infinite;
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .rainbow-border {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
+            background-size: 400% 400%;
+            animation: rainbow 3s ease infinite;
+        }
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .install-pulse {
+            animation: installPulse 2s infinite;
+        }
+        @keyframes installPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 min-h-screen">
+    <!-- PWA Install Button -->
+    <button id="installButton" class="hidden fixed top-4 left-4 z-50 bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-xl font-bold shadow-lg hover:from-green-600 hover:to-blue-600 transition duration-300 transform hover:scale-105 install-pulse">
+        📱 Instalar App
+    </button>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/573135649661?text=Hola,%20necesito%20ayuda%20con%20la%20aplicación%20del%20Liceo%20Exploradores%20de%20Sueños" 
+       target="_blank" 
+       class="floating-btn bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl neon-glow">
+        <span class="text-2xl">📱</span>
+    </a>
+
+    <!-- Floating Contact Button -->
+    <button onclick="showContactModal()" 
+            class="floating-contact bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-2xl neon-glow">
+        <span class="text-2xl">📞</span>
+    </button>
+
+    <!-- Floating Calendar Button -->
+    <button onclick="showCalendarModal()" 
+            class="floating-calendar bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-full shadow-2xl neon-glow">
+        <span class="text-2xl">📅</span>
+    </button>
+
+    <!-- Floating Maps Button -->
+    <button onclick="openGoogleMaps()" 
+            class="floating-maps bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-2xl neon-glow">
+        <span class="text-2xl">📍</span>
+    </button>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="glass-effect rounded-3xl shadow-2xl p-8 w-full max-w-md rainbow-border">
+            <div class="bg-white rounded-2xl p-6">
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-slow">
+                        <span class="text-4xl">🎓</span>
+                    </div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                        Liceo Exploradores de Sueños ✨
+                    </h1>
+                    <p class="text-gray-600 text-sm">🏫 Villa Gorgona, Candelaria</p>
+                    <div class="flex justify-center space-x-2 mt-2">
+                        <span class="animate-pulse">🌟</span>
+                        <span class="animate-pulse" style="animation-delay: 0.5s">🌈</span>
+                        <span class="animate-pulse" style="animation-delay: 1s">⭐</span>
+                    </div>
+                </div>
+                
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">👤 Usuario</label>
+                        <input type="text" id="username" class="w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-300" placeholder="Ingrese su usuario">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">🔐 Contraseña</label>
+                        <input type="password" id="password" class="w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-300" placeholder="Ingrese su contraseña">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl font-bold text-lg hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition duration-300 shadow-lg">
+                        🚀 Iniciar Sesión
+                    </button>
+                </form>
+                
+                <div class="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-dashed border-purple-300">
+                    <h3 class="font-bold text-gray-700 mb-3 text-center">🔐 Sistema Seguro</h3>
+                    <div class="text-sm text-gray-600 text-center">
+                        <p class="flex items-center justify-center space-x-2">
+                            <span>🛡️</span>
+                            <span>Ingrese sus credenciales proporcionadas por la institución</span>
+                        </p>
+                        <p class="text-xs text-gray-500 mt-2">
+                            Para obtener acceso, contacte al administrador del sistema
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="hidden min-h-screen">
+        <nav class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl animate-bounce">👨‍💼</span>
+                    <div>
+                        <h1 class="text-2xl font-bold">Panel Administrativo ⚡</h1>
+                        <p class="text-purple-200 text-sm">🎓 Liceo Exploradores de Sueños</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="showReportsModal()" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-xl transition duration-300 font-semibold">
+                        📊 Reportes
+                    </button>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl transition duration-300 font-semibold">
+                        🚪 Salir
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="p-6 space-y-6">
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-6 rounded-2xl shadow-xl card-hover text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm">👨‍🎓 Estudiantes</p>
+                            <p class="text-4xl font-bold" id="totalStudents">156</p>
+                        </div>
+                        <div class="text-5xl animate-pulse-slow">🎒</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-400 to-green-600 p-6 rounded-2xl shadow-xl card-hover text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm">👩‍🏫 Profesores</p>
+                            <p class="text-4xl font-bold" id="totalTeachers">12</p>
+                        </div>
+                        <div class="text-5xl animate-pulse-slow">📚</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-yellow-400 to-orange-500 p-6 rounded-2xl shadow-xl card-hover text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-yellow-100 text-sm">📊 Asistencia</p>
+                            <p class="text-4xl font-bold" id="attendanceToday">92%</p>
+                        </div>
+                        <div class="text-5xl animate-pulse-slow">✅</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-400 to-pink-500 p-6 rounded-2xl shadow-xl card-hover text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm">🏆 Promedio</p>
+                            <p class="text-4xl font-bold">4.2</p>
+                        </div>
+                        <div class="text-5xl animate-pulse-slow">⭐</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Management Sections -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-blue-500">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">👨‍🎓</span>
+                        Gestión de Estudiantes
+                    </h2>
+                    <div class="space-y-4">
+                        <button onclick="showAddStudentForm()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-300 font-bold text-lg transform hover:scale-105">
+                            ➕ Agregar Estudiante
+                        </button>
+                        <div class="max-h-64 overflow-y-auto space-y-2" id="studentsList">
+                            <!-- Students populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-green-500">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">👩‍🏫</span>
+                        Gestión de Profesores
+                    </h2>
+                    <div class="space-y-4">
+                        <button onclick="showAddTeacherForm()" class="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white py-4 rounded-xl hover:from-green-600 hover:to-teal-700 transition duration-300 font-bold text-lg transform hover:scale-105">
+                            ➕ Agregar Profesor
+                        </button>
+                        <div class="max-h-64 overflow-y-auto space-y-2" id="teachersList">
+                            <!-- Teachers populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Dashboard -->
+    <div id="teacherDashboard" class="hidden min-h-screen">
+        <nav class="bg-gradient-to-r from-green-500 via-teal-500 to-blue-500 text-white p-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl animate-bounce">👩‍🏫</span>
+                    <div>
+                        <h1 class="text-2xl font-bold">Panel del Profesor 📝</h1>
+                        <p class="text-green-200 text-sm" id="teacherName">María Rodríguez</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="showBulletinModal()" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-xl transition duration-300 font-semibold">
+                        📋 Boletines
+                    </button>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl transition duration-300 font-semibold">
+                        🚪 Salir
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="p-6 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-green-500">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">📚</span>
+                        Mis Clases
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                            <p class="font-bold text-blue-700 flex items-center">
+                                <span class="mr-2">🔢</span>
+                                Matemáticas - Grado 5°A
+                            </p>
+                            <p class="text-sm text-gray-600">👥 28 estudiantes</p>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border-2 border-yellow-200">
+                            <p class="font-bold text-yellow-700 flex items-center">
+                                <span class="mr-2">🔢</span>
+                                Matemáticas - Grado 5°B
+                            </p>
+                            <p class="text-sm text-gray-600">👥 25 estudiantes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-purple-500">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">📝</span>
+                        Calificaciones
+                    </h2>
+                    <select id="gradeClass" class="w-full p-4 border-2 border-purple-300 rounded-xl mb-4 focus:ring-2 focus:ring-purple-500">
+                        <option value="">🎯 Seleccionar Clase</option>
+                        <option value="5A">🔢 Matemáticas - Grado 5°A</option>
+                        <option value="5B">🔢 Matemáticas - Grado 5°B</option>
+                    </select>
+                    <button onclick="showGradeForm()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition duration-300 font-bold transform hover:scale-105">
+                        📊 Registrar Notas
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="mr-3">👨‍🎓</span>
+                    Estudiantes de la Clase
+                </h2>
+                <div id="classStudents" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Students populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Dashboard -->
+    <div id="parentDashboard" class="hidden min-h-screen">
+        <nav class="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white p-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl animate-bounce">👨‍👩‍👧‍👦</span>
+                    <div>
+                        <h1 class="text-2xl font-bold">Panel de Padres 💝</h1>
+                        <p class="text-yellow-200 text-sm" id="parentName">Familia García</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="showStudentBulletinModal()" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl transition duration-300 font-semibold">
+                        📋 Boletín
+                    </button>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl transition duration-300 font-semibold">
+                        🚪 Salir
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="p-6 space-y-6">
+            <!-- Student Info Card -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-yellow-500">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="mr-3">👨‍🎓</span>
+                    Información del Estudiante
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse-slow">
+                            <span class="text-3xl text-white">👨‍🎓</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold" id="studentName">Carlos García Pérez</h3>
+                            <p class="text-gray-600" id="studentGrade">🎒 Grado 5°A</p>
+                            <p class="text-sm text-gray-500" id="studentId">🆔 ID: 12345678</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-xl">
+                            <span class="text-gray-700 flex items-center">
+                                <span class="mr-2">📅</span>
+                                Asistencia del Mes:
+                            </span>
+                            <span class="font-bold text-green-600 text-xl" id="monthlyAttendance">95%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
+                            <span class="text-gray-700 flex items-center">
+                                <span class="mr-2">⭐</span>
+                                Promedio General:
+                            </span>
+                            <span class="font-bold text-blue-600 text-xl" id="generalAverage">4.2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades and Attendance -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-blue-500">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">📊</span>
+                        Calificaciones por Materia
+                    </h2>
+                    <div id="subjectGrades" class="space-y-3">
+                        <!-- Grades populated here -->
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-6 border-l-8 border-green-500">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">📅</span>
+                        Asistencia Reciente
+                    </h2>
+                    <div id="recentAttendance" class="space-y-2">
+                        <!-- Attendance populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md rainbow-border">
+            <div class="bg-white rounded-xl p-4">
+                <h2 class="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    📞 Contacto del Colegio
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3 p-3 bg-green-50 rounded-xl">
+                        <span class="text-2xl">📱</span>
+                        <div>
+                            <p class="font-bold text-green-700">WhatsApp</p>
+                            <p class="text-green-600">313-564-96-61</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 bg-blue-50 rounded-xl">
+                        <span class="text-2xl">📍</span>
+                        <div>
+                            <p class="font-bold text-blue-700">Dirección</p>
+                            <p class="text-blue-600">Carrera 13# 8-48 Callejón Betania</p>
+                            <p class="text-blue-600">Villa Gorgona, Candelaria</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 bg-purple-50 rounded-xl">
+                        <span class="text-2xl">🏫</span>
+                        <div>
+                            <p class="font-bold text-purple-700">Institución</p>
+                            <p class="text-purple-600">Liceo Exploradores de Sueños</p>
+                        </div>
+                    </div>
+                    <button onclick="openGoogleMaps()" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 rounded-xl hover:from-red-600 hover:to-pink-600 transition duration-300 font-bold">
+                        📍 Ver en Google Maps
+                    </button>
+                </div>
+                <button onclick="closeModal('contactModal')" class="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl hover:from-purple-600 hover:to-pink-600 transition duration-300 font-bold">
+                    ✅ Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Modal -->
+    <div id="calendarModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-2xl rainbow-border max-h-96 overflow-y-auto">
+            <div class="bg-white rounded-xl p-4">
+                <h2 class="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                    📅 Calendario Escolar 2024
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-3">
+                        <div class="p-3 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <p class="font-bold text-blue-700">📚 Inicio de Clases</p>
+                            <p class="text-blue-600">Enero 29, 2024</p>
+                        </div>
+                        <div class="p-3 bg-yellow-50 rounded-xl border-l-4 border-yellow-500">
+                            <p class="font-bold text-yellow-700">🏖️ Semana Santa</p>
+                            <p class="text-yellow-600">Marzo 25-29, 2024</p>
+                        </div>
+                        <div class="p-3 bg-green-50 rounded-xl border-l-4 border-green-500">
+                            <p class="font-bold text-green-700">👨‍👩‍👧‍👦 Día de la Familia</p>
+                            <p class="text-green-600">Mayo 15, 2024</p>
+                        </div>
+                        <div class="p-3 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <p class="font-bold text-purple-700">🏆 Graduación</p>
+                            <p class="text-purple-600">Noviembre 20, 2024</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <p class="font-bold text-red-700">📊 Entrega de Boletines</p>
+                            <p class="text-red-600">Cada fin de período</p>
+                        </div>
+                        <div class="p-3 bg-indigo-50 rounded-xl border-l-4 border-indigo-500">
+                            <p class="font-bold text-indigo-700">🎭 Festival Cultural</p>
+                            <p class="text-indigo-600">Septiembre 15, 2024</p>
+                        </div>
+                        <div class="p-3 bg-pink-50 rounded-xl border-l-4 border-pink-500">
+                            <p class="font-bold text-pink-700">🏃‍♂️ Día del Deporte</p>
+                            <p class="text-pink-600">Octubre 10, 2024</p>
+                        </div>
+                        <div class="p-3 bg-teal-50 rounded-xl border-l-4 border-teal-500">
+                            <p class="font-bold text-teal-700">🎄 Clausura</p>
+                            <p class="text-teal-600">Diciembre 15, 2024</p>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeModal('calendarModal')" class="w-full mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white py-3 rounded-xl hover:from-blue-600 hover:to-green-600 transition duration-300 font-bold">
+                    ✅ Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulletin Modal -->
+    <div id="bulletinModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-4xl rainbow-border max-h-96 overflow-y-auto">
+            <div class="bg-white rounded-xl p-4">
+                <h2 class="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    📋 Boletín de Calificaciones
+                </h2>
+                <div id="bulletinContent" class="space-y-4">
+                    <!-- Bulletin content will be populated here -->
+                </div>
+                <button onclick="closeModal('bulletinModal')" class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-xl hover:from-purple-600 hover:to-blue-600 transition duration-300 font-bold">
+                    ✅ Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md rainbow-border">
+            <div class="bg-white rounded-xl p-4">
+                <h2 class="text-xl font-bold mb-4 text-center">👨‍🎓 Agregar Nuevo Estudiante</h2>
+                <form id="addStudentForm" class="space-y-4">
+                    <input type="text" id="newStudentName" placeholder="👤 Nombre completo" class="w-full p-3 border-2 border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500" required>
+                    <input type="text" id="newStudentId" placeholder="🆔 Documento de identidad" class="w-full p-3 border-2 border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500" required>
+                    <select id="newStudentGrade" class="w-full p-3 border-2 border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500" required>
+                        <option value="">🎒 Seleccionar Grado</option>
+                        <option value="5A">Grado 5°A</option>
+                        <option value="5B">Grado 5°B</option>
+                    </select>
+                    <div class="flex space-x-3">
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-300 font-bold">
+                            ➕ Agregar
+                        </button>
+                        <button type="button" onclick="closeModal('addStudentModal')" class="flex-1 bg-gray-500 text-white py-3 rounded-xl hover:bg-gray-600 transition duration-300 font-bold">
+                            ❌ Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Teacher Modal -->
+    <div id="addTeacherModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md rainbow-border">
+            <div class="bg-white rounded-xl p-4">
+                <h2 class="text-xl font-bold mb-4 text-center">👩‍🏫 Agregar Nuevo Profesor</h2>
+                <form id="addTeacherForm" class="space-y-4">
+                    <input type="text" id="newTeacherName" placeholder="👤 Nombre completo" class="w-full p-3 border-2 border-green-300 rounded-xl focus:ring-2 focus:ring-green-500" required>
+                    <input type="text" id="newTeacherSubject" placeholder="📚 Materia" class="w-full p-3 border-2 border-green-300 rounded-xl focus:ring-2 focus:ring-green-500" required>
+                    <input type="email" id="newTeacherEmail" placeholder="📧 Email" class="w-full p-3 border-2 border-green-300 rounded-xl focus:ring-2 focus:ring-green-500" required>
+                    <div class="flex space-x-3">
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-teal-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-teal-700 transition duration-300 font-bold">
+                            ➕ Agregar
+                        </button>
+                        <button type="button" onclick="closeModal('addTeacherModal')" class="flex-1 bg-gray-500 text-white py-3 rounded-xl hover:bg-gray-600 transition duration-300 font-bold">
+                            ❌ Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate PNG icons programmatically - MEJORADO PARA PWA
+        function generateIcon(size, maskable = false) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            if (maskable) {
+                // For maskable icons, use safe zone (80% of canvas)
+                const safeZone = size * 0.8;
+                const offset = (size - safeZone) / 2;
+                
+                // Background circle for maskable
+                ctx.fillStyle = '#8b5cf6';
+                ctx.beginPath();
+                ctx.arc(size/2, size/2, size/2, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Icon in safe zone
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${safeZone * 0.4}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🎓', size/2, size/2);
+            } else {
+                // Regular icon with gradient background
+                const gradient = ctx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#8b5cf6');
+                gradient.addColorStop(0.5, '#ec4899');
+                gradient.addColorStop(1, '#f59e0b');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, size, size);
+                
+                // Add border radius effect
+                ctx.globalCompositeOperation = 'destination-in';
+                ctx.beginPath();
+                ctx.roundRect(0, 0, size, size, size * 0.2);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+                
+                // School icon
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${size * 0.4}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🎓', size/2, size/2);
+                
+                // Add shadow effect
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = size * 0.05;
+                ctx.shadowOffsetY = size * 0.02;
+            }
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        // Generate screenshot for PWA
+        function generateScreenshot(width, height, type = 'desktop') {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Mock interface elements
+            if (type === 'desktop') {
+                // Header bar
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.fillRect(50, 50, width-100, 80);
+                
+                // Cards
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                ctx.fillRect(50, 150, (width-150)/2, 200);
+                ctx.fillRect(width/2 + 25, 150, (width-150)/2, 200);
+                
+                // Title
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Liceo Exploradores de Sueños', width/2, 100);
+            } else {
+                // Mobile layout
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.fillRect(20, 50, width-40, 60);
+                
+                // Mobile cards
+                for (let i = 0; i < 3; i++) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                    ctx.fillRect(20, 130 + i * 120, width-40, 100);
+                }
+                
+                // Mobile title
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 18px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Liceo Exploradores', width/2, 85);
+            }
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        // PWA Manifest (embedded) - COMPLETO PARA TIENDAS Y PWA BUILDER
+        const manifestData = {
+            "name": "Liceo Exploradores de Sueños - Sistema Escolar",
+            "short_name": "Liceo ES",
+            "description": "Sistema completo de gestión escolar para el Liceo Exploradores de Sueños en Villa Gorgona, Candelaria. Gestiona estudiantes, profesores, calificaciones y asistencia.",
+            "id": "/?source=pwa",
+            "scope": "/",
+            "start_url": "/?source=pwa",
+            "display": "standalone",
+            "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+            "background_color": "#8b5cf6",
+            "theme_color": "#8b5cf6",
+            "orientation": "any",
+            "lang": "es-CO",
+            "dir": "ltr",
+            "categories": ["education", "productivity", "utilities", "business"],
+            "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+            "edge_side_panel": {
+                "preferred_width": 400
+            },
+            "launch_handler": {
+                "client_mode": "focus-existing"
+            },
+            "icons": [
+                {
+                    "src": generateIcon(48),
+                    "sizes": "48x48",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(72),
+                    "sizes": "72x72",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(96),
+                    "sizes": "96x96",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(128),
+                    "sizes": "128x128",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(144),
+                    "sizes": "144x144",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(152),
+                    "sizes": "152x152",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(192),
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(192, true),
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "maskable"
+                },
+                {
+                    "src": generateIcon(256),
+                    "sizes": "256x256",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(384),
+                    "sizes": "384x384",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(512),
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": generateIcon(512, true),
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "maskable"
+                }
+            ],
+            "screenshots": [
+                {
+                    "src": generateScreenshot(1280, 720, 'desktop'),
+                    "sizes": "1280x720",
+                    "type": "image/png",
+                    "form_factor": "wide",
+                    "label": "Panel Administrativo - Vista Escritorio"
+                },
+                {
+                    "src": generateScreenshot(1920, 1080, 'desktop'),
+                    "sizes": "1920x1080",
+                    "type": "image/png",
+                    "form_factor": "wide",
+                    "label": "Dashboard Completo - Vista Escritorio"
+                },
+                {
+                    "src": generateScreenshot(390, 844, 'mobile'),
+                    "sizes": "390x844",
+                    "type": "image/png",
+                    "form_factor": "narrow",
+                    "label": "Vista Móvil - Panel Principal"
+                },
+                {
+                    "src": generateScreenshot(428, 926, 'mobile'),
+                    "sizes": "428x926",
+                    "type": "image/png",
+                    "form_factor": "narrow",
+                    "label": "Vista Móvil - Gestión Estudiantes"
+                }
+            ],
+            "shortcuts": [
+                {
+                    "name": "Panel Admin",
+                    "short_name": "Admin",
+                    "description": "Acceso directo al panel administrativo",
+                    "url": "/?shortcut=admin",
+                    "icons": [{ "src": generateIcon(96), "sizes": "96x96" }]
+                },
+                {
+                    "name": "Calificaciones",
+                    "short_name": "Notas",
+                    "description": "Ver calificaciones de estudiantes",
+                    "url": "/?shortcut=grades",
+                    "icons": [{ "src": generateIcon(96), "sizes": "96x96" }]
+                },
+                {
+                    "name": "Asistencia",
+                    "short_name": "Asistencia",
+                    "description": "Registro de asistencia",
+                    "url": "/?shortcut=attendance",
+                    "icons": [{ "src": generateIcon(96), "sizes": "96x96" }]
+                }
+            ],
+            "share_target": {
+                "action": "/share-target/",
+                "method": "POST",
+                "enctype": "multipart/form-data",
+                "params": {
+                    "title": "title",
+                    "text": "text",
+                    "url": "url",
+                    "files": [
+                        {
+                            "name": "files",
+                            "accept": ["image/*", "application/pdf", ".doc", ".docx"]
+                        }
+                    ]
+                }
+            },
+            "file_handlers": [
+                {
+                    "action": "/handle-file/",
+                    "accept": {
+                        "application/pdf": [".pdf"],
+                        "application/msword": [".doc"],
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+                        "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp"]
+                    }
+                }
+            ],
+            "protocol_handlers": [
+                {
+                    "protocol": "web+liceo",
+                    "url": "/handle-protocol/?url=%s"
+                }
+            ]
+        };
+
+        // Firebase Configuration (Simulated - Replace with real Firebase config)
+        const firebaseConfig = {
+            // This would be your real Firebase configuration
+            // For demo purposes, we'll simulate cloud sync
+        };
+
+        // Simulated cloud database with real-time sync
+        let cloudData = {
+            students: [
+                { id: '12345678', name: 'Carlos García Pérez', grade: '5A', attendance: 95, grades: { matematicas: 4.2, español: 4.0, ciencias: 4.5, sociales: 3.8 } },
+                { id: '87654321', name: 'Ana María López', grade: '5A', attendance: 98, grades: { matematicas: 4.8, español: 4.6, ciencias: 4.3, sociales: 4.5 } },
+                { id: '11223344', name: 'Pedro Martínez', grade: '5B', attendance: 92, grades: { matematicas: 3.9, español: 4.1, ciencias: 4.0, sociales: 4.2 } },
+                { id: '55667788', name: 'Sofía Hernández', grade: '5A', attendance: 97, grades: { matematicas: 4.6, español: 4.4, ciencias: 4.7, sociales: 4.3 } },
+                { id: '99887766', name: 'Miguel Torres', grade: '5B', attendance: 89, grades: { matematicas: 3.7, español: 3.9, ciencias: 4.1, sociales: 3.8 } }
+            ],
+            teachers: [
+                { id: 'mrodriguez', name: 'María Rodríguez', subject: 'Matemáticas', email: 'maria@liceo.edu' },
+                { id: 'jperez', name: 'Juan Pérez', subject: 'Español', email: 'juan@liceo.edu' },
+                { id: 'lgomez', name: 'Laura Gómez', subject: 'Ciencias', email: 'laura@liceo.edu' },
+                { id: 'cmartinez', name: 'Carlos Martínez', subject: 'Sociales', email: 'carlos@liceo.edu' }
+            ],
+            attendance: [
+                { date: '2024-01-15', status: 'Presente' },
+                { date: '2024-01-14', status: 'Presente' },
+                { date: '2024-01-13', status: 'Tardanza' },
+                { date: '2024-01-12', status: 'Presente' },
+                { date: '2024-01-11', status: 'Presente' }
+            ],
+            bulletins: {
+                '12345678': {
+                    period: 'Primer Período 2024',
+                    grades: { matematicas: 4.2, español: 4.0, ciencias: 4.5, sociales: 3.8 },
+                    observations: 'Excelente desempeño en matemáticas y ciencias. Debe mejorar en español.'
+                }
+            }
+        };
+
+        let currentUser = null;
+        let deferredPrompt;
+
+        // PWA Installation
+        function createInstallButton() {
+            const installButton = document.getElementById('installButton');
+            installButton.addEventListener('click', installApp);
+        }
+
+        // PWA Install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installButton = document.getElementById('installButton');
+            installButton.classList.remove('hidden');
+            showNotification('📱 ¡App lista para instalar! Toca el botón verde arriba', 'success');
+        });
+
+        // Install app function
+        async function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    showNotification('🎉 ¡App instalada exitosamente!', 'success');
+                    document.getElementById('installButton').classList.add('hidden');
+                } else {
+                    showNotification('📱 Instalación cancelada', 'info');
+                }
+                deferredPrompt = null;
+            }
+        }
+
+        // Service Worker Registration - OPTIMIZADO PARA PWA BUILDER
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'liceo-exploradores-v3';
+                    const STATIC_CACHE = 'static-v3';
+                    const DYNAMIC_CACHE = 'dynamic-v3';
+                    const IMAGE_CACHE = 'images-v3';
+                    const API_CACHE = 'api-v3';
+                    
+                    const urlsToCache = [
+                        '/',
+                        '/?source=pwa',
+                        '/manifest.json',
+                        'https://cdn.tailwindcss.com',
+                        'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js',
+                        'https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js'
+                    ];
+
+                    // Offline fallback page
+                    const offlinePage = \`
+                        <!DOCTYPE html>
+                        <html lang="es">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Sin Conexión - Liceo Exploradores</title>
+                            <style>
+                                body { 
+                                    font-family: Arial, sans-serif; 
+                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                    color: white; 
+                                    text-align: center; 
+                                    padding: 50px 20px;
+                                    min-height: 100vh;
+                                    margin: 0;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
+                                .offline-container {
+                                    background: rgba(255,255,255,0.1);
+                                    backdrop-filter: blur(10px);
+                                    padding: 40px;
+                                    border-radius: 20px;
+                                    border: 1px solid rgba(255,255,255,0.2);
+                                    max-width: 400px;
+                                }
+                                .emoji { font-size: 4rem; margin-bottom: 20px; }
+                                h1 { margin: 20px 0; }
+                                p { margin: 10px 0; opacity: 0.9; }
+                                button {
+                                    background: linear-gradient(45deg, #667eea, #764ba2);
+                                    color: white;
+                                    border: none;
+                                    padding: 15px 30px;
+                                    border-radius: 25px;
+                                    font-size: 16px;
+                                    cursor: pointer;
+                                    margin-top: 20px;
+                                    transition: transform 0.3s;
+                                }
+                                button:hover { transform: scale(1.05); }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="offline-container">
+                                <div class="emoji">📱</div>
+                                <h1>Sin Conexión</h1>
+                                <p>🎓 Liceo Exploradores de Sueños</p>
+                                <p>No hay conexión a internet disponible.</p>
+                                <p>Algunos datos pueden estar disponibles desde el caché.</p>
+                                <button onclick="window.location.reload()">🔄 Reintentar</button>
+                            </div>
+                        </body>
+                        </html>
+                    \`;
+
+                    // Install event - Cache static resources and offline page
+                    self.addEventListener('install', (event) => {
+                        console.log('🔧 Service Worker installing...');
+                        event.waitUntil(
+                            Promise.all([
+                                caches.open(STATIC_CACHE).then((cache) => {
+                                    console.log('📦 Caching static resources');
+                                    return cache.addAll(urlsToCache);
+                                }),
+                                caches.open(DYNAMIC_CACHE).then((cache) => {
+                                    console.log('📄 Caching offline page');
+                                    return cache.put('/offline.html', new Response(offlinePage, {
+                                        headers: { 'Content-Type': 'text/html' }
+                                    }));
+                                })
+                            ]).then(() => {
+                                console.log('✅ Service Worker installed successfully');
+                                return self.skipWaiting();
+                            })
+                        );
+                    });
+
+                    // Activate event - Clean old caches and take control
+                    self.addEventListener('activate', (event) => {
+                        console.log('🚀 Service Worker activating...');
+                        event.waitUntil(
+                            caches.keys().then((cacheNames) => {
+                                return Promise.all(
+                                    cacheNames.map((cacheName) => {
+                                        if (cacheName !== STATIC_CACHE && 
+                                            cacheName !== DYNAMIC_CACHE && 
+                                            cacheName !== IMAGE_CACHE &&
+                                            cacheName !== API_CACHE) {
+                                            console.log('🗑️ Deleting old cache:', cacheName);
+                                            return caches.delete(cacheName);
+                                        }
+                                    })
+                                );
+                            }).then(() => {
+                                console.log('✅ Service Worker activated and ready');
+                                return self.clients.claim();
+                            })
+                        );
+                    });
+
+                    // Fetch event - Advanced caching strategies for PWA
+                    self.addEventListener('fetch', (event) => {
+                        const { request } = event;
+                        const url = new URL(request.url);
+
+                        // Skip non-GET requests
+                        if (request.method !== 'GET') return;
+
+                        // Handle different types of requests with optimized strategies
+                        if (request.destination === 'image') {
+                            // Images: Cache First with fallback
+                            event.respondWith(cacheFirstWithFallback(request, IMAGE_CACHE));
+                        } else if (url.pathname.startsWith('/api/') || url.hostname.includes('firebase')) {
+                            // API calls: Network First with offline support
+                            event.respondWith(networkFirstWithOffline(request, API_CACHE));
+                        } else if (request.destination === 'document' || url.pathname === '/') {
+                            // HTML pages: Network First with offline fallback
+                            event.respondWith(handleDocumentRequest(request));
+                        } else if (url.hostname.includes('cdn.') || url.hostname.includes('gstatic.com')) {
+                            // CDN resources: Cache First (long-term cache)
+                            event.respondWith(cacheFirst(request, STATIC_CACHE));
+                        } else {
+                            // Other resources: Stale While Revalidate
+                            event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+                        }
+                    });
+
+                    // Background Sync
+                    self.addEventListener('sync', (event) => {
+                        if (event.tag === 'background-sync') {
+                            event.waitUntil(doBackgroundSync());
+                        }
+                    });
+
+                    // Push notifications
+                    self.addEventListener('push', (event) => {
+                        const options = {
+                            body: event.data ? event.data.text() : 'Nueva notificación del Liceo',
+                            icon: '/icon-192x192.png',
+                            badge: '/badge-72x72.png',
+                            vibrate: [100, 50, 100],
+                            data: {
+                                dateOfArrival: Date.now(),
+                                primaryKey: 1
+                            },
+                            actions: [
+                                {
+                                    action: 'explore',
+                                    title: 'Ver más',
+                                    icon: '/icon-192x192.png'
+                                },
+                                {
+                                    action: 'close',
+                                    title: 'Cerrar',
+                                    icon: '/icon-192x192.png'
+                                }
+                            ]
+                        };
+                        event.waitUntil(
+                            self.registration.showNotification('Liceo Exploradores', options)
+                        );
+                    });
+
+                    // Share target handler
+                    self.addEventListener('message', (event) => {
+                        if (event.data && event.data.type === 'SHARE_TARGET') {
+                            // Handle shared content
+                            console.log('📤 Shared content received:', event.data);
+                        }
+                    });
+
+                    // Advanced caching strategies for PWA optimization
+                    async function cacheFirst(request, cacheName) {
+                        const cache = await caches.open(cacheName);
+                        const cached = await cache.match(request);
+                        if (cached) {
+                            console.log('📦 Cache hit:', request.url);
+                            return cached;
+                        }
+                        try {
+                            const response = await fetch(request);
+                            if (response.status === 200) {
+                                console.log('💾 Caching:', request.url);
+                                cache.put(request, response.clone());
+                            }
+                            return response;
+                        } catch (error) {
+                            console.log('❌ Network error:', request.url);
+                            return new Response('Resource unavailable offline', { 
+                                status: 503,
+                                statusText: 'Service Unavailable'
+                            });
+                        }
+                    }
+
+                    async function cacheFirstWithFallback(request, cacheName) {
+                        const cache = await caches.open(cacheName);
+                        const cached = await cache.match(request);
+                        if (cached) {
+                            return cached;
+                        }
+                        try {
+                            const response = await fetch(request);
+                            if (response.status === 200) {
+                                cache.put(request, response.clone());
+                            }
+                            return response;
+                        } catch (error) {
+                            // Return a placeholder image for failed image requests
+                            if (request.destination === 'image') {
+                                return new Response(
+                                    '<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="#f0f0f0"/><text x="100" y="100" text-anchor="middle" dy=".3em" fill="#999">📷</text></svg>',
+                                    { headers: { 'Content-Type': 'image/svg+xml' } }
+                                );
+                            }
+                            return new Response('Resource unavailable', { status: 503 });
+                        }
+                    }
+
+                    async function networkFirstWithOffline(request, cacheName) {
+                        const cache = await caches.open(cacheName);
+                        try {
+                            const response = await fetch(request, { timeout: 3000 });
+                            if (response.status === 200) {
+                                cache.put(request, response.clone());
+                            }
+                            return response;
+                        } catch (error) {
+                            console.log('🔄 Network failed, trying cache:', request.url);
+                            const cached = await cache.match(request);
+                            if (cached) {
+                                return cached;
+                            }
+                            // Return offline data structure for API calls
+                            return new Response(JSON.stringify({
+                                error: 'offline',
+                                message: 'Data not available offline',
+                                timestamp: Date.now()
+                            }), {
+                                status: 503,
+                                headers: { 'Content-Type': 'application/json' }
+                            });
+                        }
+                    }
+
+                    async function handleDocumentRequest(request) {
+                        try {
+                            const response = await fetch(request);
+                            const cache = await caches.open(DYNAMIC_CACHE);
+                            cache.put(request, response.clone());
+                            return response;
+                        } catch (error) {
+                            console.log('📄 Document request failed, serving offline page');
+                            const cache = await caches.open(DYNAMIC_CACHE);
+                            const offlineResponse = await cache.match('/offline.html');
+                            return offlineResponse || new Response(offlinePage, {
+                                headers: { 'Content-Type': 'text/html' }
+                            });
+                        }
+                    }
+
+                    async function staleWhileRevalidate(request, cacheName) {
+                        const cache = await caches.open(cacheName);
+                        const cached = await cache.match(request);
+                        
+                        const fetchPromise = fetch(request).then((response) => {
+                            if (response.status === 200) {
+                                cache.put(request, response.clone());
+                            }
+                            return response;
+                        }).catch(() => cached);
+
+                        return cached || fetchPromise;
+                    }
+
+                    async function doBackgroundSync() {
+                        // Sync offline data when connection is restored
+                        console.log('🔄 Background sync triggered');
+                        // Add your sync logic here
+                    }
+                `;
+
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+
+                navigator.serviceWorker.register(swUrl)
+                    .then((registration) => {
+                        console.log('✅ Service Worker registrado:', registration);
+                        
+                        // Register for background sync
+                        if ('sync' in window.ServiceWorkerRegistration.prototype) {
+                            registration.sync.register('background-sync');
+                        }
+                        
+                        // Request notification permission
+                        if ('Notification' in window && 'serviceWorker' in navigator) {
+                            Notification.requestPermission();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log('❌ Error Service Worker:', error);
+                    });
+            });
+        }
+
+        // Google Maps function
+        function openGoogleMaps() {
+            const address = "Carrera 13# 8-48 Callejón Betania, Villa Gorgona, Candelaria, Valle del Cauca, Colombia";
+            const encodedAddress = encodeURIComponent(address);
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+            window.open(mapsUrl, '_blank');
+        }
+
+        // Simulate real-time cloud sync
+        function syncToCloud(data) {
+            // In a real app, this would sync to Firebase
+            localStorage.setItem('liceoCloudData', JSON.stringify(data));
+            console.log('📡 Datos sincronizados en la nube');
+            
+            // Simulate network delay
+            setTimeout(() => {
+                showNotification('✅ Datos guardados en la nube', 'success');
+            }, 500);
+        }
+
+        function loadFromCloud() {
+            // In a real app, this would load from Firebase
+            const saved = localStorage.getItem('liceoCloudData');
+            if (saved) {
+                cloudData = JSON.parse(saved);
+                console.log('📥 Datos cargados desde la nube');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            } text-white font-semibold`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin2024' && password === 'LES2024*') {
+                currentUser = { type: 'admin', name: 'Administrador' };
+                showDashboard('admin');
+                showNotification('🎉 Bienvenido Administrador!', 'success');
+            } else if (username === 'mrodriguez' && password === 'teacher123') {
+                currentUser = { type: 'teacher', name: 'María Rodríguez' };
+                showDashboard('teacher');
+                showNotification('👩‍🏫 Bienvenida María!', 'success');
+            } else if (cloudData.students.find(s => s.id === username && s.id === password)) {
+                const student = cloudData.students.find(s => s.id === username);
+                currentUser = { type: 'parent', studentId: username, studentName: student.name };
+                showDashboard('parent');
+                showNotification('👨‍👩‍👧‍👦 Bienvenida Familia!', 'success');
+            } else {
+                showNotification('❌ Credenciales incorrectas', 'error');
+            }
+        });
+
+        function showDashboard(type) {
+            document.getElementById('loginScreen').classList.add('hidden');
+            
+            if (type === 'admin') {
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                loadAdminData();
+            } else if (type === 'teacher') {
+                document.getElementById('teacherDashboard').classList.remove('hidden');
+                loadTeacherData();
+            } else if (type === 'parent') {
+                document.getElementById('parentDashboard').classList.remove('hidden');
+                loadParentData();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('teacherDashboard').classList.add('hidden');
+            document.getElementById('parentDashboard').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showNotification('👋 Sesión cerrada', 'info');
+        }
+
+        function loadAdminData() {
+            document.getElementById('totalStudents').textContent = cloudData.students.length;
+            document.getElementById('totalTeachers').textContent = cloudData.teachers.length;
+            
+            const studentsList = document.getElementById('studentsList');
+            studentsList.innerHTML = '';
+            cloudData.students.forEach(student => {
+                const studentDiv = document.createElement('div');
+                studentDiv.className = 'p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl flex justify-between items-center border-2 border-blue-200 hover:border-purple-300 transition duration-300';
+                studentDiv.innerHTML = `
+                    <div>
+                        <p class="font-bold text-blue-700 flex items-center">
+                            <span class="mr-2">👨‍🎓</span>
+                            ${student.name}
+                        </p>
+                        <p class="text-sm text-gray-600">🎒 Grado ${student.grade} - 🆔 ID: ${student.id}</p>
+                        <p class="text-sm text-green-600">📊 Promedio: ${Object.values(student.grades).reduce((a,b) => a+b, 0) / Object.values(student.grades).length}</p>
+                    </div>
+                    <button onclick="removeStudent('${student.id}')" class="text-red-500 hover:text-red-700 text-2xl transform hover:scale-110 transition duration-300">
+                        🗑️
+                    </button>
+                `;
+                studentsList.appendChild(studentDiv);
+            });
+
+            const teachersList = document.getElementById('teachersList');
+            teachersList.innerHTML = '';
+            cloudData.teachers.forEach(teacher => {
+                const teacherDiv = document.createElement('div');
+                teacherDiv.className = 'p-4 bg-gradient-to-r from-green-50 to-teal-50 rounded-xl flex justify-between items-center border-2 border-green-200 hover:border-teal-300 transition duration-300';
+                teacherDiv.innerHTML = `
+                    <div>
+                        <p class="font-bold text-green-700 flex items-center">
+                            <span class="mr-2">👩‍🏫</span>
+                            ${teacher.name}
+                        </p>
+                        <p class="text-sm text-gray-600">📚 ${teacher.subject}</p>
+                        <p class="text-sm text-blue-600">📧 ${teacher.email}</p>
+                    </div>
+                    <button onclick="removeTeacher('${teacher.id}')" class="text-red-500 hover:text-red-700 text-2xl transform hover:scale-110 transition duration-300">
+                        🗑️
+                    </button>
+                `;
+                teachersList.appendChild(teacherDiv);
+            });
+        }
+
+        function loadTeacherData() {
+            document.getElementById('gradeClass').addEventListener('change', function() {
+                const selectedClass = this.value;
+                const classStudents = document.getElementById('classStudents');
+                classStudents.innerHTML = '';
+                
+                if (selectedClass) {
+                    const students = cloudData.students.filter(s => s.grade === selectedClass);
+                    students.forEach(student => {
+                        const studentCard = document.createElement('div');
+                        studentCard.className = 'bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border-2 border-purple-200 card-hover';
+                        studentCard.innerHTML = `
+                            <div class="text-center mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-white text-xl">👨‍🎓</span>
+                                </div>
+                                <h4 class="font-bold text-purple-700">${student.name}</h4>
+                                <p class="text-sm text-gray-600">🆔 ${student.id}</p>
+                                <p class="text-sm text-blue-600">📊 Promedio: ${student.grades.matematicas}</p>
+                            </div>
+                            <button onclick="editGrade('${student.id}')" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded-xl text-sm hover:from-purple-600 hover:to-pink-600 transition duration-300 font-semibold transform hover:scale-105">
+                                ✏️ Editar Nota
+                            </button>
+                        `;
+                        classStudents.appendChild(studentCard);
+                    });
+                }
+            });
+        }
+
+        function loadParentData() {
+            const student = cloudData.students.find(s => s.id === currentUser.studentId);
+            if (student) {
+                document.getElementById('studentName').textContent = student.name;
+                document.getElementById('studentGrade').textContent = `🎒 Grado ${student.grade}`;
+                document.getElementById('studentId').textContent = `🆔 ID: ${student.id}`;
+                document.getElementById('monthlyAttendance').textContent = `${student.attendance}%`;
+                
+                const grades = Object.values(student.grades);
+                const average = (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(1);
+                document.getElementById('generalAverage').textContent = average;
+
+                const subjectGrades = document.getElementById('subjectGrades');
+                subjectGrades.innerHTML = '';
+                const subjectEmojis = { matematicas: '🔢', español: '📝', ciencias: '🔬', sociales: '🌍' };
+                Object.entries(student.grades).forEach(([subject, grade]) => {
+                    const gradeDiv = document.createElement('div');
+                    gradeDiv.className = 'flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200';
+                    gradeDiv.innerHTML = `
+                        <span class="font-semibold capitalize text-blue-700 flex items-center">
+                            <span class="mr-2">${subjectEmojis[subject] || '📚'}</span>
+                            ${subject}
+                        </span>
+                        <span class="font-bold text-2xl text-purple-600">${grade}</span>
+                    `;
+                    subjectGrades.appendChild(gradeDiv);
+                });
+
+                const recentAttendance = document.getElementById('recentAttendance');
+                recentAttendance.innerHTML = '';
+                cloudData.attendance.forEach(record => {
+                    const attendanceDiv = document.createElement('div');
+                    attendanceDiv.className = 'flex justify-between items-center p-3 border-b border-gray-200 rounded-lg';
+                    const statusColor = record.status === 'Presente' ? 'text-green-600' : 
+                                       record.status === 'Tardanza' ? 'text-yellow-600' : 'text-red-600';
+                    const statusEmoji = record.status === 'Presente' ? '✅' : 
+                                       record.status === 'Tardanza' ? '⏰' : '❌';
+                    attendanceDiv.innerHTML = `
+                        <span class="flex items-center">
+                            <span class="mr-2">📅</span>
+                            ${record.date}
+                        </span>
+                        <span class="font-bold ${statusColor} flex items-center">
+                            <span class="mr-1">${statusEmoji}</span>
+                            ${record.status}
+                        </span>
+                    `;
+                    recentAttendance.appendChild(attendanceDiv);
+                });
+            }
+        }
+
+        // Modal functions
+        function showContactModal() {
+            document.getElementById('contactModal').classList.remove('hidden');
+        }
+
+        function showCalendarModal() {
+            document.getElementById('calendarModal').classList.remove('hidden');
+        }
+
+        function showBulletinModal() {
+            document.getElementById('bulletinModal').classList.remove('hidden');
+            loadBulletinData();
+        }
+
+        function showStudentBulletinModal() {
+            document.getElementById('bulletinModal').classList.remove('hidden');
+            loadStudentBulletinData();
+        }
+
+        function loadBulletinData() {
+            const bulletinContent = document.getElementById('bulletinContent');
+            bulletinContent.innerHTML = `
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-purple-700">📋 Boletín de Calificaciones - Primer Período 2024</h3>
+                    <p class="text-gray-600">🏫 Liceo Exploradores de Sueños</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${cloudData.students.map(student => `
+                        <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                            <h4 class="font-bold text-blue-700 mb-2 flex items-center">
+                                <span class="mr-2">👨‍🎓</span>
+                                ${student.name}
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-2">🎒 Grado ${student.grade}</p>
+                            <div class="space-y-1">
+                                ${Object.entries(student.grades).map(([subject, grade]) => `
+                                    <div class="flex justify-between">
+                                        <span class="capitalize">${subject}:</span>
+                                        <span class="font-bold">${grade}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mt-2 pt-2 border-t border-gray-300">
+                                <div class="flex justify-between font-bold">
+                                    <span>Promedio:</span>
+                                    <span class="text-purple-600">${(Object.values(student.grades).reduce((a,b) => a+b, 0) / Object.values(student.grades).length).toFixed(1)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function loadStudentBulletinData() {
+            const student = cloudData.students.find(s => s.id === currentUser.studentId);
+            const bulletinContent = document.getElementById('bulletinContent');
+            bulletinContent.innerHTML = `
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-purple-700">📋 Boletín de Calificaciones</h3>
+                    <p class="text-gray-600">🏫 Liceo Exploradores de Sueños</p>
+                    <p class="text-lg font-semibold text-blue-700">👨‍🎓 ${student.name}</p>
+                    <p class="text-gray-600">🎒 Grado ${student.grade} - Primer Período 2024</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border-2 border-blue-200">
+                    <h4 class="font-bold text-blue-700 mb-4 text-center">📊 Calificaciones por Materia</h4>
+                    <div class="space-y-3">
+                        ${Object.entries(student.grades).map(([subject, grade]) => `
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                <span class="font-semibold capitalize">${subject}:</span>
+                                <span class="font-bold text-xl text-purple-600">${grade}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-4 pt-4 border-t-2 border-purple-300">
+                        <div class="flex justify-between items-center text-lg font-bold">
+                            <span>🏆 Promedio General:</span>
+                            <span class="text-2xl text-purple-600">${(Object.values(student.grades).reduce((a,b) => a+b, 0) / Object.values(student.grades).length).toFixed(1)}</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+                        <p class="font-semibold text-yellow-700">📝 Observaciones:</p>
+                        <p class="text-yellow-600">Excelente desempeño académico. Continúa con el buen trabajo.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showAddStudentForm() {
+            document.getElementById('addStudentModal').classList.remove('hidden');
+        }
+
+        function showAddTeacherForm() {
+            document.getElementById('addTeacherModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Add student form
+        document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('newStudentName').value;
+            const id = document.getElementById('newStudentId').value;
+            const grade = document.getElementById('newStudentGrade').value;
+
+            const newStudent = {
+                id: id,
+                name: name,
+                grade: grade,
+                attendance: 100,
+                grades: { matematicas: 0, español: 0, ciencias: 0, sociales: 0 }
+            };
+
+            cloudData.students.push(newStudent);
+            syncToCloud(cloudData);
+            loadAdminData();
+            closeModal('addStudentModal');
+            this.reset();
+            showNotification('✅ Estudiante agregado exitosamente', 'success');
+        });
+
+        // Add teacher form
+        document.getElementById('addTeacherForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('newTeacherName').value;
+            const subject = document.getElementById('newTeacherSubject').value;
+            const email = document.getElementById('newTeacherEmail').value;
+
+            const newTeacher = {
+                id: name.toLowerCase().replace(' ', ''),
+                name: name,
+                subject: subject,
+                email: email
+            };
+
+            cloudData.teachers.push(newTeacher);
+            syncToCloud(cloudData);
+            loadAdminData();
+            closeModal('addTeacherModal');
+            this.reset();
+            showNotification('✅ Profesor agregado exitosamente', 'success');
+        });
+
+        function removeStudent(studentId) {
+            if (confirm('¿Está seguro de eliminar este estudiante?')) {
+                cloudData.students = cloudData.students.filter(s => s.id !== studentId);
+                syncToCloud(cloudData);
+                loadAdminData();
+                showNotification('✅ Estudiante eliminado exitosamente', 'success');
+            }
+        }
+
+        function removeTeacher(teacherId) {
+            if (confirm('¿Está seguro de eliminar este profesor?')) {
+                cloudData.teachers = cloudData.teachers.filter(t => t.id !== teacherId);
+                syncToCloud(cloudData);
+                loadAdminData();
+                showNotification('✅ Profesor eliminado exitosamente', 'success');
+            }
+        }
+
+        function showGradeForm() {
+            const selectedClass = document.getElementById('gradeClass').value;
+            if (!selectedClass) {
+                showNotification('⚠️ Por favor seleccione una clase primero', 'error');
+                return;
+            }
+            showNotification('📝 Función de registro de calificaciones disponible', 'info');
+        }
+
+        function editGrade(studentId) {
+            const newGrade = prompt('📊 Ingrese la nueva calificación (1.0 - 5.0):');
+            if (newGrade && !isNaN(newGrade) && newGrade >= 1.0 && newGrade <= 5.0) {
+                const student = cloudData.students.find(s => s.id === studentId);
+                if (student) {
+                    student.grades.matematicas = parseFloat(newGrade);
+                    syncToCloud(cloudData);
+                    showNotification('✅ Calificación actualizada exitosamente', 'success');
+                    loadTeacherData();
+                }
+            } else if (newGrade !== null) {
+                showNotification('❌ Por favor ingrese una calificación válida entre 1.0 y 5.0', 'error');
+            }
+        }
+
+        // Real-time data updates simulation
+        setInterval(() => {
+            if (currentUser && currentUser.type === 'admin') {
+                const currentAttendance = parseInt(document.getElementById('attendanceToday').textContent);
+                const newAttendance = Math.max(85, Math.min(100, currentAttendance + (Math.random() - 0.5) * 2));
+                document.getElementById('attendanceToday').textContent = Math.round(newAttendance) + '%';
+            }
+        }, 15000);
+
+        // Auto-sync to cloud every 30 seconds
+        setInterval(() => {
+            if (currentUser) {
+                syncToCloud(cloudData);
+            }
+        }, 30000);
+
+        // Load data on page load
+        loadFromCloud();
+
+        // Create and inject manifest for PWA
+        function createManifest() {
+            const manifestBlob = new Blob([JSON.stringify(manifestData, null, 2)], { 
+                type: 'application/json' 
+            });
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            
+            // Add manifest link
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = manifestUrl;
+            document.head.appendChild(manifestLink);
+            
+            // Add Apple touch icons
+            const appleTouchIcon = document.createElement('link');
+            appleTouchIcon.rel = 'apple-touch-icon';
+            appleTouchIcon.href = generateIcon(180);
+            document.head.appendChild(appleTouchIcon);
+            
+            // Add favicon
+            const favicon = document.createElement('link');
+            favicon.rel = 'icon';
+            favicon.type = 'image/png';
+            favicon.href = generateIcon(32);
+            document.head.appendChild(favicon);
+            
+            console.log('📱 PWA Manifest created and injected');
+            return manifestUrl;
+        }
+
+        // PWA Installation and Update Management
+        function initializePWA() {
+            // Create manifest
+            createManifest();
+            
+            // Handle PWA updates
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('🔄 PWA updated, reloading...');
+                    window.location.reload();
+                });
+            }
+            
+            // Handle online/offline status
+            window.addEventListener('online', () => {
+                showNotification('🌐 Conexión restaurada', 'success');
+                syncToCloud(cloudData);
+            });
+            
+            window.addEventListener('offline', () => {
+                showNotification('📱 Modo offline activado', 'info');
+            });
+            
+            // Handle PWA shortcuts
+            const urlParams = new URLSearchParams(window.location.search);
+            const shortcut = urlParams.get('shortcut');
+            if (shortcut && currentUser) {
+                handleShortcut(shortcut);
+            }
+        }
+
+        function handleShortcut(shortcut) {
+            switch (shortcut) {
+                case 'admin':
+                    if (currentUser && currentUser.type === 'admin') {
+                        showDashboard('admin');
+                    }
+                    break;
+                case 'grades':
+                    if (currentUser && currentUser.type === 'teacher') {
+                        showBulletinModal();
+                    }
+                    break;
+                case 'attendance':
+                    showNotification('📊 Función de asistencia disponible', 'info');
+                    break;
+            }
+        }
+
+        // Initialize PWA and visual effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize PWA functionality
+            initializePWA();
+            
+            // Add floating animation to emojis
+            const emojis = document.querySelectorAll('.animate-pulse');
+            emojis.forEach((emoji, index) => {
+                emoji.style.animationDelay = `${index * 0.5}s`;
+            });
+
+            // Create install button functionality
+            createInstallButton();
+
+            // Load data from cloud
+            loadFromCloud();
+
+            // Show PWA ready notification after a delay
+            setTimeout(() => {
+                if (!deferredPrompt) {
+                    showNotification('🚀 ¡PWA lista! Funciona offline y se puede instalar', 'success');
+                } else {
+                    showNotification('📱 ¡Toca el botón verde para instalar la app!', 'info');
+                }
+            }, 2000);
+
+            // Performance monitoring
+            if ('performance' in window) {
+                window.addEventListener('load', () => {
+                    const loadTime = performance.now();
+                    console.log(`⚡ App loaded in ${Math.round(loadTime)}ms`);
+                    if (loadTime > 3000) {
+                        console.warn('⚠️ Slow loading detected');
+                    }
+                });
+            }
+
+            // Check if running as PWA
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                console.log('📱 Running as PWA');
+                document.body.classList.add('pwa-mode');
+                showNotification('🎉 ¡Ejecutándose como PWA!', 'success');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9802c10ba6dd16ac',t:'MTc1ODA1MDc3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
 
