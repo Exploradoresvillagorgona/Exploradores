@@ -693,39 +693,51 @@ ${tipoUsuario === 'admin' ?
         }
 
         function descargarMovil() {
-            // Iniciar el mismo proceso de descarga que PC pero para móvil
+            // Mostrar progreso
             document.getElementById('progressContainer').classList.remove('hidden');
-            document.querySelector('button[onclick="descargarMovil()"]').textContent = 'Descargando para Móvil...';
+            document.querySelector('button[onclick="descargarMovil()"]').textContent = 'Descargando...';
             
             const progressBar = document.getElementById('progressBar');
             const downloadStatus = document.getElementById('downloadStatus');
             
+            // Crear y descargar el archivo inmediatamente
+            crearArchivoMovil();
+            
+            // Simular progreso visual
             let progress = 0;
             const interval = setInterval(() => {
-                progress += Math.random() * 12;
+                progress += Math.random() * 20;
                 if (progress > 100) progress = 100;
                 
                 progressBar.style.width = progress + '%';
                 
-                if (progress < 25) {
-                    downloadStatus.textContent = 'Detectando dispositivo móvil...';
-                } else if (progress < 50) {
-                    downloadStatus.textContent = 'Preparando versión móvil...';
-                } else if (progress < 75) {
-                    downloadStatus.textContent = 'Optimizando para tu dispositivo...';
-                } else if (progress < 95) {
-                    downloadStatus.textContent = 'Finalizando instalación...';
+                if (progress < 40) {
+                    downloadStatus.textContent = 'Preparando descarga móvil...';
+                } else if (progress < 80) {
+                    downloadStatus.textContent = 'Creando archivo para móvil...';
+                } else if (progress < 100) {
+                    downloadStatus.textContent = 'Iniciando descarga...';
                 } else {
-                    downloadStatus.textContent = '¡Aplicación móvil lista!';
+                    downloadStatus.textContent = '¡Descarga iniciada!';
                     clearInterval(interval);
                     
                     setTimeout(() => {
                         document.getElementById('downloadComplete').classList.remove('hidden');
-                        crearArchivoMovil();
                         document.querySelector('button[onclick="descargarMovil()"]').textContent = '📱 Descargar para Móvil';
+                        
+                        // Actualizar mensaje de descarga completada
+                        const completeDiv = document.getElementById('downloadComplete');
+                        completeDiv.innerHTML = `
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">✅</div>
+                                <h4 class="font-bold text-green-800 mb-4">¡Descarga Móvil Completada!</h4>
+                                <p class="text-green-700">Busca el archivo en tu carpeta de descargas:<br><strong>"LiceoExploradores-Movil-v2.0.html"</strong></p>
+                                <p class="text-sm text-green-600 mt-2">📱 Optimizado para dispositivos móviles</p>
+                            </div>
+                        `;
                     }, 1000);
                 }
-            }, 300);
+            }, 150);
         }
 
         function crearArchivoMovil() {
@@ -960,5 +972,5 @@ ${tipoUsuario === 'admin' ?
             }, 1000);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9803872d6614f7a8',t:'MTc1ODA1ODg4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98038dff32203eeb',t:'MTc1ODA1OTE2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
