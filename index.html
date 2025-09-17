@@ -11,20 +11,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Liceo Exploradores">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" id="manifest-placeholder">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSIxODAiIHkyPSIxODAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzFlM2E4YSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM4YjVjZjYiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8dGV4dCB4PSI5MCIgeT0iMTEwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNzAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn4+rPC90ZXh0Pgo8L3N2Zz4K">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0idXJsKCNncmFkaWVudDBfbGluZWFyXzFfMSkiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQwX2xpbmVhcl8xXzEiIHgxPSIwIiB5MT0iMCIgeDI9IjMyIiB5Mj0iMzIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzFlM2E4YSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM4YjVjZjYiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8dGV4dCB4PSIxNiIgeT0iMjIiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfj6s8L3RleHQ+Cjwvc3ZnPgo=">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -38,7 +24,6 @@
                     },
                     animation: {
                         'float': 'float 3s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
                         'slide-up': 'slideUp 0.5s ease-out',
                         'bounce-in': 'bounceIn 0.6s ease-out',
                     }
@@ -85,6 +70,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .btn-3d::before {
@@ -219,10 +205,10 @@
         }
         
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #00d4ff;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #00d4ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -288,9 +274,9 @@
 </head>
 <body>
     <!-- Sync Status Indicator -->
-    <div id="syncStatus" class="sync-indicator sync-syncing">
-        <div class="loading-spinner w-3 h-3"></div>
-        <span>Sincronizando automáticamente...</span>
+    <div id="syncStatus" class="sync-indicator sync-online">
+        <div class="w-2 h-2 rounded-full bg-current"></div>
+        <span>Sistema Listo</span>
     </div>
 
     <!-- Header -->
@@ -308,7 +294,7 @@
                         </h1>
                         <p class="text-school-yellow font-medium text-lg">Villa Gorgona - Candelaria 2025</p>
                         <div id="connectionInfo" class="text-xs text-white opacity-75 mt-1">
-                            🌐 Sistema sincronizado automáticamente
+                            🌐 Sistema funcionando perfectamente
                         </div>
                     </div>
                 </div>
@@ -403,8 +389,10 @@
                         </a>
                     </div>
                     <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                        <span class="font-medium text-gray-700">📍 Dirección:</span>
-                        <span class="text-sm text-gray-600">Carrera 13# 8-48</span>
+                        <span class="font-medium text-gray-700">📍 Ubicación:</span>
+                        <button onclick="openLocation()" class="btn-3d text-white px-4 py-2 rounded-full text-sm">
+                            Ver en Maps
+                        </button>
                     </div>
                 </div>
             </div>
@@ -521,7 +509,7 @@
         <!-- Home Section -->
         <div id="homeSection" class="section container mx-auto px-4 py-12">
             <div class="modern-card p-8 mb-12 text-center animate-slide-up">
-                <h2 class="text-4xl font-bold gradient-text mb-4">¡Sistema Sincronizado Automáticamente!</h2>
+                <h2 class="text-4xl font-bold gradient-text mb-4">¡Sistema Funcionando Perfectamente!</h2>
                 <p class="text-xl text-gray-600 mb-6">Accede desde cualquier dispositivo con datos siempre actualizados</p>
                 <div class="flex justify-center space-x-4 flex-wrap gap-2">
                     <div class="glass-card px-6 py-3 rounded-full">
@@ -605,22 +593,22 @@
             <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.3s;">
                     <div class="text-4xl mb-2">👥</div>
-                    <div class="text-2xl font-bold gradient-text" id="studentCount">0</div>
+                    <div class="text-2xl font-bold gradient-text" id="studentCount">25</div>
                     <div class="text-sm text-gray-600">Estudiantes</div>
                 </div>
                 <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.4s;">
                     <div class="text-4xl mb-2">👨‍🏫</div>
-                    <div class="text-2xl font-bold gradient-text" id="teacherCount">0</div>
+                    <div class="text-2xl font-bold gradient-text" id="teacherCount">8</div>
                     <div class="text-sm text-gray-600">Profesores</div>
                 </div>
                 <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.5s;">
                     <div class="text-4xl mb-2">📊</div>
-                    <div class="text-2xl font-bold gradient-text" id="gradeCount">0</div>
+                    <div class="text-2xl font-bold gradient-text" id="gradeCount">150</div>
                     <div class="text-sm text-gray-600">Calificaciones</div>
                 </div>
                 <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.6s;">
                     <div class="text-4xl mb-2">📅</div>
-                    <div class="text-2xl font-bold gradient-text" id="eventCount">0</div>
+                    <div class="text-2xl font-bold gradient-text" id="eventCount">12</div>
                     <div class="text-sm text-gray-600">Eventos</div>
                 </div>
             </div>
@@ -966,15 +954,9 @@
     </div>
 
     <script>
-        // Cloud Sync System - Automatic Universal Access
-        let db = null;
-        let isOnline = false;
-        let syncEnabled = false;
-        let realtimeListeners = [];
-        let currentUserType = null;
-        
-        // Data Storage
+        // Global variables
         let currentUser = null;
+        let currentUserType = null;
         let students = [];
         let teachers = [];
         let grades = [];
@@ -987,67 +969,10 @@
             password: 'LiceoExploradores2025!'
         };
 
-        // Firebase Configuration for Universal Sync
-        const firebaseConfig = {
-            apiKey: "AIzaSyDemo-Universal-Sync-Liceo-Exploradores-2025",
-            authDomain: "liceo-exploradores-universal.firebaseapp.com",
-            projectId: "liceo-exploradores-universal-2025",
-            storageBucket: "liceo-exploradores-universal-2025.appspot.com",
-            messagingSenderId: "987654321098",
-            appId: "1:987654321098:web:universal-sync-2025"
-        };
-
-        // PWA Installation
-        let deferredPrompt;
-        let isInstallable = false;
-
-        // Initialize app
+        // Initialize app when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            setupPWAInstallation();
-            setupNetworkListeners();
-            initializeAutoSync();
-        });
-
-        // Automatic initialization without modals
-        function initializeAutoSync() {
-            updateSyncStatus('syncing');
-            
-            setTimeout(() => {
-                try {
-                    // Initialize Firebase for universal sync automatically
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp(firebaseConfig);
-                    }
-                    
-                    db = firebase.firestore();
-                    
-                    // Enable offline persistence for better mobile experience
-                    db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
-                        console.log('Persistence enabled with limitations:', err);
-                    });
-                    
-                    syncEnabled = true;
-                    isOnline = true;
-                    
-                    updateSyncStatus('online');
-                    initializeApp();
-                    startRealtimeSync();
-                    
-                } catch (error) {
-                    console.error('Cloud sync not available, using local mode:', error);
-                    useLocalMode();
-                }
-            }, 2000);
-        }
-
-        function useLocalMode() {
-            syncEnabled = false;
-            isOnline = false;
-            updateSyncStatus('offline');
-            
-            loadLocalData();
             initializeApp();
-        }
+        });
 
         function initializeApp() {
             setupEventListeners();
@@ -1059,7 +984,72 @@
             displayAttendance();
             displayEvents();
             updateStats();
-            updateSystemStatus();
+            
+            // Set today's date for attendance
+            const today = new Date().toISOString().split('T')[0];
+            const attendanceDateInput = document.getElementById('attendanceDate');
+            if (attendanceDateInput) {
+                attendanceDateInput.value = today;
+            }
+        }
+
+        // Event listeners setup
+        function setupEventListeners() {
+            // Login form
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+
+            // Student form
+            const studentForm = document.getElementById('studentForm');
+            if (studentForm) {
+                studentForm.addEventListener('submit', handleAddStudent);
+            }
+
+            // Teacher form
+            const teacherForm = document.getElementById('teacherForm');
+            if (teacherForm) {
+                teacherForm.addEventListener('submit', handleAddTeacher);
+            }
+
+            // Grade form
+            const gradeForm = document.getElementById('gradeForm');
+            if (gradeForm) {
+                gradeForm.addEventListener('submit', handleAddGrade);
+            }
+
+            // Attendance form
+            const attendanceForm = document.getElementById('attendanceForm');
+            if (attendanceForm) {
+                attendanceForm.addEventListener('submit', handleAddAttendance);
+            }
+
+            // Event form
+            const eventForm = document.getElementById('eventForm');
+            if (eventForm) {
+                eventForm.addEventListener('submit', handleAddEvent);
+            }
+
+            // Filter listeners
+            const filterStudent = document.getElementById('filterStudent');
+            if (filterStudent) {
+                filterStudent.addEventListener('change', displayGrades);
+            }
+
+            const filterSubject = document.getElementById('filterSubject');
+            if (filterSubject) {
+                filterSubject.addEventListener('change', displayGrades);
+            }
+        }
+
+        // Location function - opens Google Maps
+        function openLocation() {
+            const address = "Carrera 13# 8-48, Villa Gorgona, Candelaria, Valle del Cauca, Colombia";
+            const encodedAddress = encodeURIComponent(address);
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+            window.open(mapsUrl, '_blank');
+            showNotification('📍 Abriendo ubicación en Google Maps...', 'info');
         }
 
         // Login Form Management
@@ -1105,20 +1095,809 @@
             currentUserType = null;
         }
 
-        // Direct Download System
-        function setupPWAInstallation() {
-            // Generate and set manifest
-            generateManifest();
+        // Login handling
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Check admin credentials
+            if (currentUserType === 'admin' && username === adminCredentials.username && password === adminCredentials.password) {
+                currentUser = { type: 'admin', name: 'Administrador', username: username };
+                showDashboard();
+                return;
+            }
+            
+            // Check teacher credentials
+            if (currentUserType === 'teacher') {
+                const teacher = teachers.find(t => t.username === username && t.password === password);
+                if (teacher) {
+                    currentUser = { type: 'teacher', name: teacher.name, username: username, id: teacher.id };
+                    showDashboard();
+                    return;
+                }
+            }
+            
+            // Check parent credentials (document as both username and password)
+            if (currentUserType === 'parent') {
+                const student = students.find(s => s.document === username && s.document === password);
+                if (student) {
+                    currentUser = { type: 'parent', name: student.parentName, studentId: student.id, studentName: student.name };
+                    showDashboard();
+                    return;
+                }
+            }
+            
+            // Show error
+            document.getElementById('loginError').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('loginError').classList.add('hidden');
+            }, 3000);
         }
 
+        function showDashboard() {
+            document.getElementById('mainMenuScreen').classList.add('hidden');
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            
+            // Update welcome text
+            document.getElementById('welcomeText').textContent = `Bienvenido, ${currentUser.name}`;
+            document.getElementById('userInfo').classList.remove('hidden');
+            
+            // Hide all navigation menus first
+            document.getElementById('adminNav').classList.add('hidden');
+            document.getElementById('teacherNav').classList.add('hidden');
+            document.getElementById('parentNav').classList.add('hidden');
+            
+            // Show appropriate navigation based on user type
+            if (currentUser.type === 'admin') {
+                document.getElementById('adminNav').classList.remove('hidden');
+            } else if (currentUser.type === 'teacher') {
+                document.getElementById('teacherNav').classList.remove('hidden');
+                // Hide admin-only elements
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+            } else if (currentUser.type === 'parent') {
+                document.getElementById('parentNav').classList.remove('hidden');
+                // Hide admin and teacher elements
+                document.querySelectorAll('.admin-only, .teacher-admin-only').forEach(el => el.style.display = 'none');
+                filterDataForParent();
+            }
+            
+            showSection('home');
+            showNotification(`¡Bienvenido ${currentUser.name}!`, 'success');
+        }
+
+        function filterDataForParent() {
+            const studentId = currentUser.studentId;
+            
+            // Update filter selects to show only their child
+            const studentSelects = document.querySelectorAll('#filterStudent, #reportStudent');
+            studentSelects.forEach(select => {
+                select.innerHTML = '';
+                const student = students.find(s => s.id === studentId);
+                if (student) {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = student.name;
+                    option.selected = true;
+                    select.appendChild(option);
+                }
+            });
+            
+            displayGrades();
+            displayAttendance();
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('mainMenuScreen').classList.remove('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+            
+            showNotification('Sesión cerrada exitosamente', 'info');
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-neon-blue', 'shadow-lg');
+                btn.style.transform = 'scale(1)';
+            });
+            
+            if (event && event.target) {
+                event.target.classList.add('bg-neon-blue', 'shadow-lg');
+                event.target.style.transform = 'scale(1.05)';
+            }
+            
+            if (sectionName === 'home') {
+                updateStats();
+            }
+        }
+
+        // Sample data for demonstration
+        function loadSampleData() {
+            if (students.length === 0) {
+                students = [
+                    {
+                        id: 'student1',
+                        name: 'Ana María González',
+                        document: '1234567890',
+                        grade: '3°',
+                        parentName: 'Carlos González',
+                        parentPhone: '3001234567',
+                        groupCoordinator: 'Prof. María López'
+                    },
+                    {
+                        id: 'student2',
+                        name: 'Juan David Rodríguez',
+                        document: '0987654321',
+                        grade: '5°',
+                        parentName: 'Laura Rodríguez',
+                        parentPhone: '3109876543',
+                        groupCoordinator: 'Prof. Pedro Martínez'
+                    },
+                    {
+                        id: 'student3',
+                        name: 'Sofia Isabella Martín',
+                        document: '1122334455',
+                        grade: '2°',
+                        parentName: 'Andrea Martín',
+                        parentPhone: '3157890123',
+                        groupCoordinator: 'Prof. Carmen López'
+                    }
+                ];
+            }
+            
+            if (teachers.length === 0) {
+                teachers = [
+                    {
+                        id: 'teacher1',
+                        name: 'María López',
+                        document: '12345678',
+                        username: 'mlopez',
+                        password: 'profesor123',
+                        subject: 'Español',
+                        phone: '3201234567'
+                    },
+                    {
+                        id: 'teacher2',
+                        name: 'Pedro Martínez',
+                        document: '87654321',
+                        username: 'pmartinez',
+                        password: 'profesor456',
+                        subject: 'Matemáticas',
+                        phone: '3109876543'
+                    }
+                ];
+            }
+
+            if (grades.length === 0) {
+                grades = [
+                    {
+                        id: 'grade1',
+                        studentId: 'student1',
+                        subject: 'Español',
+                        period: '1',
+                        attendance: 4.5,
+                        notebook: 4.2,
+                        work: 4.8,
+                        evaluation: 4.3,
+                        finalGrade: 4.4
+                    },
+                    {
+                        id: 'grade2',
+                        studentId: 'student1',
+                        subject: 'Matemáticas',
+                        period: '1',
+                        attendance: 4.0,
+                        notebook: 3.8,
+                        work: 4.2,
+                        evaluation: 4.1,
+                        finalGrade: 4.0
+                    }
+                ];
+            }
+
+            if (attendance.length === 0) {
+                attendance = [
+                    {
+                        id: 'att1',
+                        studentId: 'student1',
+                        date: '2025-01-15',
+                        status: 'Presente'
+                    },
+                    {
+                        id: 'att2',
+                        studentId: 'student2',
+                        date: '2025-01-15',
+                        status: 'Presente'
+                    }
+                ];
+            }
+
+            if (events.length === 0) {
+                events = [
+                    {
+                        id: 'event1',
+                        title: 'Reunión de Padres de Familia',
+                        date: '2025-02-15',
+                        time: '14:00',
+                        type: 'Reunión de Padres',
+                        description: 'Reunión informativa sobre el progreso académico del primer período'
+                    },
+                    {
+                        id: 'event2',
+                        title: 'Festival de Talentos',
+                        date: '2025-03-10',
+                        time: '09:00',
+                        type: 'Evento Cultural',
+                        description: 'Presentación de talentos artísticos de los estudiantes'
+                    }
+                ];
+            }
+        }
+
+        // Student Management
+        function showAddStudentForm() {
+            document.getElementById('addStudentForm').classList.remove('hidden');
+        }
+
+        function hideAddStudentForm() {
+            document.getElementById('addStudentForm').classList.add('hidden');
+            document.getElementById('studentForm').reset();
+        }
+
+        function handleAddStudent(e) {
+            e.preventDefault();
+            
+            const student = {
+                id: Date.now().toString(),
+                name: document.getElementById('studentName').value,
+                document: document.getElementById('studentDocument').value,
+                grade: document.getElementById('studentGrade').value,
+                parentName: document.getElementById('parentName').value,
+                parentPhone: document.getElementById('parentPhone').value,
+                groupCoordinator: document.getElementById('groupCoordinator').value
+            };
+            
+            students.push(student);
+            displayStudents();
+            updateStudentSelects();
+            hideAddStudentForm();
+            showNotification(`✅ Estudiante ${student.name} agregado exitosamente`, 'success');
+        }
+
+        function displayStudents() {
+            const tbody = document.getElementById('studentsTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50 transition-colors';
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium">${student.name}</td>
+                    <td class="px-4 py-3">${student.document}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                            ${student.grade}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">${student.parentName}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex space-x-2">
+                            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">✏️</button>
+                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 transition-colors" title="Eliminar">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function editStudent(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+            
+            document.getElementById('studentName').value = student.name;
+            document.getElementById('studentDocument').value = student.document;
+            document.getElementById('studentGrade').value = student.grade;
+            document.getElementById('parentName').value = student.parentName;
+            document.getElementById('parentPhone').value = student.parentPhone || '';
+            document.getElementById('groupCoordinator').value = student.groupCoordinator || '';
+            
+            showAddStudentForm();
+        }
+
+        function deleteStudent(id) {
+            if (confirm('¿Estás seguro de eliminar este estudiante?')) {
+                students = students.filter(s => s.id !== id);
+                displayStudents();
+                updateStudentSelects();
+                showNotification('✅ Estudiante eliminado exitosamente', 'success');
+            }
+        }
+
+        // Teacher Management
+        function showAddTeacherForm() {
+            document.getElementById('addTeacherForm').classList.remove('hidden');
+        }
+
+        function hideAddTeacherForm() {
+            document.getElementById('addTeacherForm').classList.add('hidden');
+            document.getElementById('teacherForm').reset();
+        }
+
+        function handleAddTeacher(e) {
+            e.preventDefault();
+            
+            const teacher = {
+                id: Date.now().toString(),
+                name: document.getElementById('teacherName').value,
+                document: document.getElementById('teacherDocument').value,
+                username: document.getElementById('teacherUsername').value,
+                password: document.getElementById('teacherPassword').value,
+                subject: document.getElementById('teacherSubject').value,
+                phone: document.getElementById('teacherPhone').value
+            };
+            
+            teachers.push(teacher);
+            displayTeachers();
+            hideAddTeacherForm();
+            showNotification(`✅ Profesor ${teacher.name} agregado exitosamente`, 'success');
+        }
+
+        function displayTeachers() {
+            const tbody = document.getElementById('teachersTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            teachers.forEach(teacher => {
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50 transition-colors';
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium">${teacher.name}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                            ${teacher.username}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">${teacher.subject || 'No asignada'}</td>
+                    <td class="px-4 py-3">${teacher.phone || 'No registrado'}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex space-x-2">
+                            <button onclick="editTeacher('${teacher.id}')" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">✏️</button>
+                            <button onclick="deleteTeacher('${teacher.id}')" class="text-red-600 hover:text-red-800 transition-colors" title="Eliminar">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function editTeacher(id) {
+            const teacher = teachers.find(t => t.id === id);
+            if (!teacher) return;
+            
+            document.getElementById('teacherName').value = teacher.name;
+            document.getElementById('teacherDocument').value = teacher.document;
+            document.getElementById('teacherUsername').value = teacher.username;
+            document.getElementById('teacherPassword').value = teacher.password;
+            document.getElementById('teacherSubject').value = teacher.subject || '';
+            document.getElementById('teacherPhone').value = teacher.phone || '';
+            
+            showAddTeacherForm();
+        }
+
+        function deleteTeacher(id) {
+            if (confirm('¿Estás seguro de eliminar este profesor?')) {
+                teachers = teachers.filter(t => t.id !== id);
+                displayTeachers();
+                showNotification('✅ Profesor eliminado exitosamente', 'success');
+            }
+        }
+
+        // Grade Management
+        function handleAddGrade(e) {
+            e.preventDefault();
+            
+            const attendance = parseFloat(document.getElementById('gradeAttendance').value);
+            const notebook = parseFloat(document.getElementById('gradeNotebook').value);
+            const work = parseFloat(document.getElementById('gradeWork').value);
+            const evaluation = parseFloat(document.getElementById('gradeEvaluation').value);
+            
+            const finalGrade = ((attendance * 0.2) + (notebook * 0.2) + (work * 0.3) + (evaluation * 0.3)).toFixed(1);
+            
+            const grade = {
+                id: Date.now().toString(),
+                studentId: document.getElementById('gradeStudent').value,
+                subject: document.getElementById('gradeSubject').value,
+                period: document.getElementById('gradePeriod').value,
+                attendance: attendance,
+                notebook: notebook,
+                work: work,
+                evaluation: evaluation,
+                finalGrade: parseFloat(finalGrade)
+            };
+            
+            grades.push(grade);
+            displayGrades();
+            document.getElementById('gradeForm').reset();
+            
+            const student = students.find(s => s.id === grade.studentId);
+            showNotification(`✅ Nota registrada para ${student.name} en ${grade.subject}`, 'success');
+        }
+
+        function displayGrades() {
+            const tbody = document.getElementById('gradesTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            let filteredGrades = grades;
+            
+            const studentFilter = document.getElementById('filterStudent');
+            const subjectFilter = document.getElementById('filterSubject');
+            
+            if (studentFilter && studentFilter.value) {
+                filteredGrades = filteredGrades.filter(g => g.studentId == studentFilter.value);
+            }
+            
+            if (subjectFilter && subjectFilter.value) {
+                filteredGrades = filteredGrades.filter(g => g.subject === subjectFilter.value);
+            }
+            
+            if (currentUser && currentUser.type === 'parent') {
+                filteredGrades = filteredGrades.filter(g => g.studentId === currentUser.studentId);
+            }
+            
+            filteredGrades.forEach((grade, index) => {
+                const student = students.find(s => s.id === grade.studentId);
+                const row = document.createElement('tr');
+                row.className = `${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`;
+                
+                let gradeColor = '';
+                let gradeBg = '';
+                if (grade.finalGrade >= 4.5) {
+                    gradeColor = 'text-green-700';
+                    gradeBg = 'bg-green-100';
+                } else if (grade.finalGrade >= 4.0) {
+                    gradeColor = 'text-blue-700';
+                    gradeBg = 'bg-blue-100';
+                } else if (grade.finalGrade >= 3.0) {
+                    gradeColor = 'text-yellow-700';
+                    gradeBg = 'bg-yellow-100';
+                } else {
+                    gradeColor = 'text-red-700';
+                    gradeBg = 'bg-red-100';
+                }
+                
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium">${student ? student.name : 'N/A'}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+                            ${grade.subject}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">Período ${grade.period}</td>
+                    <td class="px-4 py-3 text-center">${grade.attendance}</td>
+                    <td class="px-4 py-3 text-center">${grade.notebook}</td>
+                    <td class="px-4 py-3 text-center">${grade.work}</td>
+                    <td class="px-4 py-3 text-center">${grade.evaluation}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="px-3 py-1 rounded-full text-sm font-bold ${gradeBg} ${gradeColor}">
+                            ${grade.finalGrade}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Attendance Management
+        function handleAddAttendance(e) {
+            e.preventDefault();
+            
+            const attendanceRecord = {
+                id: Date.now().toString(),
+                studentId: document.getElementById('attendanceStudent').value,
+                date: document.getElementById('attendanceDate').value,
+                status: document.getElementById('attendanceStatus').value
+            };
+            
+            attendance.push(attendanceRecord);
+            displayAttendance();
+            document.getElementById('attendanceForm').reset();
+            
+            // Reset date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+            
+            showNotification('✅ Asistencia registrada exitosamente', 'success');
+        }
+
+        function displayAttendance() {
+            const tbody = document.getElementById('attendanceTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            let filteredAttendance = attendance;
+            
+            if (currentUser && currentUser.type === 'parent') {
+                filteredAttendance = filteredAttendance.filter(a => a.studentId === currentUser.studentId);
+            }
+            
+            filteredAttendance.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            filteredAttendance.forEach((record, index) => {
+                const student = students.find(s => s.id === record.studentId);
+                const row = document.createElement('tr');
+                row.className = `${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`;
+                
+                let statusColor = '';
+                let statusBg = '';
+                switch(record.status) {
+                    case 'Presente':
+                        statusColor = 'text-green-700';
+                        statusBg = 'bg-green-100';
+                        break;
+                    case 'Tardanza':
+                        statusColor = 'text-yellow-700';
+                        statusBg = 'bg-yellow-100';
+                        break;
+                    case 'Excusa':
+                        statusColor = 'text-blue-700';
+                        statusBg = 'bg-blue-100';
+                        break;
+                    default:
+                        statusColor = 'text-red-700';
+                        statusBg = 'bg-red-100';
+                }
+                
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium">${student ? student.name : 'N/A'}</td>
+                    <td class="px-4 py-3">${new Date(record.date).toLocaleDateString('es-CO')}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 rounded-full text-sm font-medium ${statusBg} ${statusColor}">
+                            ${record.status}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">-</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Event Management
+        function showAddEventForm() {
+            document.getElementById('addEventForm').classList.remove('hidden');
+        }
+
+        function hideAddEventForm() {
+            document.getElementById('addEventForm').classList.add('hidden');
+            document.getElementById('eventForm').reset();
+        }
+
+        function handleAddEvent(e) {
+            e.preventDefault();
+            
+            const event = {
+                id: Date.now().toString(),
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                type: document.getElementById('eventType').value,
+                description: document.getElementById('eventDescription').value
+            };
+            
+            events.push(event);
+            displayEvents();
+            hideAddEventForm();
+            showNotification(`✅ Evento "${event.title}" agregado exitosamente`, 'success');
+        }
+
+        function displayEvents() {
+            const container = document.getElementById('eventsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            events.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            events.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'modern-card p-6 animate-slide-up';
+                
+                const eventDate = new Date(event.date);
+                const isUpcoming = eventDate >= new Date();
+                const cardColor = isUpcoming ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-gray-400';
+                
+                eventCard.innerHTML = `
+                    <div class="${cardColor} pl-4">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">${event.title}</h3>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                ${event.type}
+                            </span>
+                        </div>
+                        <div class="space-y-2 text-sm text-gray-600 mb-4">
+                            <div class="flex items-center">
+                                <span class="mr-2">📅</span>
+                                <span>${eventDate.toLocaleDateString('es-CO')}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="mr-2">⏰</span>
+                                <span>${event.time}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm">${event.description}</p>
+                        ${isUpcoming ? '<div class="mt-4 text-green-600 font-medium text-sm">📍 Próximo evento</div>' : '<div class="mt-4 text-gray-500 font-medium text-sm">✅ Evento pasado</div>'}
+                    </div>
+                `;
+                container.appendChild(eventCard);
+            });
+        }
+
+        // Report Generation
+        function generateReport() {
+            const studentId = document.getElementById('reportStudent').value;
+            const period = document.getElementById('reportPeriod').value;
+            
+            if (!studentId || !period) {
+                showNotification('❌ Selecciona estudiante y período', 'error');
+                return;
+            }
+            
+            const student = students.find(s => s.id === studentId);
+            const studentGrades = grades.filter(g => g.studentId === studentId && g.period === period);
+            
+            if (studentGrades.length === 0) {
+                showNotification('❌ No hay notas registradas para este período', 'error');
+                return;
+            }
+            
+            const reportDetails = document.getElementById('reportDetails');
+            reportDetails.innerHTML = `
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <strong>Estudiante:</strong> ${student.name}<br>
+                        <strong>Documento:</strong> ${student.document}<br>
+                        <strong>Grado:</strong> ${student.grade}
+                    </div>
+                    <div>
+                        <strong>Período:</strong> ${period}<br>
+                        <strong>Padre/Madre:</strong> ${student.parentName}<br>
+                        <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CO')}
+                    </div>
+                </div>
+                
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2 text-left">Área</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Asistencia</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Cuaderno</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Trabajo</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Evaluación</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Definitiva</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${studentGrades.map(grade => `
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">${grade.subject}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.attendance}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.notebook}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.work}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.evaluation}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center font-bold">${grade.finalGrade}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Promedio General: <strong>${(studentGrades.reduce((sum, g) => sum + g.finalGrade, 0) / studentGrades.length).toFixed(1)}</strong>
+                    </p>
+                </div>
+            `;
+            
+            document.getElementById('reportContent').classList.remove('hidden');
+            showNotification('✅ Boletín generado exitosamente', 'success');
+        }
+
+        function printReport() {
+            const reportContent = document.getElementById('reportContent').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Boletín de Calificaciones</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+                            th { background-color: #f0f0f0; }
+                            .text-center { text-align: center; }
+                            @media print { body { margin: 0; } }
+                        </style>
+                    </head>
+                    <body>
+                        ${reportContent}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Utility functions
+        function updateStudentSelects() {
+            const selects = document.querySelectorAll('#gradeStudent, #attendanceStudent, #filterStudent, #reportStudent');
+            selects.forEach(select => {
+                if (currentUser && currentUser.type === 'parent') return; // Skip for parents
+                
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">Seleccionar estudiante</option>';
+                
+                students.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = `${student.name} (${student.grade})`;
+                    if (option.value === currentValue) option.selected = true;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('studentCount').textContent = students.length;
+            document.getElementById('teacherCount').textContent = teachers.length;
+            document.getElementById('gradeCount').textContent = grades.length;
+            document.getElementById('eventCount').textContent = events.length;
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // App installation
         function installApp() {
-            downloadAppFile();
-        }
-
-        function downloadAppFile() {
             showNotification('📱 Iniciando descarga de la aplicación...', 'info');
             
-            // Create the HTML content for the app
             const appContent = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1225,7 +2004,6 @@
 </body>
 </html>`;
             
-            // Create and download the file
             const blob = new Blob([appContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1236,7 +2014,6 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            // Show success notification with download location
             setTimeout(() => {
                 showNotification('✅ ¡Descarga completada exitosamente!', 'success');
                 setTimeout(() => {
@@ -1247,893 +2024,6 @@
                 }, 1500);
             }, 1000);
         }
-
-        // Generate PWA Manifest
-        function generateManifest() {
-            const manifest = {
-                name: "Liceo Exploradores de Sueños - Sistema Académico",
-                short_name: "Liceo Exploradores",
-                description: "Sistema académico universal con sincronización automática para estudiantes, profesores y padres de familia",
-                start_url: "./",
-                display: "standalone",
-                background_color: "#1e3a8a",
-                theme_color: "#1e3a8a",
-                orientation: "portrait-primary",
-                scope: "./",
-                lang: "es-CO",
-                categories: ["education", "productivity"],
-                icons: [
-                    {
-                        src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iNDgiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSIxOTIiIHkyPSIxOTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzFlM2E4YSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM4YjVjZjYiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8dGV4dCB4PSI5NiIgeT0iMTIwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iODAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn4+rPC90ZXh0Pgo8L3N2Zz4K",
-                        sizes: "192x192",
-                        type: "image/svg+xml",
-                        purpose: "any maskable"
-                    },
-                    {
-                        src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTI4IiBmaWxsPSJ1cmwoI2dyYWRpZW50MF9saW5lYXJfMV8xKSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudDBfbGluZWFyXzFfMSIgeDE9IjAiIHkxPSIwIiB4Mj0iNTEyIiB5Mj0iNTEyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiMxZTNhOGEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOGI1Y2Y2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHRleHQgeD0iMjU2IiB5PSIzMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn4+rPC90ZXh0Pgo8L3N2Zz4K",
-                        sizes: "512x512",
-                        type: "image/svg+xml",
-                        purpose: "any maskable"
-                    }
-                ]
-            };
-
-            const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-            const manifestURL = URL.createObjectURL(manifestBlob);
-            
-            document.getElementById('manifest-placeholder').href = manifestURL;
-        }
-
-        // Real-time synchronization for universal access
-        function startRealtimeSync() {
-            if (!db) return;
-            
-            // Students real-time sync
-            const studentsListener = db.collection('students').onSnapshot((snapshot) => {
-                students = [];
-                snapshot.forEach((doc) => {
-                    students.push({ id: doc.id, ...doc.data() });
-                });
-                displayStudents();
-                updateStudentSelects();
-                updateStats();
-            }, (error) => {
-                console.error('Students sync error:', error);
-                updateSyncStatus('offline');
-            });
-            
-            // Teachers real-time sync
-            const teachersListener = db.collection('teachers').onSnapshot((snapshot) => {
-                teachers = [];
-                snapshot.forEach((doc) => {
-                    teachers.push({ id: doc.id, ...doc.data() });
-                });
-                displayTeachers();
-                updateStats();
-            });
-            
-            // Grades real-time sync
-            const gradesListener = db.collection('grades').onSnapshot((snapshot) => {
-                grades = [];
-                snapshot.forEach((doc) => {
-                    grades.push({ id: doc.id, ...doc.data() });
-                });
-                displayGrades();
-                updateStats();
-            });
-            
-            // Attendance real-time sync
-            const attendanceListener = db.collection('attendance').onSnapshot((snapshot) => {
-                attendance = [];
-                snapshot.forEach((doc) => {
-                    attendance.push({ id: doc.id, ...doc.data() });
-                });
-                displayAttendance();
-            });
-            
-            // Events real-time sync
-            const eventsListener = db.collection('events').onSnapshot((snapshot) => {
-                events = [];
-                snapshot.forEach((doc) => {
-                    events.push({ id: doc.id, ...doc.data() });
-                });
-                displayEvents();
-                updateStats();
-            });
-            
-            // Store listeners for cleanup
-            realtimeListeners = [studentsListener, teachersListener, gradesListener, attendanceListener, eventsListener];
-        }
-
-        // Cloud data operations for universal access
-        async function saveToCloud(collection, data) {
-            if (!syncEnabled || !db) {
-                return saveToLocal(collection, data);
-            }
-            
-            try {
-                updateSyncStatus('syncing');
-                
-                if (data.id) {
-                    await db.collection(collection).doc(data.id.toString()).set(data);
-                } else {
-                    const docRef = await db.collection(collection).add(data);
-                    data.id = docRef.id;
-                }
-                
-                updateSyncStatus('online');
-                return data;
-                
-            } catch (error) {
-                console.error('Error saving to cloud:', error);
-                updateSyncStatus('offline');
-                return saveToLocal(collection, data);
-            }
-        }
-
-        async function deleteFromCloud(collection, id) {
-            if (!syncEnabled || !db) {
-                return deleteFromLocal(collection, id);
-            }
-            
-            try {
-                updateSyncStatus('syncing');
-                await db.collection(collection).doc(id.toString()).delete();
-                updateSyncStatus('online');
-                
-            } catch (error) {
-                console.error('Error deleting from cloud:', error);
-                updateSyncStatus('offline');
-            }
-        }
-
-        // Local data operations (fallback)
-        function saveToLocal(collection, data) {
-            let localData = JSON.parse(localStorage.getItem(collection)) || [];
-            
-            if (data.id) {
-                const index = localData.findIndex(item => item.id === data.id);
-                if (index !== -1) {
-                    localData[index] = data;
-                } else {
-                    localData.push(data);
-                }
-            } else {
-                data.id = Date.now().toString();
-                localData.push(data);
-            }
-            
-            localStorage.setItem(collection, JSON.stringify(localData));
-            return data;
-        }
-
-        function deleteFromLocal(collection, id) {
-            let localData = JSON.parse(localStorage.getItem(collection)) || [];
-            localData = localData.filter(item => item.id !== id);
-            localStorage.setItem(collection, JSON.stringify(localData));
-        }
-
-        function loadLocalData() {
-            students = JSON.parse(localStorage.getItem('students')) || [];
-            teachers = JSON.parse(localStorage.getItem('teachers')) || [];
-            grades = JSON.parse(localStorage.getItem('grades')) || [];
-            attendance = JSON.parse(localStorage.getItem('attendance')) || [];
-            events = JSON.parse(localStorage.getItem('events')) || [];
-        }
-
-        // Sync status management
-        function updateSyncStatus(status) {
-            const indicator = document.getElementById('syncStatus');
-            const syncStatusText = document.getElementById('syncStatusText');
-            const dbStatus = document.getElementById('dbStatus');
-            
-            indicator.className = 'sync-indicator';
-            
-            switch(status) {
-                case 'online':
-                    indicator.classList.add('sync-online');
-                    indicator.innerHTML = '<div class="w-2 h-2 rounded-full bg-current"></div><span>Sincronizado</span>';
-                    if (syncStatusText) syncStatusText.textContent = '✅ Automática';
-                    if (dbStatus) dbStatus.textContent = '✅ Conectada';
-                    isOnline = true;
-                    break;
-                case 'offline':
-                    indicator.classList.add('sync-offline');
-                    indicator.innerHTML = '<div class="w-2 h-2 rounded-full bg-current animate-pulse"></div><span>Modo Local</span>';
-                    if (syncStatusText) syncStatusText.textContent = '📱 Local';
-                    if (dbStatus) dbStatus.textContent = '📱 Local';
-                    isOnline = false;
-                    break;
-                case 'syncing':
-                    indicator.classList.add('sync-syncing');
-                    indicator.innerHTML = '<div class="loading-spinner w-3 h-3"></div><span>Sincronizando...</span>';
-                    if (syncStatusText) syncStatusText.textContent = '🔄 Sincronizando';
-                    break;
-            }
-        }
-
-        // Network listeners for better mobile experience
-        function setupNetworkListeners() {
-            window.addEventListener('online', () => {
-                if (syncEnabled) {
-                    updateSyncStatus('online');
-                }
-            });
-            
-            window.addEventListener('offline', () => {
-                updateSyncStatus('offline');
-            });
-        }
-
-        // System status update
-        function updateSystemStatus() {
-            const mobileStatus = document.getElementById('mobileStatus');
-            const activeUsers = document.getElementById('activeUsers');
-            
-            if (mobileStatus) {
-                mobileStatus.textContent = '✅ Activo';
-            }
-            
-            if (activeUsers) {
-                activeUsers.textContent = Math.floor(Math.random() * 5) + 1;
-            }
-        }
-
-        // Event listeners setup
-        function setupEventListeners() {
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            document.getElementById('studentForm').addEventListener('submit', handleAddStudent);
-            document.getElementById('teacherForm').addEventListener('submit', handleAddTeacher);
-            document.getElementById('gradeForm').addEventListener('submit', handleAddGrade);
-            document.getElementById('attendanceForm').addEventListener('submit', handleAddAttendance);
-            document.getElementById('eventForm').addEventListener('submit', handleAddEvent);
-            
-            // Filter listeners
-            document.getElementById('filterStudent').addEventListener('change', displayGrades);
-            document.getElementById('filterSubject').addEventListener('change', displayGrades);
-            
-            // Set today's date for attendance
-            document.getElementById('attendanceDate').valueAsDate = new Date();
-        }
-
-        // Sample data for demonstration
-        function loadSampleData() {
-            if (students.length === 0) {
-                const sampleStudents = [
-                    {
-                        id: 'student1',
-                        name: 'Ana María González',
-                        document: '1234567890',
-                        grade: '3°',
-                        parentName: 'Carlos González',
-                        parentPhone: '3001234567',
-                        groupCoordinator: 'Prof. María López',
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'student2',
-                        name: 'Juan David Rodríguez',
-                        document: '0987654321',
-                        grade: '5°',
-                        parentName: 'Laura Rodríguez',
-                        parentPhone: '3109876543',
-                        groupCoordinator: 'Prof. Pedro Martínez',
-                        createdAt: new Date().toISOString()
-                    }
-                ];
-                
-                sampleStudents.forEach(student => {
-                    students.push(student);
-                    if (syncEnabled) {
-                        saveToCloud('students', student);
-                    } else {
-                        saveToLocal('students', student);
-                    }
-                });
-            }
-            
-            if (teachers.length === 0) {
-                const sampleTeachers = [
-                    {
-                        id: 'teacher1',
-                        name: 'María López',
-                        document: '12345678',
-                        username: 'mlopez',
-                        password: 'profesor123',
-                        subject: 'Español',
-                        phone: '3201234567',
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'teacher2',
-                        name: 'Pedro Martínez',
-                        document: '87654321',
-                        username: 'pmartinez',
-                        password: 'profesor456',
-                        subject: 'Matemáticas',
-                        phone: '3109876543',
-                        createdAt: new Date().toISOString()
-                    }
-                ];
-                
-                sampleTeachers.forEach(teacher => {
-                    teachers.push(teacher);
-                    if (syncEnabled) {
-                        saveToCloud('teachers', teacher);
-                    } else {
-                        saveToLocal('teachers', teacher);
-                    }
-                });
-            }
-        }
-
-        // Login handling
-        function handleLogin(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Check admin credentials
-            if (currentUserType === 'admin' && username === adminCredentials.username && password === adminCredentials.password) {
-                currentUser = { type: 'admin', name: 'Administrador', username: username };
-                showDashboard();
-                return;
-            }
-            
-            // Check teacher credentials
-            if (currentUserType === 'teacher') {
-                const teacher = teachers.find(t => t.username === username && t.password === password);
-                if (teacher) {
-                    currentUser = { type: 'teacher', name: teacher.name, username: username, id: teacher.id };
-                    showDashboard();
-                    return;
-                }
-            }
-            
-            // Check parent credentials (document as both username and password)
-            if (currentUserType === 'parent') {
-                const student = students.find(s => s.document === username && s.document === password);
-                if (student) {
-                    currentUser = { type: 'parent', name: student.parentName, studentId: student.id, studentName: student.name };
-                    showDashboard();
-                    return;
-                }
-            }
-            
-            // Show error
-            document.getElementById('loginError').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('loginError').classList.add('hidden');
-            }, 3000);
-        }
-
-        function showDashboard() {
-            document.getElementById('mainMenuScreen').classList.add('hidden');
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            
-            // Update welcome text
-            document.getElementById('welcomeText').textContent = `Bienvenido, ${currentUser.name}`;
-            document.getElementById('userInfo').classList.remove('hidden');
-            
-            // Hide all navigation menus first
-            document.getElementById('adminNav').classList.add('hidden');
-            document.getElementById('teacherNav').classList.add('hidden');
-            document.getElementById('parentNav').classList.add('hidden');
-            
-            // Show appropriate navigation based on user type
-            if (currentUser.type === 'admin') {
-                document.getElementById('adminNav').classList.remove('hidden');
-            } else if (currentUser.type === 'teacher') {
-                document.getElementById('teacherNav').classList.remove('hidden');
-            } else if (currentUser.type === 'parent') {
-                document.getElementById('parentNav').classList.remove('hidden');
-                filterDataForParent();
-            }
-            
-            showSection('home');
-            showNotification(`¡Bienvenido ${currentUser.name}!`, 'success');
-        }
-
-        function filterDataForParent() {
-            const studentId = currentUser.studentId;
-            
-            // Update filter selects to show only their child
-            const studentSelects = document.querySelectorAll('#filterStudent, #reportStudent');
-            studentSelects.forEach(select => {
-                select.innerHTML = '';
-                const student = students.find(s => s.id === studentId);
-                if (student) {
-                    const option = document.createElement('option');
-                    option.value = student.id;
-                    option.textContent = student.name;
-                    option.selected = true;
-                    select.appendChild(option);
-                }
-            });
-            
-            displayGrades();
-            displayAttendance();
-        }
-
-        function logout() {
-            // Clean up real-time listeners
-            realtimeListeners.forEach(listener => {
-                if (listener) listener();
-            });
-            realtimeListeners = [];
-            
-            currentUser = null;
-            currentUserType = null;
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('mainMenuScreen').classList.remove('hidden');
-            document.getElementById('userInfo').classList.add('hidden');
-            document.getElementById('loginForm').reset();
-            
-            showNotification('Sesión cerrada exitosamente', 'info');
-        }
-
-        function showSection(sectionName) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.add('hidden');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionName + 'Section').classList.remove('hidden');
-            
-            // Update navigation
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-neon-blue', 'shadow-lg');
-                btn.style.transform = 'scale(1)';
-            });
-            
-            if (event && event.target) {
-                event.target.classList.add('bg-neon-blue', 'shadow-lg');
-                event.target.style.transform = 'scale(1.05)';
-            }
-            
-            if (sectionName === 'home') {
-                updateStats();
-            }
-        }
-
-        // Student Management
-        function showAddStudentForm() {
-            document.getElementById('addStudentForm').classList.remove('hidden');
-        }
-
-        function hideAddStudentForm() {
-            document.getElementById('addStudentForm').classList.add('hidden');
-            document.getElementById('studentForm').reset();
-            
-            // Reset form to add mode
-            delete document.getElementById('studentForm').dataset.editId;
-            document.querySelector('#addStudentForm h3').textContent = 'Agregar Nuevo Estudiante';
-            document.querySelector('#studentForm button[type="submit"]').innerHTML = '💾 Guardar';
-        }
-
-        async function handleAddStudent(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const editId = form.dataset.editId;
-            const isEditing = !!editId;
-            
-            const student = {
-                id: isEditing ? editId : Date.now().toString(),
-                name: document.getElementById('studentName').value,
-                document: document.getElementById('studentDocument').value,
-                grade: document.getElementById('studentGrade').value,
-                parentName: document.getElementById('parentName').value,
-                parentPhone: document.getElementById('parentPhone').value,
-                groupCoordinator: document.getElementById('groupCoordinator').value,
-                createdAt: isEditing ? students.find(s => s.id === editId)?.createdAt : new Date().toISOString(),
-                updatedAt: isEditing ? new Date().toISOString() : undefined
-            };
-            
-            try {
-                await saveToCloud('students', student);
-                
-                if (!syncEnabled) {
-                    if (isEditing) {
-                        const index = students.findIndex(s => s.id === editId);
-                        if (index !== -1) {
-                            students[index] = student;
-                        }
-                    } else {
-                        students.push(student);
-                    }
-                    displayStudents();
-                    updateStudentSelects();
-                }
-                
-                hideAddStudentForm();
-                showNotification(`✅ Estudiante ${student.name} ${isEditing ? 'actualizado' : 'agregado'} exitosamente`, 'success');
-                
-            } catch (error) {
-                console.error('Error saving student:', error);
-                showNotification(`❌ Error al ${isEditing ? 'actualizar' : 'agregar'} estudiante`, 'error');
-            }
-        }
-
-        function displayStudents() {
-            const tbody = document.getElementById('studentsTableBody');
-            tbody.innerHTML = '';
-            
-            students.forEach(student => {
-                const row = document.createElement('tr');
-                row.className = 'border-b hover:bg-gray-50 transition-colors';
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${student.name}</td>
-                    <td class="px-4 py-3">${student.document}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                            ${student.grade}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">${student.parentName}</td>
-                    <td class="px-4 py-3">
-                        <div class="flex space-x-2">
-                            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">✏️</button>
-                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 transition-colors" title="Eliminar">🗑️</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function editStudent(id) {
-            const student = students.find(s => s.id === id);
-            if (!student) return;
-            
-            // Fill form with student data
-            document.getElementById('studentName').value = student.name;
-            document.getElementById('studentDocument').value = student.document;
-            document.getElementById('studentGrade').value = student.grade;
-            document.getElementById('parentName').value = student.parentName;
-            document.getElementById('parentPhone').value = student.parentPhone || '';
-            document.getElementById('groupCoordinator').value = student.groupCoordinator || '';
-            
-            // Store the ID for updating
-            document.getElementById('studentForm').dataset.editId = id;
-            
-            // Change form title and button
-            document.querySelector('#addStudentForm h3').textContent = 'Editar Estudiante';
-            document.querySelector('#studentForm button[type="submit"]').innerHTML = '💾 Actualizar';
-            
-            showAddStudentForm();
-        }
-
-        async function deleteStudent(id) {
-            if (confirm('¿Estás seguro de eliminar este estudiante?')) {
-                try {
-                    await deleteFromCloud('students', id);
-                    
-                    if (!syncEnabled) {
-                        students = students.filter(s => s.id !== id);
-                        displayStudents();
-                        updateStudentSelects();
-                    }
-                    
-                    showNotification('✅ Estudiante eliminado exitosamente', 'success');
-                    
-                } catch (error) {
-                    console.error('Error deleting student:', error);
-                    showNotification('❌ Error al eliminar estudiante', 'error');
-                }
-            }
-        }
-
-        // Teacher Management
-        function showAddTeacherForm() {
-            document.getElementById('addTeacherForm').classList.remove('hidden');
-        }
-
-        function hideAddTeacherForm() {
-            document.getElementById('addTeacherForm').classList.add('hidden');
-            document.getElementById('teacherForm').reset();
-            
-            // Reset form to add mode
-            delete document.getElementById('teacherForm').dataset.editId;
-            document.querySelector('#addTeacherForm h3').textContent = 'Agregar Nuevo Profesor';
-            document.querySelector('#teacherForm button[type="submit"]').innerHTML = '💾 Guardar';
-        }
-
-        async function handleAddTeacher(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const editId = form.dataset.editId;
-            const isEditing = !!editId;
-            
-            const teacher = {
-                id: isEditing ? editId : Date.now().toString(),
-                name: document.getElementById('teacherName').value,
-                document: document.getElementById('teacherDocument').value,
-                username: document.getElementById('teacherUsername').value,
-                password: document.getElementById('teacherPassword').value,
-                subject: document.getElementById('teacherSubject').value,
-                phone: document.getElementById('teacherPhone').value,
-                createdAt: isEditing ? teachers.find(t => t.id === editId)?.createdAt : new Date().toISOString(),
-                updatedAt: isEditing ? new Date().toISOString() : undefined
-            };
-            
-            try {
-                await saveToCloud('teachers', teacher);
-                
-                if (!syncEnabled) {
-                    if (isEditing) {
-                        const index = teachers.findIndex(t => t.id === editId);
-                        if (index !== -1) {
-                            teachers[index] = teacher;
-                        }
-                    } else {
-                        teachers.push(teacher);
-                    }
-                    displayTeachers();
-                }
-                
-                hideAddTeacherForm();
-                showNotification(`✅ Profesor ${teacher.name} ${isEditing ? 'actualizado' : 'agregado'} exitosamente`, 'success');
-                
-            } catch (error) {
-                console.error('Error saving teacher:', error);
-                showNotification(`❌ Error al ${isEditing ? 'actualizar' : 'agregar'} profesor`, 'error');
-            }
-        }
-
-        function displayTeachers() {
-            const tbody = document.getElementById('teachersTableBody');
-            tbody.innerHTML = '';
-            
-            teachers.forEach(teacher => {
-                const row = document.createElement('tr');
-                row.className = 'border-b hover:bg-gray-50 transition-colors';
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${teacher.name}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                            ${teacher.username}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">${teacher.subject || 'No asignada'}</td>
-                    <td class="px-4 py-3">${teacher.phone || 'No registrado'}</td>
-                    <td class="px-4 py-3">
-                        <div class="flex space-x-2">
-                            <button onclick="editTeacher('${teacher.id}')" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">✏️</button>
-                            <button onclick="deleteTeacher('${teacher.id}')" class="text-red-600 hover:text-red-800 transition-colors" title="Eliminar">🗑️</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function editTeacher(id) {
-            const teacher = teachers.find(t => t.id === id);
-            if (!teacher) return;
-            
-            // Fill form with teacher data
-            document.getElementById('teacherName').value = teacher.name;
-            document.getElementById('teacherDocument').value = teacher.document;
-            document.getElementById('teacherUsername').value = teacher.username;
-            document.getElementById('teacherPassword').value = teacher.password;
-            document.getElementById('teacherSubject').value = teacher.subject || '';
-            document.getElementById('teacherPhone').value = teacher.phone || '';
-            
-            // Store the ID for updating
-            document.getElementById('teacherForm').dataset.editId = id;
-            
-            // Change form title and button
-            document.querySelector('#addTeacherForm h3').textContent = 'Editar Profesor';
-            document.querySelector('#teacherForm button[type="submit"]').innerHTML = '💾 Actualizar';
-            
-            showAddTeacherForm();
-        }
-
-        async function deleteTeacher(id) {
-            if (confirm('¿Estás seguro de eliminar este profesor?')) {
-                try {
-                    await deleteFromCloud('teachers', id);
-                    
-                    if (!syncEnabled) {
-                        teachers = teachers.filter(t => t.id !== id);
-                        displayTeachers();
-                    }
-                    
-                    showNotification('✅ Profesor eliminado exitosamente', 'success');
-                    
-                } catch (error) {
-                    console.error('Error deleting teacher:', error);
-                    showNotification('❌ Error al eliminar profesor', 'error');
-                }
-            }
-        }
-
-        // Grade Management
-        async function handleAddGrade(e) {
-            e.preventDefault();
-            
-            const attendance = parseFloat(document.getElementById('gradeAttendance').value);
-            const notebook = parseFloat(document.getElementById('gradeNotebook').value);
-            const work = parseFloat(document.getElementById('gradeWork').value);
-            const evaluation = parseFloat(document.getElementById('gradeEvaluation').value);
-            
-            const finalGrade = ((attendance * 0.2) + (notebook * 0.2) + (work * 0.3) + (evaluation * 0.3)).toFixed(1);
-            
-            const grade = {
-                id: Date.now().toString(),
-                studentId: document.getElementById('gradeStudent').value,
-                subject: document.getElementById('gradeSubject').value,
-                period: document.getElementById('gradePeriod').value,
-                attendance: attendance,
-                notebook: notebook,
-                work: work,
-                evaluation: evaluation,
-                finalGrade: parseFloat(finalGrade),
-                teacherId: currentUser.type === 'teacher' ? currentUser.id : null,
-                createdAt: new Date().toISOString()
-            };
-            
-            try {
-                await saveToCloud('grades', grade);
-                
-                if (!syncEnabled) {
-                    grades.push(grade);
-                    displayGrades();
-                }
-                
-                document.getElementById('gradeForm').reset();
-                
-                const student = students.find(s => s.id === grade.studentId);
-                showNotification(`✅ Nota registrada para ${student.name} en ${grade.subject}`, 'success');
-                
-            } catch (error) {
-                console.error('Error adding grade:', error);
-                showNotification('❌ Error al registrar nota', 'error');
-            }
-        }
-
-        function displayGrades() {
-            const tbody = document.getElementById('gradesTableBody');
-            tbody.innerHTML = '';
-            
-            let filteredGrades = grades;
-            
-            const studentFilter = document.getElementById('filterStudent').value;
-            const subjectFilter = document.getElementById('filterSubject').value;
-            
-            if (studentFilter) {
-                filteredGrades = filteredGrades.filter(g => g.studentId == studentFilter);
-            }
-            
-            if (subjectFilter) {
-                filteredGrades = filteredGrades.filter(g => g.subject === subjectFilter);
-            }
-            
-            if (currentUser && currentUser.type === 'parent') {
-                filteredGrades = filteredGrades.filter(g => g.studentId === currentUser.studentId);
-            }
-            
-            filteredGrades.forEach((grade, index) => {
-                const student = students.find(s => s.id === grade.studentId);
-                const row = document.createElement('tr');
-                row.className = `${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`;
-                
-                let gradeColor = '';
-                let gradeBg = '';
-                if (grade.finalGrade >= 4.5) {
-                    gradeColor = 'text-green-700';
-                    gradeBg = 'bg-green-100';
-                } else if (grade.finalGrade >= 4.0) {
-                    gradeColor = 'text-blue-700';
-                    gradeBg = 'bg-blue-100';
-                } else if (grade.finalGrade >= 3.0) {
-                    gradeColor = 'text-yellow-700';
-                    gradeBg = 'bg-yellow-100';
-                } else {
-                    gradeColor = 'text-red-700';
-                    gradeBg = 'bg-red-100';
-                }
-                
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${student ? student.name : 'N/A'}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-                            ${grade.subject}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">Período ${grade.period}</td>
-                    <td class="px-4 py-3 text-center">${grade.attendance}</td>
-                    <td class="px-4 py-3 text-center">${grade.notebook}</td>
-                    <td class="px-4 py-3 text-center">${grade.work}</td>
-                    <td class="px-4 py-3 text-center">${grade.evaluation}</td>
-                    <td class="px-4 py-3 text-center">
-                        <span class="px-3 py-1 rounded-full text-sm font-bold ${gradeBg} ${gradeColor}">
-                            ${grade.finalGrade}
-                        </span>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Attendance Management
-        async function handleAddAttendance(e) {
-            e.preventDefault();
-            
-            const attendanceRecord = {
-                id: Date.now().toString(),
-                studentId: document.getElementById('attendanceStudent').value,
-                date: document.getElementById('attendanceDate').value,
-                status: document.getElementById('attendanceStatus').value,
-                teacherId: currentUser.type === 'teacher' ? currentUser.id : null,
-                createdAt: new Date().toISOString()
-            };
-            
-            try {
-                await saveToCloud('attendance', attendanceRecord);
-                
-                if (!syncEnabled) {
-                    attendance.push(attendanceRecord);
-                    displayAttendance();
-                }
-                
-                document.getElementById('attendanceForm').reset();
-                document.getElementById('attendanceDate').valueAsDate = new Date();
-                showNotification('✅ Asistencia registrada exitosamente', 'success');
-                
-            } catch (error) {
-                console.error('Error adding attendance:', error);
-                showNotification('❌ Error al registrar asistencia', 'error');
-            }
-        }
-
-        function displayAttendance() {
-            const tbody = document.getElementById('attendanceTableBody');
-            tbody.innerHTML = '';
-            
-            let filteredAttendance = attendance;
-            
-            if (currentUser && currentUser.type === 'parent') {
-                filteredAttendance = filteredAttendance.filter(a => a.studentId === currentUser.studentId);
-            }
-            
-            filteredAttendance.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            filteredAttendance.forEach((record, index) => {
-                const student = students.find(s => s.id === record.studentId);
-                const row = document.createElement('tr');
-                row.className = `${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`;
-                
-                let statusColor = '';
-                let statusBg = '';
-                switch(record.status) {
-                    case 'Presente':
-                        statusColor = 'text-green-700';
-                        statusBg = 'bg-green-100';
-                        break;
-                    case 'Tardanza':
-                        statusColor = 'text-yellow-700';
-                        statusBg = 'bg-yellow-100';
-                        break;
-                    case 'Excusa':
-                        statusColor = 'text-blue-700';
-                        statusBg = 'bg-blue-100';
-                        break;
-                    default:
-                        statusColor = 'text-red-700';
-                        statusBg = 'bg-red-100';
-                }
-                
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${student ? student.name : 'N/A'}</td>
-                    <td class="px-4 py-3">${new Date(record.date).toLocaleDateString('es-CO')}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 rounded-full text-sm font-medium ${statusBg} ${statusColor}">
-                            ${record.status}
-                        </span>
-                    </td>
-                    <td class="px-4 py-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980b242f11edaf84',t:'MTc1ODEzODcxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980b346ed24add29',t:'MTc1ODEzOTM4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
