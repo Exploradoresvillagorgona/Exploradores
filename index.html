@@ -486,6 +486,9 @@
                     <button onclick="showSection('schedule')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
                         📋 Cronograma
                     </button>
+                    <button id="teacherReportsBtn" onclick="showSection('reports')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
+                        📄 Boletines
+                    </button>
                 </div>
                 
                 <!-- Parent Navigation -->
@@ -1308,6 +1311,20 @@
                 document.getElementById('teacherNav').classList.remove('hidden');
                 // Hide admin-only elements
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                
+                // Check if teacher is a group coordinator
+                const teacherName = currentUser.name;
+                const isCoordinator = students.some(student => 
+                    student.groupCoordinator && 
+                    (student.groupCoordinator.toLowerCase().includes(teacherName.toLowerCase()) ||
+                     teacherName.toLowerCase().includes(student.groupCoordinator.toLowerCase().replace(/prof\.|profesor|profesora/gi, '').trim()))
+                );
+                
+                // Hide reports button if not coordinator
+                const reportsBtn = document.getElementById('teacherReportsBtn');
+                if (reportsBtn) {
+                    reportsBtn.style.display = isCoordinator ? 'block' : 'none';
+                }
             } else if (currentUser.type === 'parent') {
                 document.getElementById('parentNav').classList.remove('hidden');
                 // Hide admin and teacher elements
@@ -2205,5 +2222,5 @@
             }, 1000);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980b6c2c5647db1b',t:'MTc1ODE0MTY2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980b92a3075df7b0',t:'MTc1ODE0MzI0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
