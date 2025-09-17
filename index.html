@@ -1,977 +1,2052 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏫 Liceo Exploradores de Sueños - Portal Educativo</title>
+    <title>Liceo Exploradores de Sueños - Sistema Educativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#1e40af',
-                        'secondary': '#dc2626',
-                        'accent': '#059669',
-                        'success': '#16a34a',
-                        'warning': '#d97706',
-                        'danger': '#dc2626'
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
         body {
-            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .bg-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .bg-secondary { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .bg-accent { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .text-primary { color: #667eea; }
+        .text-secondary { color: #f5576c; }
+        .border-primary { border-color: #667eea; }
+        
+        .floating-btn {
             position: relative;
-            overflow-x: hidden;
-        }
-        
-        /* Pantalla principal */
-        .main-screen {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            margin: 20px;
-            padding: 40px;
+            padding: 20px 30px;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            overflow: hidden;
         }
         
-        /* Pantallas individuales */
-        .individual-screen {
-            position: fixed;
+        .floating-btn::before {
+            content: '';
+            position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
         }
         
-        .screen-card {
-            background: white;
+        .floating-btn:hover::before {
+            left: 100%;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .floating-btn.yellow {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+        
+        .floating-btn.yellow:hover {
+            box-shadow: 0 20px 40px rgba(245, 87, 108, 0.6);
+        }
+        
+        .floating-btn.green {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.4);
+        }
+        
+        .floating-btn.green:hover {
+            box-shadow: 0 20px 40px rgba(67, 233, 123, 0.6);
+        }
+        
+        .floating-btn.blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .floating-btn.blue:hover {
+            box-shadow: 0 20px 40px rgba(79, 172, 254, 0.6);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        
-        /* Botones institucionales */
-        .btn-primary {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
-            width: 100%;
-            margin: 10px 0;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-            width: 100%;
-            margin: 10px 0;
-        }
-        
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
-            width: 100%;
-            margin: 10px 0;
-        }
-        
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
-        }
-        
-        .btn-cancel {
-            background: #6b7280;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin: 10px 0;
-        }
-        
-        .btn-cancel:hover {
-            background: #4b5563;
-            transform: translateY(-2px);
-        }
-        
-        /* Inputs limpios */
-        .clean-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 16px;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-            background: white;
-        }
-        
-        .clean-input:focus {
-            outline: none;
-            border-color: #1e40af;
-            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
-        }
-        
-        /* Iconos institucionales */
-        .institutional-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            margin: 0 auto 20px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .icon-blue {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
-        }
-        
-        .icon-yellow {
-            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.3);
-        }
-        
-        .icon-green {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
-        }
-        
-        /* Títulos institucionales */
-        .institutional-title {
-            color: #1e40af;
-            font-size: 48px;
-            font-weight: 900;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .section-title {
-            color: #1e40af;
-            font-size: 32px;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        /* Cards limpias */
-        .clean-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 20px 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 2px solid #f3f4f6;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             transition: all 0.3s ease;
         }
         
-        .clean-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            border-color: #1e40af;
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.5);
         }
         
-        /* Animaciones suaves */
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+            animation: neonPulse 2s infinite alternate;
+        }
+        
+        @keyframes neonPulse {
+            from { box-shadow: 0 0 20px rgba(102, 126, 234, 0.6); }
+            to { box-shadow: 0 0 30px rgba(102, 126, 234, 0.9), 0 0 40px rgba(102, 126, 234, 0.6); }
+        }
+        
         .fade-in {
-            animation: fadeIn 0.8s ease-out;
+            animation: fadeInUp 0.8s ease-out;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-screen {
-                margin: 10px;
-                padding: 20px;
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
             }
-            
-            .screen-card {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-            
-            .institutional-title {
-                font-size: 36px;
-            }
-            
-            .section-title {
-                font-size: 24px;
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
             }
         }
         
-        /* Estados ocultos */
-        .hidden {
-            display: none !important;
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
         }
         
-        /* Notificaciones limpias */
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border-left: 5px solid #16a34a;
-            z-index: 2000;
-            animation: slideIn 0.5s ease-out;
+            z-index: 1000;
+            padding: 16px 28px;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .notification.show {
+            transform: translateX(0);
         }
         
-        /* Loading spinner limpio */
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #1e40af;
+        .notification.success { 
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.4);
+        }
+        .notification.error { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+        .notification.info { 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .sparkle {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sparkle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+            transform: rotate(45deg);
+            animation: sparkle 3s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .pulse-ring {
+            position: relative;
+        }
+        
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(102, 126, 234, 0.6);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+        
+        .rainbow-border {
+            position: relative;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            border-radius: 20px;
+            padding: 3px;
+            animation: rainbow 3s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .morphing-btn {
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .morphing-btn:hover {
+            border-radius: 15px;
+            transform: scale(1.1);
         }
     </style>
 </head>
-<body>
-    <!-- Pantalla Principal -->
-    <div id="mainScreen" class="main-screen fade-in">
-        <!-- Header Institucional -->
-        <div class="text-center mb-12">
-            <h1 class="institutional-title">
-                🏫 Liceo Exploradores de Sueños
-            </h1>
-            <p class="text-2xl font-bold text-gray-700 mb-4">
-                ✨ Villa Gorgona - Candelaria ✨
-            </p>
-            <p class="text-lg text-gray-600">
-                Portal Educativo Oficial - Educación de Calidad
-            </p>
-        </div>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Notificaciones -->
+    <div id="notification" class="notification"></div>
 
-        <!-- Botones Principales -->
-        <div class="grid md:grid-cols-3 gap-6 mb-12">
-            <div class="clean-card text-center">
-                <div class="institutional-icon icon-blue">📱</div>
-                <h3 class="section-title text-2xl">Descargar App</h3>
-                <p class="text-gray-600 mb-6">Aplicación oficial para PC y móvil</p>
-                <button onclick="mostrarDescarga()" class="btn-primary">
-                    📱 Descargar Ahora
+    <!-- Pantalla de Inicio -->
+    <div id="homeScreen" class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+        <!-- Elementos decorativos flotantes -->
+        <div class="absolute top-10 left-10 w-20 h-20 bg-pink-400 rounded-full opacity-20 floating-icon"></div>
+        <div class="absolute top-32 right-20 w-16 h-16 bg-yellow-400 rounded-full opacity-20 floating-icon" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-32 w-12 h-12 bg-green-400 rounded-full opacity-20 floating-icon" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-40 right-10 w-24 h-24 bg-blue-400 rounded-full opacity-20 floating-icon" style="animation-delay: 0.5s;"></div>
+        
+        <div class="container mx-auto px-4 py-8 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-12 fade-in">
+                <div class="rainbow-border mx-auto mb-6 w-fit">
+                    <div class="bg-white rounded-full w-32 h-32 flex items-center justify-center pulse-ring">
+                        <span class="text-6xl floating-icon">🏫</span>
+                    </div>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 sparkle">
+                    Liceo Exploradores de Sueños
+                </h1>
+                <p class="text-2xl text-pink-200 mb-2 bounce-in">Villa Gorgona - Candelaria</p>
+                <p class="text-xl text-blue-200 bounce-in" style="animation-delay: 0.2s;">✨ Educación de Jardín a Quinto de Primaria ✨</p>
+            </div>
+
+            <!-- Información de Contacto -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16 fade-in" style="animation-delay: 0.4s;">
+                <div class="glass-card p-8 text-center neon-glow">
+                    <div class="text-5xl mb-4 floating-icon">📞</div>
+                    <h3 class="font-bold text-white text-xl mb-3">Teléfono</h3>
+                    <p class="text-pink-200 text-lg font-semibold">313-564-96-61</p>
+                </div>
+                
+                <div class="glass-card p-8 text-center cursor-pointer sparkle" onclick="openWhatsApp()">
+                    <div class="text-5xl mb-4 floating-icon" style="animation-delay: 0.5s;">💬</div>
+                    <h3 class="font-bold text-white text-xl mb-3">WhatsApp</h3>
+                    <p class="text-green-300 font-bold text-lg">¡Contactar ahora!</p>
+                </div>
+                
+                <div class="glass-card p-8 text-center cursor-pointer sparkle" onclick="openMaps()">
+                    <div class="text-5xl mb-4 floating-icon" style="animation-delay: 1s;">📍</div>
+                    <h3 class="font-bold text-white text-xl mb-3">Ubicación</h3>
+                    <p class="text-blue-300 font-bold text-lg">Ver en Maps</p>
+                </div>
+            </div>
+
+            <!-- Botones de Acceso -->
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto fade-in" style="animation-delay: 0.6s;">
+                <button onclick="showLogin('admin')" class="floating-btn yellow morphing-btn">
+                    <div class="text-5xl mb-3 floating-icon">👨‍💼</div>
+                    <div class="text-2xl font-bold">Administrador</div>
+                    <div class="text-sm opacity-80 mt-2">Gestión completa</div>
+                </button>
+                
+                <button onclick="showLogin('teacher')" class="floating-btn green morphing-btn">
+                    <div class="text-5xl mb-3 floating-icon" style="animation-delay: 0.5s;">👩‍🏫</div>
+                    <div class="text-2xl font-bold">Profesores</div>
+                    <div class="text-sm opacity-80 mt-2">Ingreso de notas</div>
+                </button>
+                
+                <button onclick="showLogin('parent')" class="floating-btn blue morphing-btn">
+                    <div class="text-5xl mb-3 floating-icon" style="animation-delay: 1s;">👨‍👩‍👧‍👦</div>
+                    <div class="text-2xl font-bold">Padres de Familia</div>
+                    <div class="text-sm opacity-80 mt-2">Consulta de notas</div>
                 </button>
             </div>
-            
-            <div class="clean-card text-center">
-                <div class="institutional-icon icon-green">🚀</div>
-                <h3 class="section-title text-2xl">Ingresar</h3>
-                <p class="text-gray-600 mb-6">Acceso para padres, profesores y admin</p>
-                <button onclick="mostrarLogin()" class="btn-success">
-                    🚀 Iniciar Sesión
-                </button>
-            </div>
-            
-            <div class="clean-card text-center">
-                <div class="institutional-icon icon-yellow">📞</div>
-                <h3 class="section-title text-2xl">Contacto</h3>
-                <p class="text-gray-600 mb-6">Información y comunicación directa</p>
-                <button onclick="mostrarContacto()" class="btn-secondary">
-                    📞 Contactar
-                </button>
-            </div>
-        </div>
 
-        <!-- Información Institucional -->
-        <div class="clean-card">
-            <h3 class="section-title">📋 Información del Colegio</h3>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-4">📍 Ubicación</h4>
-                    <p class="text-gray-600">Carrera 13# 8-48 Callejón Betania<br>Villa Gorgona, Candelaria</p>
-                </div>
-                <div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-4">📱 Contacto</h4>
-                    <p class="text-gray-600">WhatsApp: 313-564-96-61<br>Atención: Lunes a Viernes</p>
+            <!-- Calificación de la App -->
+            <div class="mt-16 text-center fade-in" style="animation-delay: 0.8s;">
+                <div class="glass-card p-8 max-w-lg mx-auto sparkle">
+                    <h3 class="text-2xl font-bold text-white mb-6">¿Cómo calificarías nuestra app? ✨</h3>
+                    <div class="flex justify-center space-x-3 mb-6">
+                        <button onclick="rateApp(1)" class="text-4xl hover:scale-125 transition-all duration-300 hover:rotate-12 neon-glow" data-rating="1">⭐</button>
+                        <button onclick="rateApp(2)" class="text-4xl hover:scale-125 transition-all duration-300 hover:rotate-12 neon-glow" data-rating="2">⭐</button>
+                        <button onclick="rateApp(3)" class="text-4xl hover:scale-125 transition-all duration-300 hover:rotate-12 neon-glow" data-rating="3">⭐</button>
+                        <button onclick="rateApp(4)" class="text-4xl hover:scale-125 transition-all duration-300 hover:rotate-12 neon-glow" data-rating="4">⭐</button>
+                        <button onclick="rateApp(5)" class="text-4xl hover:scale-125 transition-all duration-300 hover:rotate-12 neon-glow" data-rating="5">⭐</button>
+                    </div>
+                    <p id="ratingText" class="text-lg text-pink-200 font-semibold">Toca las estrellas para calificar</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Niveles Educativos -->
-        <div class="clean-card">
-            <h3 class="section-title">🎓 Niveles Educativos</h3>
-            <div class="grid md:grid-cols-5 gap-4 text-center">
-                <div class="p-4 bg-blue-50 rounded-lg">
-                    <div class="text-3xl mb-2">🌱</div>
-                    <p class="font-bold text-blue-800">Jardín</p>
-                </div>
-                <div class="p-4 bg-blue-50 rounded-lg">
-                    <div class="text-3xl mb-2">🎨</div>
-                    <p class="font-bold text-blue-800">Transición</p>
-                </div>
-                <div class="p-4 bg-red-50 rounded-lg">
-                    <div class="text-3xl mb-2">📚</div>
-                    <p class="font-bold text-red-800">Primero</p>
-                </div>
-                <div class="p-4 bg-red-50 rounded-lg">
-                    <div class="text-3xl mb-2">✏️</div>
-                    <p class="font-bold text-red-800">Segundo</p>
-                </div>
-                <div class="p-4 bg-green-50 rounded-lg">
-                    <div class="text-3xl mb-2">🏆</div>
-                    <p class="font-bold text-green-800">Tercero a Quinto</p>
+            <!-- Botón de Descarga -->
+            <div class="mt-12 text-center fade-in" style="animation-delay: 1s;">
+                <div class="glass-card p-8 max-w-lg mx-auto rainbow-border">
+                    <div class="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-lg p-6">
+                        <div class="text-6xl mb-4 floating-icon">📱</div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Descargar App</h3>
+                        <p class="text-lg text-blue-200 mb-6">Descarga la aplicación para acceso rápido desde cualquier dispositivo</p>
+                        <button onclick="downloadApp()" class="floating-btn morphing-btn w-full text-xl py-4">
+                            <span class="floating-icon">📥</span> Descargar Aplicación
+                        </button>
+                        <div class="flex justify-center space-x-4 mt-4 text-sm text-pink-200">
+                            <span>📱 Móvil</span>
+                            <span>💻 PC</span>
+                            <span>📟 Tablet</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Pantalla de Login -->
-    <div id="loginScreen" class="individual-screen hidden">
-        <div class="screen-card">
-            <div class="institutional-icon icon-blue">🔐</div>
-            <h2 class="section-title">Iniciar Sesión</h2>
+    <div id="loginScreen" class="hidden min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center px-4 relative overflow-hidden">
+        <!-- Elementos decorativos -->
+        <div class="absolute top-20 left-20 w-32 h-32 bg-pink-400 rounded-full opacity-10 floating-icon"></div>
+        <div class="absolute bottom-20 right-20 w-24 h-24 bg-yellow-400 rounded-full opacity-10 floating-icon" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-10 w-16 h-16 bg-green-400 rounded-full opacity-10 floating-icon" style="animation-delay: 2s;"></div>
+        
+        <div class="glass-card p-10 w-full max-w-lg relative z-10 sparkle">
+            <div class="text-center mb-8">
+                <button onclick="goHome()" class="absolute -top-2 -left-2 floating-btn blue w-12 h-12 rounded-full p-0 text-xl">
+                    ←
+                </button>
+                <div class="rainbow-border mx-auto mb-6 w-fit">
+                    <div class="bg-white rounded-full w-24 h-24 flex items-center justify-center pulse-ring">
+                        <div class="text-5xl floating-icon" id="loginIcon">👨‍💼</div>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-2" id="loginTitle">Acceso Administrador</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full"></div>
+            </div>
             
-            <div class="text-left mb-6">
-                <label class="block text-gray-700 font-bold mb-2">Tipo de Usuario:</label>
-                <select id="tipoUsuario" class="clean-input">
-                    <option value="padre">👨‍👩‍👧‍👦 Padre de Familia</option>
-                    <option value="profesor">👨‍🏫 Profesor</option>
-                    <option value="admin">⚙️ Administrador</option>
-                </select>
-            </div>
-
-            <div class="text-left mb-6">
-                <label class="block text-gray-700 font-bold mb-2">Usuario:</label>
-                <input type="text" id="usuario" placeholder="Ingrese su usuario" class="clean-input">
-            </div>
-
-            <div class="text-left mb-6">
-                <label class="block text-gray-700 font-bold mb-2">Contraseña:</label>
-                <input type="password" id="contrasena" placeholder="Ingrese su contraseña" class="clean-input">
-            </div>
-
-            <div id="mensajeError" class="hidden bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-6">
-                <p class="text-red-700 font-bold text-center">Usuario o contraseña incorrecta</p>
-            </div>
-
-            <div class="space-y-4">
-                <button onclick="iniciarSesion()" class="btn-success">
-                    🚀 Ingresar
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
+                <div class="relative">
+                    <label class="block text-white text-lg font-semibold mb-3" id="usernameLabel">Usuario:</label>
+                    <input type="text" id="username" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:border-pink-400 focus:bg-white/30 transition-all backdrop-blur-sm" placeholder="Ingresa tu usuario" required>
+                </div>
+                
+                <div class="relative">
+                    <label class="block text-white text-lg font-semibold mb-3">Contraseña:</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:border-pink-400 focus:bg-white/30 transition-all backdrop-blur-sm" placeholder="Ingresa tu contraseña" required>
+                </div>
+                
+                <button type="submit" class="floating-btn w-full text-xl py-4 morphing-btn">
+                    <span class="floating-icon">🚀</span> Ingresar
                 </button>
-                <button onclick="volverInicio()" class="btn-cancel">
-                    ← Volver al Inicio
-                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <label class="flex items-center justify-center text-white/80 text-lg">
+                    <input type="checkbox" id="rememberMe" class="mr-3 w-5 h-5 rounded border-2 border-white/50 bg-white/20">
+                    Recordar información
+                </label>
             </div>
         </div>
     </div>
 
-    <!-- Pantalla de Contacto -->
-    <div id="contactScreen" class="individual-screen hidden">
-        <div class="screen-card">
-            <div class="institutional-icon icon-yellow">📞</div>
-            <h2 class="section-title">Información de Contacto</h2>
-            
-            <div class="space-y-6 mb-8">
-                <div class="bg-blue-50 p-6 rounded-lg">
-                    <h4 class="font-bold text-blue-800 mb-2">📍 Dirección</h4>
-                    <p class="text-blue-700">Carrera 13# 8-48 Callejón Betania<br>Villa Gorgona, Candelaria</p>
-                </div>
-                
-                <div class="bg-green-50 p-6 rounded-lg">
-                    <h4 class="font-bold text-green-800 mb-2">📱 WhatsApp</h4>
-                    <p class="text-green-700 text-xl font-bold">313-564-96-61</p>
-                </div>
-                
-                <div class="bg-red-50 p-6 rounded-lg">
-                    <h4 class="font-bold text-red-800 mb-2">🕒 Horario de Atención</h4>
-                    <p class="text-red-700">Lunes a Viernes: 7:00 AM - 5:00 PM</p>
-                </div>
+    <!-- Panel de Administrador -->
+    <div id="adminPanel" class="hidden min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <nav class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white p-6 shadow-2xl">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold sparkle">
+                    <span class="floating-icon text-3xl">👨‍💼</span> Panel Administrador
+                </h1>
+                <button onclick="logout()" class="floating-btn yellow text-lg px-6 py-3">
+                    <span class="floating-icon">🚪</span> Cerrar Sesión
+                </button>
             </div>
-
-            <div class="space-y-4">
-                <button onclick="abrirWhatsApp()" class="btn-success">
-                    💬 Abrir WhatsApp
+        </nav>
+        
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <button onclick="showSection('students')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon">👨‍🎓</div>
+                    <h3 class="font-bold text-white text-xl">Gestionar Estudiantes</h3>
+                    <p class="text-blue-200 mt-2">Agregar y editar estudiantes</p>
                 </button>
-                <button onclick="abrirUbicacion()" class="btn-primary">
-                    🗺️ Ver Ubicación
+                
+                <button onclick="showSection('teachers')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.2s;">👩‍🏫</div>
+                    <h3 class="font-bold text-white text-xl">Gestionar Profesores</h3>
+                    <p class="text-green-200 mt-2">Administrar profesores</p>
                 </button>
-                <button onclick="volverInicio()" class="btn-cancel">
-                    ← Volver al Inicio
+                
+                <button onclick="showSection('grades')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.4s;">📊</div>
+                    <h3 class="font-bold text-white text-xl">Ver Notas</h3>
+                    <p class="text-pink-200 mt-2">Consultar calificaciones</p>
                 </button>
+                
+                <button onclick="showSection('schedule')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.6s;">📅</div>
+                    <h3 class="font-bold text-white text-xl">Cronograma</h3>
+                    <p class="text-yellow-200 mt-2">Eventos y actividades</p>
+                </button>
+                
+                <button onclick="showSection('reports')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.8s;">📋</div>
+                    <h3 class="font-bold text-white text-xl">Boletines</h3>
+                    <p class="text-purple-200 mt-2">Generar reportes</p>
+                </button>
+                
+                <button onclick="showSection('settings')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 1s;">⚙️</div>
+                    <h3 class="font-bold text-white text-xl">Configuración</h3>
+                    <p class="text-indigo-200 mt-2">Ajustes del sistema</p>
+                </button>
+            </div>
+            
+            <div id="adminContent" class="glass-card p-8 neon-glow">
+                <h2 class="text-3xl font-bold text-white mb-6 gradient-text">Bienvenido al Panel de Administración</h2>
+                <p class="text-blue-200 text-lg">Selecciona una opción del menú para comenzar a gestionar el sistema educativo.</p>
+                <div class="mt-6 flex space-x-4">
+                    <div class="w-4 h-4 bg-pink-400 rounded-full floating-icon"></div>
+                    <div class="w-4 h-4 bg-blue-400 rounded-full floating-icon" style="animation-delay: 0.5s;"></div>
+                    <div class="w-4 h-4 bg-green-400 rounded-full floating-icon" style="animation-delay: 1s;"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Pantalla de Descarga -->
-    <div id="downloadScreen" class="individual-screen hidden">
-        <div class="screen-card">
-            <div class="institutional-icon icon-blue">📱</div>
-            <h2 class="section-title">Descargar Aplicación</h2>
+    <!-- Panel de Profesores -->
+    <div id="teacherPanel" class="hidden min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <nav class="bg-gradient-to-r from-green-500 via-teal-500 to-blue-500 text-white p-6 shadow-2xl">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold sparkle">
+                    <span class="floating-icon text-3xl">👩‍🏫</span> Panel Profesor
+                </h1>
+                <button onclick="logout()" class="floating-btn yellow text-lg px-6 py-3">
+                    <span class="floating-icon">🚪</span> Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+        
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <button onclick="showTeacherSection('myStudents')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon">👨‍🎓</div>
+                    <h3 class="font-bold text-white text-xl">Mis Estudiantes</h3>
+                    <p class="text-blue-200 mt-2">Ver lista de estudiantes</p>
+                </button>
+                
+                <button onclick="showTeacherSection('enterGrades')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.2s;">📝</div>
+                    <h3 class="font-bold text-white text-xl">Ingresar Notas</h3>
+                    <p class="text-green-200 mt-2">Calificar estudiantes</p>
+                </button>
+                
+                <button onclick="showTeacherSection('viewSchedule')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.4s;">📅</div>
+                    <h3 class="font-bold text-white text-xl">Ver Cronograma</h3>
+                    <p class="text-yellow-200 mt-2">Eventos programados</p>
+                </button>
+                
+                <button onclick="showTeacherSection('attendance')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.6s;">✅</div>
+                    <h3 class="font-bold text-white text-xl">Asistencia</h3>
+                    <p class="text-pink-200 mt-2">Control de asistencia</p>
+                </button>
+            </div>
             
-            <div id="downloadInfo" class="mb-8">
-                <div class="bg-blue-50 p-6 rounded-lg mb-6">
-                    <h4 class="font-bold text-blue-800 mb-2">📦 Portal Educativo v2.0</h4>
-                    <p class="text-blue-700">Tamaño: 45.2 MB<br>Compatible con todos los dispositivos</p>
-                </div>
-                
-                <div id="progressContainer" class="hidden mb-6">
-                    <div class="bg-gray-200 rounded-full h-4 mb-4">
-                        <div id="progressBar" class="bg-blue-600 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
-                    </div>
-                    <p id="downloadStatus" class="text-center font-bold text-gray-700">Preparando descarga...</p>
-                </div>
-                
-                <div id="downloadComplete" class="hidden bg-green-50 p-6 rounded-lg mb-6">
-                    <div class="text-center">
-                        <div class="text-6xl mb-4">✅</div>
-                        <h4 class="font-bold text-green-800 mb-4">¡Descarga Completada!</h4>
-                        <p class="text-green-700">Busca el archivo en tu carpeta de descargas:<br><strong>"LiceoExploradores-v2.0.html"</strong></p>
-                    </div>
+            <div id="teacherContent" class="glass-card p-8 neon-glow">
+                <h2 class="text-3xl font-bold text-white mb-6">Bienvenido Profesor</h2>
+                <p class="text-green-200 text-lg">Selecciona una opción para gestionar tus clases y estudiantes.</p>
+                <div class="mt-6 flex space-x-4">
+                    <div class="w-4 h-4 bg-green-400 rounded-full floating-icon"></div>
+                    <div class="w-4 h-4 bg-teal-400 rounded-full floating-icon" style="animation-delay: 0.5s;"></div>
+                    <div class="w-4 h-4 bg-blue-400 rounded-full floating-icon" style="animation-delay: 1s;"></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="space-y-4">
-                <button id="downloadBtn" onclick="iniciarDescarga()" class="btn-primary">
-                    💻 Descargar para PC
+    <!-- Panel de Padres -->
+    <div id="parentPanel" class="hidden min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <nav class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white p-6 shadow-2xl">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold sparkle">
+                    <span class="floating-icon text-3xl">👨‍👩‍👧‍👦</span> Panel Padres
+                </h1>
+                <button onclick="logout()" class="floating-btn yellow text-lg px-6 py-3">
+                    <span class="floating-icon">🚪</span> Cerrar Sesión
                 </button>
-                <button onclick="descargarMovil()" class="btn-secondary">
-                    📱 Descargar para Móvil
+            </div>
+        </nav>
+        
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <button onclick="showParentSection('grades')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon">📊</div>
+                    <h3 class="font-bold text-white text-xl">Notas de mi Hijo/a</h3>
+                    <p class="text-blue-200 mt-2">Ver calificaciones</p>
                 </button>
-                <button onclick="volverInicio()" class="btn-cancel">
-                    ← Volver al Inicio
+                
+                <button onclick="showParentSection('attendance')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.2s;">✅</div>
+                    <h3 class="font-bold text-white text-xl">Asistencia</h3>
+                    <p class="text-green-200 mt-2">Control de asistencia</p>
                 </button>
+                
+                <button onclick="showParentSection('schedule')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.4s;">📅</div>
+                    <h3 class="font-bold text-white text-xl">Cronograma</h3>
+                    <p class="text-yellow-200 mt-2">Eventos y actividades</p>
+                </button>
+                
+                <button onclick="showParentSection('contact')" class="glass-card p-8 text-center sparkle">
+                    <div class="text-6xl mb-4 floating-icon" style="animation-delay: 0.6s;">📞</div>
+                    <h3 class="font-bold text-white text-xl">Contacto</h3>
+                    <p class="text-pink-200 mt-2">Información de contacto</p>
+                </button>
+            </div>
+            
+            <div id="parentContent" class="glass-card p-8 neon-glow">
+                <h2 class="text-3xl font-bold text-white mb-6">Bienvenido</h2>
+                <p class="text-blue-200 text-lg">Aquí puedes consultar toda la información académica de tu hijo/a.</p>
+                <div class="mt-6 flex space-x-4">
+                    <div class="w-4 h-4 bg-blue-400 rounded-full floating-icon"></div>
+                    <div class="w-4 h-4 bg-purple-400 rounded-full floating-icon" style="animation-delay: 0.5s;"></div>
+                    <div class="w-4 h-4 bg-pink-400 rounded-full floating-icon" style="animation-delay: 1s;"></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // Variables globales
-        let usuarioActual = null;
-        let tipoUsuarioActual = null;
+        let currentUser = null;
+        let currentUserType = null;
+        
+        // Datos del sistema (simulando base de datos)
+        let systemData = {
+            students: [
+                {
+                    id: 1,
+                    document: '12345678',
+                    name: 'Ana María García',
+                    grade: 'Jardín',
+                    parent: 'Carlos García',
+                    phone: '300-123-4567',
+                    grades: {
+                        'Período 1': {
+                            'Español': { asistencia: 95, cuaderno: 90, trabajo: 85, evaluacion: 88 },
+                            'Matemáticas': { asistencia: 92, cuaderno: 88, trabajo: 90, evaluacion: 85 },
+                            'Biología': { asistencia: 98, cuaderno: 92, trabajo: 88, evaluacion: 90 }
+                        },
+                        'Período 2': {
+                            'Español': { asistencia: 90, cuaderno: 85, trabajo: 88, evaluacion: 92 },
+                            'Matemáticas': { asistencia: 88, cuaderno: 90, trabajo: 85, evaluacion: 87 },
+                            'Biología': { asistencia: 95, cuaderno: 88, trabajo: 90, evaluacion: 93 }
+                        },
+                        'Período 3': {
+                            'Español': { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 },
+                            'Matemáticas': { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 },
+                            'Biología': { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 }
+                        },
+                        'Período 4': {
+                            'Español': { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 },
+                            'Matemáticas': { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 },
+                            'Biología': { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 }
+                        }
+                    }
+                }
+            ],
+            teachers: [
+                {
+                    id: 1,
+                    username: 'prof001',
+                    password: 'teacher123',
+                    name: 'María Rodríguez',
+                    subject: 'Español',
+                    phone: '300-987-6543',
+                    coordinator: false,
+                    areaTeacher: true
+                }
+            ],
+            schedule: [
+                {
+                    id: 1,
+                    title: 'Reunión de Padres - Jardín',
+                    date: '2024-02-15',
+                    time: '14:00',
+                    description: 'Reunión informativa sobre el progreso académico'
+                }
+            ],
+            subjects: ['Español', 'Matemáticas', 'Biología', 'Sociales', 'Artística', 'Religión', 'Danzas', 'Música', 'Tecnología', 'Ortografía', 'Comprensión Lectora', 'Inglés', 'Educación Física', 'Cátedra'],
+            grades: ['Jardín', 'Transición', 'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto'],
+            periods: ['Período 1', 'Período 2', 'Período 3', 'Período 4'],
+            currentPeriod: 'Período 1',
+            appRating: 0
+        };
 
-        // Credenciales de administrador
-        const ADMIN_USER = 'admin2024';
-        const ADMIN_PASS = 'liceo2024';
+        // Credenciales de administrador (solo para uso interno)
+        const adminCredentials = {
+            username: 'admin2024',
+            password: 'LiceoExploradores2024!'
+        };
 
-        // Funciones de navegación
-        function mostrarLogin() {
-            document.getElementById('mainScreen').classList.add('hidden');
-            document.getElementById('loginScreen').classList.remove('hidden');
-        }
-
-        function mostrarContacto() {
-            document.getElementById('mainScreen').classList.add('hidden');
-            document.getElementById('contactScreen').classList.remove('hidden');
-        }
-
-        function mostrarDescarga() {
-            document.getElementById('mainScreen').classList.add('hidden');
-            document.getElementById('downloadScreen').classList.remove('hidden');
-        }
-
-        function volverInicio() {
-            // Ocultar todas las pantallas
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('contactScreen').classList.add('hidden');
-            document.getElementById('downloadScreen').classList.add('hidden');
+        // Funciones de utilidad
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
             
-            // Mostrar pantalla principal
-            document.getElementById('mainScreen').classList.remove('hidden');
-            
-            // Limpiar formularios
-            limpiarFormularios();
-        }
-
-        function limpiarFormularios() {
-            document.getElementById('usuario').value = '';
-            document.getElementById('contrasena').value = '';
-            document.getElementById('mensajeError').classList.add('hidden');
-            
-            // Resetear descarga
-            document.getElementById('progressContainer').classList.add('hidden');
-            document.getElementById('downloadComplete').classList.add('hidden');
-            document.getElementById('downloadBtn').textContent = '💻 Descargar para PC';
-            document.getElementById('progressBar').style.width = '0%';
-        }
-
-        // Función de login
-        function iniciarSesion() {
-            const tipoUsuario = document.getElementById('tipoUsuario').value;
-            const usuario = document.getElementById('usuario').value.trim();
-            const contrasena = document.getElementById('contrasena').value.trim();
-
-            if (!usuario || !contrasena) {
-                mostrarError('Por favor complete todos los campos');
-                return;
-            }
-
-            const btnIngresar = document.querySelector('button[onclick="iniciarSesion()"]');
-            const originalText = btnIngresar.innerHTML;
-            btnIngresar.innerHTML = '<div class="spinner"></div>';
-            btnIngresar.disabled = true;
-
             setTimeout(() => {
-                let loginExitoso = false;
-                let nombreUsuario = '';
+                notification.classList.remove('show');
+            }, 3000);
+        }
 
-                if (tipoUsuario === 'admin') {
-                    if (usuario === ADMIN_USER && contrasena === ADMIN_PASS) {
-                        loginExitoso = true;
-                        nombreUsuario = 'Administrador';
-                    }
-                } else if (tipoUsuario === 'profesor') {
-                    // Simulación de login de profesor
-                    if (usuario === 'profesor1' && contrasena === 'prof123') {
-                        loginExitoso = true;
-                        nombreUsuario = 'Profesor Juan Pérez';
-                    }
-                } else if (tipoUsuario === 'padre') {
-                    // Simulación de login de padre (documento del estudiante)
-                    if (usuario === contrasena && usuario.length >= 6) {
-                        loginExitoso = true;
-                        nombreUsuario = 'Padre de Familia';
-                    }
-                }
+        // Sistema de guardado automático en tiempo real
+        function saveData() {
+            try {
+                // Guardar en localStorage (persistencia local)
+                localStorage.setItem('liceoData', JSON.stringify(systemData));
+                
+                // Simular guardado en servidor (en tiempo real)
+                const timestamp = new Date().toISOString();
+                systemData.lastUpdate = timestamp;
+                
+                // Mostrar indicador de guardado
+                showSaveIndicator();
+                
+                // Sincronizar con otros usuarios (simulado)
+                broadcastUpdate();
+                
+            } catch (error) {
+                showNotification('Error al guardar datos', 'error');
+            }
+        }
 
-                if (loginExitoso) {
-                    usuarioActual = nombreUsuario;
-                    tipoUsuarioActual = tipoUsuario;
-                    
-                    mostrarNotificacion(`¡Bienvenido ${nombreUsuario}!`, 'success');
-                    
-                    setTimeout(() => {
-                        alert(`🎉 ¡Acceso Concedido!
-
-👤 Usuario: ${nombreUsuario}
-🔐 Tipo: ${tipoUsuario === 'admin' ? 'Administrador' : tipoUsuario === 'profesor' ? 'Profesor' : 'Padre de Familia'}
-🌐 Estado: Conectado
-
-✨ FUNCIONES DISPONIBLES:
-${tipoUsuario === 'admin' ? 
-    '⚙️ Gestión completa del sistema\n📊 Reportes en tiempo real\n👥 Administrar usuarios\n📅 Programar actividades' :
-    tipoUsuario === 'profesor' ?
-    '📝 Registrar notas\n👀 Consultar estudiantes\n📊 Seguimiento académico\n📈 Estadísticas' :
-    '📊 Ver notas de su hijo\n📅 Consultar asistencia\n📋 Descargar boletines\n🔔 Recibir notificaciones'
-}
-
-🎯 ¡Sistema completamente funcional!`);
-                        
-                        volverInicio();
-                    }, 1500);
-                } else {
-                    mostrarError('Usuario o contraseña incorrecta');
-                }
-
-                btnIngresar.innerHTML = originalText;
-                btnIngresar.disabled = false;
+        function showSaveIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'fixed top-4 left-4 bg-green-500 text-white px-3 py-1 rounded text-sm z-50';
+            indicator.textContent = '💾 Guardado automáticamente';
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                indicator.remove();
             }, 2000);
         }
 
-        function mostrarError(mensaje) {
-            const errorDiv = document.getElementById('mensajeError');
-            errorDiv.querySelector('p').textContent = mensaje;
-            errorDiv.classList.remove('hidden');
+        function broadcastUpdate() {
+            // Simular sincronización en tiempo real
+            const event = new CustomEvent('dataUpdate', { 
+                detail: { 
+                    timestamp: systemData.lastUpdate,
+                    data: systemData 
+                } 
+            });
+            window.dispatchEvent(event);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('liceoData');
+            if (saved) {
+                systemData = { ...systemData, ...JSON.parse(saved) };
+            }
+            
+            // Escuchar actualizaciones en tiempo real
+            window.addEventListener('dataUpdate', function(event) {
+                if (event.detail.timestamp > (systemData.lastUpdate || '')) {
+                    systemData = { ...systemData, ...event.detail.data };
+                    refreshCurrentView();
+                }
+            });
+        }
+
+        function refreshCurrentView() {
+            // Refrescar la vista actual cuando hay actualizaciones
+            if (currentUserType === 'admin' && !document.getElementById('adminPanel').classList.contains('hidden')) {
+                // Refrescar vista de administrador si está activa
+                const activeSection = document.querySelector('#adminContent h2');
+                if (activeSection && activeSection.textContent.includes('Estudiantes')) {
+                    showSection('students');
+                } else if (activeSection && activeSection.textContent.includes('Profesores')) {
+                    showSection('teachers');
+                } else if (activeSection && activeSection.textContent.includes('Notas')) {
+                    showSection('grades');
+                }
+            }
+        }
+
+        // Funciones de navegación
+        function goHome() {
+            document.getElementById('homeScreen').classList.remove('hidden');
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('teacherPanel').classList.add('hidden');
+            document.getElementById('parentPanel').classList.add('hidden');
+        }
+
+        function showLogin(userType) {
+            document.getElementById('homeScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            
+            const icons = { admin: '👨‍💼', teacher: '👩‍🏫', parent: '👨‍👩‍👧‍👦' };
+            const titles = { admin: 'Acceso Administrador', teacher: 'Acceso Profesores', parent: 'Acceso Padres' };
+            const labels = { admin: 'Usuario:', teacher: 'Usuario:', parent: 'Documento del Estudiante:' };
+            
+            document.getElementById('loginIcon').textContent = icons[userType];
+            document.getElementById('loginTitle').textContent = titles[userType];
+            document.getElementById('usernameLabel').textContent = labels[userType];
+            document.getElementById('loginForm').dataset.userType = userType;
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const userType = event.target.dataset.userType;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (userType === 'admin') {
+                if (username === adminCredentials.username && password === adminCredentials.password) {
+                    currentUser = { username: 'admin', name: 'Administrador' };
+                    currentUserType = 'admin';
+                    showPanel('admin');
+                    showNotification('¡Bienvenido Administrador!', 'success');
+                } else {
+                    showNotification('Usuario o contraseña incorrecta', 'error');
+                }
+            } else if (userType === 'teacher') {
+                const teacher = systemData.teachers.find(t => t.username === username && t.password === password);
+                if (teacher) {
+                    currentUser = teacher;
+                    currentUserType = 'teacher';
+                    showPanel('teacher');
+                    showNotification(`¡Bienvenido/a ${teacher.name}!`, 'success');
+                } else {
+                    showNotification('Usuario o contraseña incorrecta', 'error');
+                }
+            } else if (userType === 'parent') {
+                const student = systemData.students.find(s => s.document === username && s.document === password);
+                if (student) {
+                    currentUser = student;
+                    currentUserType = 'parent';
+                    showPanel('parent');
+                    showNotification(`¡Bienvenido! Información de ${student.name}`, 'success');
+                } else {
+                    showNotification('Número o contraseña incorrecta', 'error');
+                }
+            }
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function showPanel(type) {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById(`${type}Panel`).classList.remove('hidden');
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            goHome();
+            showNotification('Sesión cerrada correctamente', 'info');
         }
 
         // Funciones de contacto
-        function abrirWhatsApp() {
-            const numero = '573135649661';
-            const mensaje = encodeURIComponent('Hola, me comunico desde el Portal Educativo del Liceo Exploradores de Sueños 🏫');
-            const url = `https://wa.me/${numero}?text=${mensaje}`;
-            window.open(url, '_blank');
-            mostrarNotificacion('Abriendo WhatsApp...', 'success');
+        function openWhatsApp() {
+            const message = encodeURIComponent('Hola, me gustaría obtener información sobre el Liceo Exploradores de Sueños');
+            window.open(`https://wa.me/573135649661?text=${message}`, '_blank');
         }
 
-        function abrirUbicacion() {
-            const direccion = encodeURIComponent('Carrera 13# 8-48 Callejón Betania, Villa Gorgona, Candelaria');
-            const url = `https://www.google.com/maps/search/?api=1&query=${direccion}`;
-            window.open(url, '_blank');
-            mostrarNotificacion('Abriendo ubicación en Google Maps...', 'info');
+        function openMaps() {
+            const address = encodeURIComponent('Carrera 13# 8-48 Callejón Betania Villagorgona, Candelaria');
+            window.open(`https://www.google.com/maps/search/?api=1&query=${address}`, '_blank');
         }
 
-        // Funciones de descarga
-        function iniciarDescarga() {
-            document.getElementById('progressContainer').classList.remove('hidden');
-            document.getElementById('downloadBtn').textContent = 'Descargando...';
-            
-            const progressBar = document.getElementById('progressBar');
-            const downloadStatus = document.getElementById('downloadStatus');
-            
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = progress + '%';
-                
-                if (progress < 30) {
-                    downloadStatus.textContent = 'Conectando con servidor...';
-                } else if (progress < 60) {
-                    downloadStatus.textContent = 'Descargando archivos principales...';
-                } else if (progress < 90) {
-                    downloadStatus.textContent = 'Descargando recursos adicionales...';
-                } else if (progress < 100) {
-                    downloadStatus.textContent = 'Finalizando descarga...';
-                } else {
-                    downloadStatus.textContent = '¡Descarga completada!';
-                    clearInterval(interval);
-                    
-                    setTimeout(() => {
-                        document.getElementById('downloadComplete').classList.remove('hidden');
-                        crearArchivoDescarga();
-                    }, 1000);
-                }
-            }, 200);
+        // Función de calificación
+        function rateApp(rating) {
+            systemData.appRating = rating;
+            const stars = ['⭐', '⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐⭐⭐'];
+            document.getElementById('ratingText').textContent = `¡Gracias! Calificaste con ${stars[rating-1]}`;
+            showNotification(`¡Gracias por tu calificación de ${rating} estrellas!`, 'success');
+            saveData();
         }
 
-        function descargarMovil() {
-            // Mostrar progreso
-            document.getElementById('progressContainer').classList.remove('hidden');
-            document.querySelector('button[onclick="descargarMovil()"]').textContent = 'Descargando...';
+        // Función de descarga de la aplicación
+        function downloadApp() {
+            const currentUrl = window.location.href;
             
-            const progressBar = document.getElementById('progressBar');
-            const downloadStatus = document.getElementById('downloadStatus');
-            
-            // Crear y descargar el archivo inmediatamente
-            crearArchivoMovil();
-            
-            // Simular progreso visual
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 20;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = progress + '%';
-                
-                if (progress < 40) {
-                    downloadStatus.textContent = 'Preparando descarga móvil...';
-                } else if (progress < 80) {
-                    downloadStatus.textContent = 'Creando archivo para móvil...';
-                } else if (progress < 100) {
-                    downloadStatus.textContent = 'Iniciando descarga...';
-                } else {
-                    downloadStatus.textContent = '¡Descarga iniciada!';
-                    clearInterval(interval);
-                    
-                    setTimeout(() => {
-                        document.getElementById('downloadComplete').classList.remove('hidden');
-                        document.querySelector('button[onclick="descargarMovil()"]').textContent = '📱 Descargar para Móvil';
-                        
-                        // Actualizar mensaje de descarga completada
-                        const completeDiv = document.getElementById('downloadComplete');
-                        completeDiv.innerHTML = `
-                            <div class="text-center">
-                                <div class="text-6xl mb-4">✅</div>
-                                <h4 class="font-bold text-green-800 mb-4">¡Descarga Móvil Completada!</h4>
-                                <p class="text-green-700">Busca el archivo en tu carpeta de descargas:<br><strong>"LiceoExploradores-Movil-v2.0.html"</strong></p>
-                                <p class="text-sm text-green-600 mt-2">📱 Optimizado para dispositivos móviles</p>
-                            </div>
-                        `;
-                    }, 1000);
-                }
-            }, 150);
-        }
-
-        function crearArchivoMovil() {
-            const mobileAppContent = `<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liceo Exploradores - App Móvil</title>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
-            margin: 0;
-            padding: 15px;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .mobile-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            max-width: 400px;
-            width: 100%;
-        }
-        .mobile-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-        .mobile-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1e40af;
-            margin-bottom: 10px;
-        }
-        .mobile-success {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .mobile-btn {
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-        }
-        .device-info {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-size: 14px;
-            color: #64748b;
-        }
-    </style>
-</head>
-<body>
-    <div class="mobile-container">
-        <div class="mobile-icon">📱</div>
-        <h1 class="mobile-title">Liceo Exploradores</h1>
-        <p style="color: #64748b; font-size: 14px;">Versión Móvil v2.0</p>
-        
-        <div class="mobile-success">
-            ✅ ¡App móvil instalada correctamente!<br>
-            📲 Optimizada para tu dispositivo
-        </div>
-        
-        <div class="device-info">
-            📱 <strong>Compatible con:</strong><br>
-            • Android 5.0+<br>
-            • iOS 12.0+<br>
-            • Navegadores móviles
-        </div>
-        
-        <button class="mobile-btn" onclick="window.location.reload()">
-            🚀 Abrir App Móvil
-        </button>
-        
-        <p style="font-size: 12px; color: #94a3b8; margin-top: 15px;">
-            💡 Agrega esta página a tu pantalla de inicio para acceso rápido
-        </p>
-    </div>
-</body>
-</html>`;
-            
-            const blob = new Blob([mobileAppContent], { type: 'text/html' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'LiceoExploradores-Movil-v2.0.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-            
-            mostrarNotificacion('¡App móvil descargada exitosamente!', 'success');
-        }
-
-        function crearArchivoDescarga() {
+            // Crear contenido HTML para la descarga
             const appContent = `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liceo Exploradores de Sueños - App Instalada</title>
+    <title>Liceo Exploradores de Sueños - Acceso Rápido</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
-            margin: 0;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0;
+            padding: 20px;
         }
-        .app-container {
+        .container {
             background: white;
             border-radius: 20px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
         }
-        .app-icon {
+        .logo {
             font-size: 80px;
             margin-bottom: 20px;
         }
-        .app-title {
-            font-size: 32px;
-            font-weight: bold;
-            color: #1e40af;
+        h1 {
+            color: #1e3a8a;
             margin-bottom: 10px;
+            font-size: 24px;
         }
-        .success-message {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            font-weight: bold;
+        p {
+            color: #666;
+            margin-bottom: 30px;
         }
-        .launch-btn {
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
+        .btn {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             color: white;
-            border: none;
             padding: 15px 30px;
+            border: none;
             border-radius: 10px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="app-icon">🏫</div>
-        <h1 class="app-title">Liceo Exploradores de Sueños</h1>
-        <p>Portal Educativo v2.0 - Instalado Correctamente</p>
+    <div class="container">
+        <div class="logo">🏫</div>
+        <h1>Liceo Exploradores de Sueños</h1>
+        <p>Sistema Educativo Digital</p>
+        <p>Villa Gorgona - Candelaria</p>
         
-        <div class="success-message">
-            ✅ ¡Aplicación instalada exitosamente!<br>
-            🚀 Lista para usar con colores institucionales
-        </div>
-        
-        <button class="launch-btn" onclick="window.location.reload()">
+        <a href="${currentUrl}" class="btn" onclick="openApp()">
             🚀 Abrir Aplicación
-        </button>
+        </a>
+        
+        <div class="info">
+            <p>📱 Compatible con todos los dispositivos</p>
+            <p>💾 Datos sincronizados en tiempo real</p>
+            <p>🔒 Acceso seguro para estudiantes, padres y profesores</p>
+        </div>
     </div>
-</body>
+    
+    <script>
+        function openApp() {
+            // Abrir la aplicación y mostrar notificación
+            setTimeout(() => {
+                alert('¡Bienvenido al Liceo Exploradores de Sueños! 🎓\\n\\nAccede con tus credenciales para consultar notas, asistencia y más.');
+            }, 1000);
+        }
+        
+        // Auto-abrir la aplicación si se detecta que es la primera vez
+        if (localStorage.getItem('liceoFirstTime') !== 'false') {
+            localStorage.setItem('liceoFirstTime', 'false');
+            setTimeout(() => {
+                if (confirm('¿Deseas abrir la aplicación del Liceo Exploradores de Sueños ahora?')) {
+                    window.location.href = '${currentUrl}';
+                }
+            }, 2000);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9809f760d5aa16aa',t:'MTc1ODEyNjM5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>`;
-            
+
+            // Crear y descargar el archivo
             const blob = new Blob([appContent], { type: 'text/html' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'LiceoExploradores-v2.0.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Liceo_Exploradores_de_Sueños.html';
+            link.click();
+            URL.revokeObjectURL(url);
             
-            mostrarNotificacion('¡Archivo descargado exitosamente!', 'success');
+            showNotification('¡Aplicación descargada! Abre el archivo para acceso rápido', 'success');
         }
 
-        // Sistema de notificaciones
-        function mostrarNotificacion(mensaje, tipo = 'info') {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
+        // Funciones del panel de administrador
+        function showSection(section) {
+            const content = document.getElementById('adminContent');
             
-            const color = tipo === 'success' ? '#16a34a' : tipo === 'error' ? '#dc2626' : '#1e40af';
-            notification.style.borderLeftColor = color;
+            switch(section) {
+                case 'students':
+                    content.innerHTML = `
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">👨‍🎓 Gestión de Estudiantes</h2>
+                            <button onclick="showAddStudentForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
+                                ➕ Agregar Estudiante
+                            </button>
+                        </div>
+                        <div id="studentsTable">${generateStudentsTable()}</div>
+                    `;
+                    break;
+                    
+                case 'teachers':
+                    content.innerHTML = `
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">👩‍🏫 Gestión de Profesores</h2>
+                            <button onclick="showAddTeacherForm()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors">
+                                ➕ Agregar Profesor
+                            </button>
+                        </div>
+                        <div id="teachersTable">${generateTeachersTable()}</div>
+                    `;
+                    break;
+                    
+                case 'grades':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📊 Consulta de Notas</h2>
+                        <div class="mb-4">
+                            <select id="studentSelect" class="w-full p-2 border rounded" onchange="showStudentGrades()">
+                                <option value="">Seleccionar estudiante...</option>
+                                ${systemData.students.map(s => `<option value="${s.id}">${s.name} - ${s.grade}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div id="gradesDisplay"></div>
+                    `;
+                    break;
+                    
+                case 'schedule':
+                    content.innerHTML = `
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">📅 Cronograma de Actividades</h2>
+                            <button onclick="showAddEventForm()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded transition-colors">
+                                ➕ Agregar Evento
+                            </button>
+                        </div>
+                        <div id="scheduleDisplay">${generateScheduleDisplay()}</div>
+                    `;
+                    break;
+                    
+                case 'reports':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📋 Boletines de Calificaciones</h2>
+                        <div class="mb-4">
+                            <select id="reportStudentSelect" class="w-full p-2 border rounded" onchange="generateReport()">
+                                <option value="">Seleccionar estudiante para generar boletín...</option>
+                                ${systemData.students.map(s => `<option value="${s.id}">${s.name} - ${s.grade}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div id="reportDisplay"></div>
+                    `;
+                    break;
+                    
+                case 'settings':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">⚙️ Configuración del Sistema</h2>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-gray-50 p-4 rounded">
+                                <h3 class="font-semibold mb-2">📊 Estadísticas</h3>
+                                <p>Estudiantes registrados: ${systemData.students.length}</p>
+                                <p>Profesores activos: ${systemData.teachers.length}</p>
+                                <p>Eventos programados: ${systemData.schedule.length}</p>
+                                <p>Calificación de la app: ${systemData.appRating}/5 ⭐</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded">
+                                <h3 class="font-semibold mb-2">💾 Respaldo de Datos</h3>
+                                <button onclick="exportData()" class="bg-blue-600 text-white px-4 py-2 rounded mr-2 mb-2">Exportar Datos</button>
+                                <button onclick="clearData()" class="bg-red-600 text-white px-4 py-2 rounded">Limpiar Datos</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        function generateStudentsTable() {
+            if (systemData.students.length === 0) {
+                return '<p class="text-gray-500 text-center py-8">No hay estudiantes registrados</p>';
+            }
             
-            notification.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <div class="text-2xl">
-                        ${tipo === 'success' ? '✅' : tipo === 'error' ? '❌' : 'ℹ️'}
+            return `
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="border border-gray-300 p-2">Documento</th>
+                                <th class="border border-gray-300 p-2">Nombre</th>
+                                <th class="border border-gray-300 p-2">Grado</th>
+                                <th class="border border-gray-300 p-2">Padre/Madre</th>
+                                <th class="border border-gray-300 p-2">Teléfono</th>
+                                <th class="border border-gray-300 p-2">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${systemData.students.map(student => `
+                                <tr>
+                                    <td class="border border-gray-300 p-2">${student.document}</td>
+                                    <td class="border border-gray-300 p-2">${student.name}</td>
+                                    <td class="border border-gray-300 p-2">${student.grade}</td>
+                                    <td class="border border-gray-300 p-2">${student.parent}</td>
+                                    <td class="border border-gray-300 p-2">${student.phone}</td>
+                                    <td class="border border-gray-300 p-2">
+                                        <button onclick="editStudent(${student.id})" class="bg-yellow-500 text-white px-2 py-1 rounded text-sm mr-1">✏️</button>
+                                        <button onclick="deleteStudent(${student.id})" class="bg-red-500 text-white px-2 py-1 rounded text-sm">🗑️</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function generateTeachersTable() {
+            if (systemData.teachers.length === 0) {
+                return '<p class="text-gray-500 text-center py-8">No hay profesores registrados</p>';
+            }
+            
+            return `
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="border border-gray-300 p-2">Usuario</th>
+                                <th class="border border-gray-300 p-2">Nombre</th>
+                                <th class="border border-gray-300 p-2">Materia</th>
+                                <th class="border border-gray-300 p-2">Teléfono</th>
+                                <th class="border border-gray-300 p-2">Rol</th>
+                                <th class="border border-gray-300 p-2">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${systemData.teachers.map(teacher => `
+                                <tr>
+                                    <td class="border border-gray-300 p-2">${teacher.username}</td>
+                                    <td class="border border-gray-300 p-2">${teacher.name}</td>
+                                    <td class="border border-gray-300 p-2">${teacher.subject}</td>
+                                    <td class="border border-gray-300 p-2">${teacher.phone}</td>
+                                    <td class="border border-gray-300 p-2">
+                                        ${teacher.coordinator ? '👑 Coordinador' : ''}
+                                        ${teacher.areaTeacher ? '📚 Profesor de Área' : ''}
+                                    </td>
+                                    <td class="border border-gray-300 p-2">
+                                        <button onclick="editTeacher(${teacher.id})" class="bg-yellow-500 text-white px-2 py-1 rounded text-sm mr-1">✏️</button>
+                                        <button onclick="deleteTeacher(${teacher.id})" class="bg-red-500 text-white px-2 py-1 rounded text-sm">🗑️</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function showAddStudentForm() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex items-center mb-6">
+                        <button onclick="showSection('students')" class="mr-4 text-blue-600 hover:text-blue-800">← Volver</button>
+                        <h2 class="text-2xl font-bold">➕ Agregar Nuevo Estudiante</h2>
                     </div>
-                    <div>
-                        <p class="font-bold text-gray-800">${mensaje}</p>
-                        <p class="text-sm text-gray-600">Portal Educativo</p>
+                    
+                    <form onsubmit="addStudent(event)" class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Documento de Identidad *</label>
+                                <input type="text" id="studentDocument" class="w-full p-2 border rounded" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Nombre Completo *</label>
+                                <input type="text" id="studentName" class="w-full p-2 border rounded" required>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Grado *</label>
+                                <select id="studentGrade" class="w-full p-2 border rounded" required>
+                                    <option value="">Seleccionar grado...</option>
+                                    ${systemData.grades.map(grade => `<option value="${grade}">${grade}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Nombre del Padre/Madre *</label>
+                                <input type="text" id="studentParent" class="w-full p-2 border rounded" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Teléfono de Contacto *</label>
+                            <input type="tel" id="studentPhone" class="w-full p-2 border rounded" required>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition-colors">
+                                💾 Guardar Estudiante
+                            </button>
+                            <button type="button" onclick="showSection('students')" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded transition-colors">
+                                ❌ Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        }
+
+        function addStudent(event) {
+            event.preventDefault();
+            
+            const newStudent = {
+                id: Date.now(),
+                document: document.getElementById('studentDocument').value,
+                name: document.getElementById('studentName').value,
+                grade: document.getElementById('studentGrade').value,
+                parent: document.getElementById('studentParent').value,
+                phone: document.getElementById('studentPhone').value,
+                grades: {}
+            };
+            
+            // Verificar que no exista el documento
+            if (systemData.students.find(s => s.document === newStudent.document)) {
+                showNotification('Ya existe un estudiante con ese documento', 'error');
+                return;
+            }
+            
+            // Inicializar notas para todas las materias por períodos
+            newStudent.grades = {};
+            systemData.periods.forEach(period => {
+                newStudent.grades[period] = {};
+                systemData.subjects.forEach(subject => {
+                    newStudent.grades[period][subject] = {
+                        asistencia: 0,
+                        cuaderno: 0,
+                        trabajo: 0,
+                        evaluacion: 0
+                    };
+                });
+            });
+            
+            systemData.students.push(newStudent);
+            saveData();
+            showNotification('Estudiante agregado correctamente', 'success');
+            showSection('students');
+        }
+
+        function showAddTeacherForm() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex items-center mb-6">
+                        <button onclick="showSection('teachers')" class="mr-4 text-blue-600 hover:text-blue-800">← Volver</button>
+                        <h2 class="text-2xl font-bold">➕ Agregar Nuevo Profesor</h2>
+                    </div>
+                    
+                    <form onsubmit="addTeacher(event)" class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Usuario *</label>
+                                <input type="text" id="teacherUsername" class="w-full p-2 border rounded" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Contraseña *</label>
+                                <input type="password" id="teacherPassword" class="w-full p-2 border rounded" required>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Nombre Completo *</label>
+                                <input type="text" id="teacherName" class="w-full p-2 border rounded" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Materia Principal *</label>
+                                <select id="teacherSubject" class="w-full p-2 border rounded" required>
+                                    <option value="">Seleccionar materia...</option>
+                                    ${systemData.subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Teléfono</label>
+                            <input type="tel" id="teacherPhone" class="w-full p-2 border rounded">
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="teacherCoordinator" class="mr-2">
+                                    <span class="text-sm">👑 Coordinador de Grupo</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="teacherAreaTeacher" class="mr-2" checked>
+                                    <span class="text-sm">📚 Profesor de Área</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition-colors">
+                                💾 Guardar Profesor
+                            </button>
+                            <button type="button" onclick="showSection('teachers')" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded transition-colors">
+                                ❌ Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        }
+
+        function addTeacher(event) {
+            event.preventDefault();
+            
+            const newTeacher = {
+                id: Date.now(),
+                username: document.getElementById('teacherUsername').value,
+                password: document.getElementById('teacherPassword').value,
+                name: document.getElementById('teacherName').value,
+                subject: document.getElementById('teacherSubject').value,
+                phone: document.getElementById('teacherPhone').value,
+                coordinator: document.getElementById('teacherCoordinator').checked,
+                areaTeacher: document.getElementById('teacherAreaTeacher').checked
+            };
+            
+            // Verificar que no exista el usuario
+            if (systemData.teachers.find(t => t.username === newTeacher.username)) {
+                showNotification('Ya existe un profesor con ese usuario', 'error');
+                return;
+            }
+            
+            systemData.teachers.push(newTeacher);
+            saveData();
+            showNotification('Profesor agregado correctamente', 'success');
+            showSection('teachers');
+        }
+
+        function deleteStudent(id) {
+            if (confirm('¿Estás seguro de eliminar este estudiante?')) {
+                systemData.students = systemData.students.filter(s => s.id !== id);
+                saveData();
+                showNotification('Estudiante eliminado correctamente', 'success');
+                showSection('students');
+            }
+        }
+
+        function deleteTeacher(id) {
+            if (confirm('¿Estás seguro de eliminar este profesor?')) {
+                systemData.teachers = systemData.teachers.filter(t => t.id !== id);
+                saveData();
+                showNotification('Profesor eliminado correctamente', 'success');
+                showSection('teachers');
+            }
+        }
+
+        function showStudentGrades() {
+            const studentId = document.getElementById('studentSelect').value;
+            if (!studentId) return;
+            
+            const student = systemData.students.find(s => s.id == studentId);
+            if (!student) return;
+            
+            const gradesDisplay = document.getElementById('gradesDisplay');
+            gradesDisplay.innerHTML = `
+                <div class="bg-gray-50 p-4 rounded mb-4">
+                    <h3 class="text-lg font-semibold">📊 Notas de ${student.name} - ${student.grade}</h3>
+                    <div class="mt-2">
+                        <label class="block text-sm font-medium mb-1">Seleccionar Período:</label>
+                        <select id="periodSelect" class="p-2 border rounded" onchange="updateGradesView()">
+                            ${systemData.periods.map(period => `<option value="${period}">${period}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <div id="periodGradesTable"></div>
+            `;
+            
+            updateGradesView();
+        }
+
+        function updateGradesView() {
+            const studentId = document.getElementById('studentSelect').value;
+            const selectedPeriod = document.getElementById('periodSelect').value;
+            
+            if (!studentId || !selectedPeriod) return;
+            
+            const student = systemData.students.find(s => s.id == studentId);
+            if (!student) return;
+            
+            const periodGradesTable = document.getElementById('periodGradesTable');
+            periodGradesTable.innerHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead class="bg-blue-100">
+                            <tr>
+                                <th class="border border-gray-300 p-2">Materia</th>
+                                <th class="border border-gray-300 p-2">Asistencia (20%)</th>
+                                <th class="border border-gray-300 p-2">Cuaderno (20%)</th>
+                                <th class="border border-gray-300 p-2">Trabajo (30%)</th>
+                                <th class="border border-gray-300 p-2">Evaluación (30%)</th>
+                                <th class="border border-gray-300 p-2">Nota Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${systemData.subjects.map(subject => {
+                                const grades = student.grades[selectedPeriod] && student.grades[selectedPeriod][subject] 
+                                    ? student.grades[selectedPeriod][subject] 
+                                    : { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 };
+                                const finalGrade = (grades.asistencia * 0.2 + grades.cuaderno * 0.2 + grades.trabajo * 0.3 + grades.evaluacion * 0.3).toFixed(1);
+                                return `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 font-medium">${subject}</td>
+                                        <td class="border border-gray-300 p-2 text-center">${grades.asistencia}</td>
+                                        <td class="border border-gray-300 p-2 text-center">${grades.cuaderno}</td>
+                                        <td class="border border-gray-300 p-2 text-center">${grades.trabajo}</td>
+                                        <td class="border border-gray-300 p-2 text-center">${grades.evaluacion}</td>
+                                        <td class="border border-gray-300 p-2 text-center font-bold ${finalGrade >= 70 ? 'text-green-600' : 'text-red-600'}">${finalGrade}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function generateScheduleDisplay() {
+            if (systemData.schedule.length === 0) {
+                return '<p class="text-gray-500 text-center py-8">No hay eventos programados</p>';
+            }
+            
+            return `
+                <div class="space-y-4">
+                    ${systemData.schedule.map(event => `
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-semibold text-lg">${event.title}</h3>
+                                    <p class="text-gray-600">📅 ${event.date} - ⏰ ${event.time}</p>
+                                    <p class="text-gray-700 mt-2">${event.description}</p>
+                                </div>
+                                <button onclick="deleteEvent(${event.id})" class="text-red-500 hover:text-red-700">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function showAddEventForm() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex items-center mb-6">
+                        <button onclick="showSection('schedule')" class="mr-4 text-blue-600 hover:text-blue-800">← Volver</button>
+                        <h2 class="text-2xl font-bold">➕ Agregar Nuevo Evento</h2>
+                    </div>
+                    
+                    <form onsubmit="addEvent(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Título del Evento *</label>
+                            <input type="text" id="eventTitle" class="w-full p-2 border rounded" required>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Fecha *</label>
+                                <input type="date" id="eventDate" class="w-full p-2 border rounded" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Hora *</label>
+                                <input type="time" id="eventTime" class="w-full p-2 border rounded" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Descripción</label>
+                            <textarea id="eventDescription" class="w-full p-2 border rounded h-24" placeholder="Descripción del evento..."></textarea>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded transition-colors">
+                                💾 Guardar Evento
+                            </button>
+                            <button type="button" onclick="showSection('schedule')" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded transition-colors">
+                                ❌ Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        }
+
+        function addEvent(event) {
+            event.preventDefault();
+            
+            const newEvent = {
+                id: Date.now(),
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                description: document.getElementById('eventDescription').value
+            };
+            
+            systemData.schedule.push(newEvent);
+            saveData();
+            showNotification('Evento agregado correctamente', 'success');
+            showSection('schedule');
+        }
+
+        function deleteEvent(id) {
+            if (confirm('¿Estás seguro de eliminar este evento?')) {
+                systemData.schedule = systemData.schedule.filter(e => e.id !== id);
+                saveData();
+                showNotification('Evento eliminado correctamente', 'success');
+                showSection('schedule');
+            }
+        }
+
+        function generateReport() {
+            const studentId = document.getElementById('reportStudentSelect').value;
+            if (!studentId) return;
+            
+            const student = systemData.students.find(s => s.id == studentId);
+            if (!student) return;
+            
+            const reportDisplay = document.getElementById('reportDisplay');
+            const currentDate = new Date().toLocaleDateString('es-ES');
+            
+            // Calcular promedios por período y general
+            let periodAverages = {};
+            let totalFinalGrade = 0;
+            let periodsWithGrades = 0;
+            
+            // Calcular promedios por período
+            systemData.periods.forEach(period => {
+                if (student.grades[period]) {
+                    let periodTotal = 0;
+                    let subjectsInPeriod = 0;
+                    
+                    systemData.subjects.forEach(subject => {
+                        if (student.grades[period][subject]) {
+                            const grades = student.grades[period][subject];
+                            const finalGrade = grades.asistencia * 0.2 + grades.cuaderno * 0.2 + grades.trabajo * 0.3 + grades.evaluacion * 0.3;
+                            if (finalGrade > 0) {
+                                periodTotal += finalGrade;
+                                subjectsInPeriod++;
+                            }
+                        }
+                    });
+                    
+                    if (subjectsInPeriod > 0) {
+                        periodAverages[period] = (periodTotal / subjectsInPeriod).toFixed(1);
+                        totalFinalGrade += parseFloat(periodAverages[period]);
+                        periodsWithGrades++;
+                    } else {
+                        periodAverages[period] = '0.0';
+                    }
+                }
+            });
+
+            const finalAverage = periodsWithGrades > 0 ? (totalFinalGrade / periodsWithGrades).toFixed(1) : '0.0';
+
+            const reportContent = `
+                <div class="bg-white border-2 border-gray-300 p-8 rounded-lg">
+                    <div class="text-center mb-8">
+                        <h2 class="text-2xl font-bold text-primary mb-2">🏫 LICEO EXPLORADORES DE SUEÑOS</h2>
+                        <p class="text-gray-600">Villa Gorgona - Candelaria</p>
+                        <p class="text-gray-600">Carrera 13# 8-48 Callejón Betania</p>
+                        <hr class="my-4">
+                        <h3 class="text-xl font-semibold">📋 BOLETÍN DE CALIFICACIONES CONSOLIDADO</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <p><strong>Estudiante:</strong> ${student.name}</p>
+                            <p><strong>Documento:</strong> ${student.document}</p>
+                            <p><strong>Grado:</strong> ${student.grade}</p>
+                        </div>
+                        <div>
+                            <p><strong>Padre/Madre:</strong> ${student.parent}</p>
+                            <p><strong>Fecha:</strong> ${currentDate}</p>
+                            <p><strong>Año Académico:</strong> 2024</p>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto mb-6">
+                        <table class="w-full border-collapse border border-gray-400">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="border border-gray-400 p-2">ÁREA/MATERIA</th>
+                                    ${systemData.periods.map(period => `<th class="border border-gray-400 p-2">${period}</th>`).join('')}
+                                    <th class="border border-gray-400 p-2">PROMEDIO</th>
+                                    <th class="border border-gray-400 p-2">ESTADO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${systemData.subjects.map(subject => {
+                                    let subjectTotal = 0;
+                                    let periodsWithSubjectGrades = 0;
+                                    
+                                    const periodGrades = systemData.periods.map(period => {
+                                        if (student.grades[period] && student.grades[period][subject]) {
+                                            const grades = student.grades[period][subject];
+                                            const finalGrade = (grades.asistencia * 0.2 + grades.cuaderno * 0.2 + grades.trabajo * 0.3 + grades.evaluacion * 0.3);
+                                            if (finalGrade > 0) {
+                                                subjectTotal += finalGrade;
+                                                periodsWithSubjectGrades++;
+                                            }
+                                            return finalGrade.toFixed(1);
+                                        }
+                                        return '0.0';
+                                    });
+                                    
+                                    const subjectAverage = periodsWithSubjectGrades > 0 ? (subjectTotal / periodsWithSubjectGrades).toFixed(1) : '0.0';
+                                    const status = parseFloat(subjectAverage) >= 70 ? 'APROBADO' : 'PENDIENTE';
+                                    const statusColor = parseFloat(subjectAverage) >= 70 ? 'text-green-600' : 'text-red-600';
+                                    
+                                    return `
+                                        <tr>
+                                            <td class="border border-gray-400 p-2 font-medium">${subject}</td>
+                                            ${periodGrades.map(grade => `<td class="border border-gray-400 p-2 text-center">${grade}</td>`).join('')}
+                                            <td class="border border-gray-400 p-2 text-center font-bold">${subjectAverage}</td>
+                                            <td class="border border-gray-400 p-2 text-center font-bold ${statusColor}">${status}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded mb-6">
+                        <h4 class="font-semibold mb-4 text-center">PROMEDIOS POR PERÍODO</h4>
+                        <div class="grid md:grid-cols-4 gap-4 text-center mb-4">
+                            ${systemData.periods.map(period => `
+                                <div>
+                                    <p class="font-semibold">${period}</p>
+                                    <p class="text-xl font-bold ${parseFloat(periodAverages[period]) >= 70 ? 'text-green-600' : 'text-red-600'}">${periodAverages[period]}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="border-t pt-4">
+                            <div class="grid md:grid-cols-3 gap-4 text-center">
+                                <div>
+                                    <p class="font-semibold">PROMEDIO FINAL</p>
+                                    <p class="text-3xl font-bold ${parseFloat(finalAverage) >= 70 ? 'text-green-600' : 'text-red-600'}">${finalAverage}</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">MATERIAS APROBADAS</p>
+                                    <p class="text-2xl font-bold text-green-600">${systemData.subjects.filter(subject => {
+                                        let subjectTotal = 0;
+                                        let periodsCount = 0;
+                                        systemData.periods.forEach(period => {
+                                            if (student.grades[period] && student.grades[period][subject]) {
+                                                const grades = student.grades[period][subject];
+                                                const finalGrade = grades.asistencia * 0.2 + grades.cuaderno * 0.2 + grades.trabajo * 0.3 + grades.evaluacion * 0.3;
+                                                if (finalGrade > 0) {
+                                                    subjectTotal += finalGrade;
+                                                    periodsCount++;
+                                                }
+                                            }
+                                        });
+                                        return periodsCount > 0 && (subjectTotal / periodsCount) >= 70;
+                                    }).length}</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">TOTAL MATERIAS</p>
+                                    <p class="text-2xl font-bold text-blue-600">${systemData.subjects.length}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center text-sm text-gray-600">
+                        <p>Este boletín consolida las calificaciones de todos los períodos académicos</p>
+                        <p>Liceo Exploradores de Sueños - ${currentDate}</p>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <button onclick="printReport()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition-colors mr-2">
+                            🖨️ Imprimir Boletín
+                        </button>
                     </div>
                 </div>
             `;
             
-            document.body.appendChild(notification);
+            reportDisplay.innerHTML = reportContent;
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        // Funciones del panel de profesores
+        function showTeacherSection(section) {
+            const content = document.getElementById('teacherContent');
             
-            setTimeout(() => {
-                notification.style.animation = 'slideIn 0.5s reverse';
-                setTimeout(() => notification.remove(), 500);
-            }, 3000);
+            switch(section) {
+                case 'myStudents':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">👨‍🎓 Mis Estudiantes</h2>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${systemData.students.map(student => `
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h3 class="font-semibold">${student.name}</h3>
+                                    <p class="text-gray-600">Grado: ${student.grade}</p>
+                                    <p class="text-gray-600">Documento: ${student.document}</p>
+                                    <p class="text-gray-600">Padre/Madre: ${student.parent}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    break;
+                    
+                case 'enterGrades':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📝 Ingresar Notas</h2>
+                        <div class="mb-4">
+                            <select id="gradeStudentSelect" class="w-full p-2 border rounded mb-4" onchange="showGradeForm()">
+                                <option value="">Seleccionar estudiante...</option>
+                                ${systemData.students.map(s => `<option value="${s.id}">${s.name} - ${s.grade}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div id="gradeForm"></div>
+                    `;
+                    break;
+                    
+                case 'viewSchedule':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📅 Cronograma de Actividades</h2>
+                        ${generateScheduleDisplay()}
+                    `;
+                    break;
+                    
+                case 'attendance':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">✅ Control de Asistencia</h2>
+                        <div class="bg-yellow-100 border border-yellow-400 rounded p-4 mb-4">
+                            <p class="text-yellow-800">💡 <strong>Información:</strong> La asistencia se registra como parte de las notas de cada materia.</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${systemData.students.map(student => `
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-semibold">${student.name}</h3>
+                                    <p class="text-gray-600">Grado: ${student.grade}</p>
+                                    <div class="mt-2">
+                                        <button onclick="markAttendance(${student.id}, true)" class="bg-green-500 text-white px-3 py-1 rounded text-sm mr-2">✅ Presente</button>
+                                        <button onclick="markAttendance(${student.id}, false)" class="bg-red-500 text-white px-3 py-1 rounded text-sm">❌ Ausente</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        function showGradeForm() {
+            const studentId = document.getElementById('gradeStudentSelect').value;
+            if (!studentId) return;
+            
+            const student = systemData.students.find(s => s.id == studentId);
+            if (!student) return;
+            
+            const gradeForm = document.getElementById('gradeForm');
+            gradeForm.innerHTML = `
+                <div class="bg-gray-50 p-4 rounded mb-4">
+                    <h3 class="text-lg font-semibold">Ingresando notas para: ${student.name} - ${student.grade}</h3>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Seleccionar Período:</label>
+                        <select id="periodSelectTeacher" class="w-full p-2 border rounded" onchange="showSubjectGrades()">
+                            ${systemData.periods.map(period => `<option value="${period}" ${period === systemData.currentPeriod ? 'selected' : ''}>${period}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Seleccionar Materia:</label>
+                        <select id="subjectSelect" class="w-full p-2 border rounded" onchange="showSubjectGrades()">
+                            <option value="">Seleccionar materia...</option>
+                            ${systemData.subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="subjectGradeForm"></div>
+            `;
+        }
+
+        function showSubjectGrades() {
+            const studentId = document.getElementById('gradeStudentSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+            const period = document.getElementById('periodSelectTeacher').value;
+            
+            if (!studentId || !subject || !period) return;
+            
+            const student = systemData.students.find(s => s.id == studentId);
+            
+            // Asegurar que existe la estructura de períodos
+            if (!student.grades[period]) {
+                student.grades[period] = {};
+            }
+            if (!student.grades[period][subject]) {
+                student.grades[period][subject] = { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 };
+            }
+            
+            const grades = student.grades[period][subject];
+            
+            const subjectGradeForm = document.getElementById('subjectGradeForm');
+            subjectGradeForm.innerHTML = `
+                <form onsubmit="saveGrades(event)" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Asistencia (20%)</label>
+                            <input type="number" id="asistencia" min="0" max="100" value="${grades.asistencia}" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cuaderno (20%)</label>
+                            <input type="number" id="cuaderno" min="0" max="100" value="${grades.cuaderno}" class="w-full p-2 border rounded" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Trabajo (30%)</label>
+                            <input type="number" id="trabajo" min="0" max="100" value="${grades.trabajo}" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Evaluación (30%)</label>
+                            <input type="number" id="evaluacion" min="0" max="100" value="${grades.evaluacion}" class="w-full p-2 border rounded" required>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded">
+                        <p class="text-sm text-blue-800">
+                            <strong>Nota Final Calculada:</strong> 
+                            <span id="calculatedGrade">0.0</span>
+                        </p>
+                    </div>
+                    
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition-colors">
+                        💾 Guardar Notas
+                    </button>
+                </form>
+            `;
+            
+            // Agregar event listeners para calcular nota en tiempo real
+            ['asistencia', 'cuaderno', 'trabajo', 'evaluacion'].forEach(field => {
+                document.getElementById(field).addEventListener('input', calculateGrade);
+            });
+            
+            calculateGrade();
+        }
+
+        function calculateGrade() {
+            const asistencia = parseFloat(document.getElementById('asistencia').value) || 0;
+            const cuaderno = parseFloat(document.getElementById('cuaderno').value) || 0;
+            const trabajo = parseFloat(document.getElementById('trabajo').value) || 0;
+            const evaluacion = parseFloat(document.getElementById('evaluacion').value) || 0;
+            
+            const finalGrade = (asistencia * 0.2 + cuaderno * 0.2 + trabajo * 0.3 + evaluacion * 0.3).toFixed(1);
+            document.getElementById('calculatedGrade').textContent = finalGrade;
+        }
+
+        function saveGrades(event) {
+            event.preventDefault();
+            
+            const studentId = document.getElementById('gradeStudentSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+            const period = document.getElementById('periodSelectTeacher').value;
+            
+            const student = systemData.students.find(s => s.id == studentId);
+            
+            // Asegurar estructura de períodos
+            if (!student.grades[period]) {
+                student.grades[period] = {};
+            }
+            
+            student.grades[period][subject] = {
+                asistencia: parseFloat(document.getElementById('asistencia').value),
+                cuaderno: parseFloat(document.getElementById('cuaderno').value),
+                trabajo: parseFloat(document.getElementById('trabajo').value),
+                evaluacion: parseFloat(document.getElementById('evaluacion').value)
+            };
+            
+            saveData();
+            showNotification(`Notas guardadas correctamente para ${period} - ${subject}`, 'success');
+        }
+
+        function markAttendance(studentId, present) {
+            const student = systemData.students.find(s => s.id == studentId);
+            if (student) {
+                // Actualizar asistencia en todas las materias del profesor actual
+                const attendanceValue = present ? 100 : 0;
+                systemData.subjects.forEach(subject => {
+                    if (!student.grades[subject]) {
+                        student.grades[subject] = { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 };
+                    }
+                    student.grades[subject].asistencia = attendanceValue;
+                });
+                
+                saveData();
+                showNotification(`Asistencia marcada para ${student.name}: ${present ? 'Presente' : 'Ausente'}`, 'success');
+            }
+        }
+
+        // Funciones del panel de padres
+        function showParentSection(section) {
+            const content = document.getElementById('parentContent');
+            const student = currentUser;
+            
+            switch(section) {
+                case 'grades':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📊 Notas de ${student.name}</h2>
+                        <div class="bg-blue-50 p-4 rounded mb-6">
+                            <h3 class="font-semibold">Información del Estudiante</h3>
+                            <p>Nombre: ${student.name}</p>
+                            <p>Grado: ${student.grade}</p>
+                            <p>Documento: ${student.document}</p>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-gray-300">
+                                <thead class="bg-blue-100">
+                                    <tr>
+                                        <th class="border border-gray-300 p-2">Materia</th>
+                                        <th class="border border-gray-300 p-2">Asistencia</th>
+                                        <th class="border border-gray-300 p-2">Cuaderno</th>
+                                        <th class="border border-gray-300 p-2">Trabajo</th>
+                                        <th class="border border-gray-300 p-2">Evaluación</th>
+                                        <th class="border border-gray-300 p-2">Nota Final</th>
+                                        <th class="border border-gray-300 p-2">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${systemData.subjects.map(subject => {
+                                        const grades = student.grades[subject] || { asistencia: 0, cuaderno: 0, trabajo: 0, evaluacion: 0 };
+                                        const finalGrade = (grades.asistencia * 0.2 + grades.cuaderno * 0.2 + grades.trabajo * 0.3 + grades.evaluacion * 0.3).toFixed(1);
+                                        const status = finalGrade >= 70 ? '✅ Aprobado' : '⚠️ Pendiente';
+                                        const statusColor = finalGrade >= 70 ? 'text-green-600' : 'text-red-600';
+                                        
+                                        return `
+                                            <tr>
+                                                <td class="border border-gray-300 p-2 font-medium">${subject}</td>
+                                                <td class="border border-gray-300 p-2 text-center">${grades.asistencia}</td>
+                                                <td class="border border-gray-300 p-2 text-center">${grades.cuaderno}</td>
+                                                <td class="border border-gray-300 p-2 text-center">${grades.trabajo}</td>
+                                                <td class="border border-gray-300 p-2 text-center">${grades.evaluacion}</td>
+                                                <td class="border border-gray-300 p-2 text-center font-bold">${finalGrade}</td>
+                                                <td class="border border-gray-300 p-2 text-center ${statusColor}">${status}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'attendance':
+                    const totalDays = 20; // Días del mes
+                    const presentDays = Math.floor(Math.random() * 5) + 16; // Entre 16-20 días
+                    const attendancePercentage = ((presentDays / totalDays) * 100).toFixed(1);
+                    
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">✅ Asistencia de ${student.name}</h2>
+                        
+                        <div class="grid md:grid-cols-3 gap-6 mb-6">
+                            <div class="bg-green-100 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-green-600">${presentDays}</div>
+                                <div class="text-green-800">Días Presente</div>
+                            </div>
+                            <div class="bg-red-100 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-red-600">${totalDays - presentDays}</div>
+                                <div class="text-red-800">Días Ausente</div>
+                            </div>
+                            <div class="bg-blue-100 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-blue-600">${attendancePercentage}%</div>
+                                <div class="text-blue-800">Porcentaje</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border">
+                            <h3 class="font-semibold mb-4">Registro Mensual</h3>
+                            <div class="grid grid-cols-7 gap-2 text-center text-sm">
+                                ${Array.from({length: totalDays}, (_, i) => {
+                                    const isPresent = i < presentDays;
+                                    return `<div class="p-2 rounded ${isPresent ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">${i + 1}</div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'schedule':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📅 Cronograma de Actividades</h2>
+                        ${generateScheduleDisplay()}
+                    `;
+                    break;
+                    
+                case 'contact':
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold mb-6">📞 Información de Contacto</h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg border">
+                                <h3 class="font-semibold mb-4">🏫 Liceo Exploradores de Sueños</h3>
+                                <p class="mb-2"><strong>Dirección:</strong> Carrera 13# 8-48 Callejón Betania</p>
+                                <p class="mb-2">Villagorgona, Candelaria</p>
+                                <p class="mb-4"><strong>Teléfono:</strong> 313-564-96-61</p>
+                                
+                                <div class="space-y-2">
+                                    <button onclick="openWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition-colors">
+                                        💬 Contactar por WhatsApp
+                                    </button>
+                                    <button onclick="openMaps()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition-colors">
+                                        📍 Ver Ubicación en Maps
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-lg border">
+                                <h3 class="font-semibold mb-4">👨‍👩‍👧‍👦 Información del Estudiante</h3>
+                                <p class="mb-2"><strong>Estudiante:</strong> ${student.name}</p>
+                                <p class="mb-2"><strong>Grado:</strong> ${student.grade}</p>
+                                <p class="mb-2"><strong>Documento:</strong> ${student.document}</p>
+                                <p class="mb-4"><strong>Padre/Madre:</strong> ${student.parent}</p>
+                                
+                                <div class="bg-yellow-50 p-4 rounded border border-yellow-200">
+                                    <p class="text-sm text-yellow-800">
+                                        💡 <strong>Recordatorio:</strong> Para cualquier consulta académica, 
+                                        puedes contactarnos por WhatsApp o visitar nuestras instalaciones.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Funciones de utilidad adicionales
+        function exportData() {
+            const dataStr = JSON.stringify(systemData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'liceo_datos_' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            showNotification('Datos exportados correctamente', 'success');
+        }
+
+        function clearData() {
+            if (confirm('¿Estás seguro de limpiar todos los datos? Esta acción no se puede deshacer.')) {
+                systemData.students = [];
+                systemData.teachers = [];
+                systemData.schedule = [];
+                localStorage.removeItem('liceoData');
+                showNotification('Datos limpiados correctamente', 'info');
+                showSection('settings');
+            }
         }
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                mostrarNotificacion('¡Bienvenido al Portal Educativo!', 'success');
-            }, 1000);
+            loadData();
+            
+            // Configurar fecha mínima para eventos
+            const today = new Date().toISOString().split('T')[0];
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(input => {
+                input.min = today;
+            });
+        });
+
+        // Hacer responsive las tablas
+        window.addEventListener('resize', function() {
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                if (window.innerWidth < 768) {
+                    table.style.fontSize = '12px';
+                } else {
+                    table.style.fontSize = '14px';
+                }
+            });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98038dff32203eeb',t:'MTc1ODA1OTE2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
