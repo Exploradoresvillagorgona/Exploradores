@@ -3,2224 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liceo Exploradores de Sueños - Sistema Académico</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1e3a8a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Liceo Exploradores">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'school-blue': '#1e3a8a',
-                        'school-yellow': '#fbbf24',
-                        'neon-blue': '#00d4ff',
-                        'neon-purple': '#8b5cf6',
-                    },
-                    animation: {
-                        'float': 'float 3s ease-in-out infinite',
-                        'slide-up': 'slideUp 0.5s ease-out',
-                        'bounce-in': 'bounceIn 0.6s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
+    <title>Liceo Exploradores de Sueños</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        /* Glassmorphism */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-        }
-        
-        .modern-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .modern-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* 3D Buttons */
-        .btn-3d {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-            transform: translateY(0);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        
-        .btn-3d::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-3d:hover::before {
-            left: 100%;
-        }
-        
-        .btn-3d:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
-        }
-        
-        /* User Type Cards */
-        .user-type-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .user-type-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-        
-        .user-type-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-            border-color: #667eea;
-        }
-        
-        .user-type-card:hover::before {
-            opacity: 0.1;
-        }
-        
-        .user-type-card:hover .card-content {
-            color: #1e3a8a;
-        }
-        
-        /* Sync Status */
-        .sync-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .sync-online {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-        
-        .sync-offline {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-        
-        .sync-syncing {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-        
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .neon-border {
-            border: 2px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                       linear-gradient(45deg, #00d4ff, #8b5cf6) border-box;
-        }
-        
-        .loading-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid #00d4ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        /* Notification System */
-        .notification {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 1001;
-            padding: 16px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification.success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .notification.error {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-        
-        .notification.warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        .notification.info {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-        }
-        
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
-            .sync-indicator {
-                top: 10px;
-                right: 10px;
-                font-size: 10px;
-                padding: 6px 12px;
-            }
-            
-            .notification {
-                right: 10px;
-                left: 10px;
-                transform: translateY(-100px);
-            }
-            
-            .notification.show {
-                transform: translateY(0);
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Sync Status Indicator -->
-    <div id="syncStatus" class="sync-indicator sync-online">
-        <div class="w-2 h-2 rounded-full bg-current"></div>
-        <span>Sistema Listo</span>
-    </div>
-
-    <!-- Header -->
-    <header class="glass-card text-white py-8 shadow-2xl relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-school-blue via-neon-purple to-neon-blue opacity-90"></div>
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-6">
-                    <div class="glass-card rounded-full p-4 animate-bounce-in">
-                        <span class="text-4xl">🏫</span>
-                    </div>
-                    <div class="animate-slide-up">
-                        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-school-yellow bg-clip-text text-transparent">
-                            Liceo Exploradores de Sueños
-                        </h1>
-                        <p class="text-school-yellow font-medium text-lg">Villa Gorgona - Candelaria 2025</p>
-                        <div id="connectionInfo" class="text-xs text-white opacity-75 mt-1">
-                            🌐 Sincronización automática activa
-                        </div>
-                    </div>
-                </div>
-                <div id="userInfo" class="hidden text-right glass-card p-4 rounded-xl">
-                    <p class="font-medium text-lg" id="welcomeText"></p>
-                    <button onclick="logout()" class="text-school-yellow hover:text-white text-sm transition-colors duration-300">
-                        🚪 Cerrar Sesión
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Menu Screen -->
-    <div id="mainMenuScreen" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-school-blue via-neon-purple to-neon-blue"></div>
-        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-        
-        <!-- Floating Elements -->
-        <div class="absolute top-20 left-10 w-20 h-20 bg-white bg-opacity-10 rounded-full animate-float"></div>
-        <div class="absolute bottom-20 right-10 w-32 h-32 bg-school-yellow bg-opacity-10 rounded-full animate-float" style="animation-delay: 1s;"></div>
-        
-        <div class="w-full max-w-6xl relative z-10">
-            <!-- Welcome Section -->
-            <div class="text-center mb-12 animate-slide-up">
-                <div class="glass-card rounded-full w-32 h-32 flex items-center justify-center mx-auto mb-8 animate-bounce-in">
-                    <span class="text-7xl">🎓</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">¡Bienvenido al Sistema Académico!</h2>
-                <p class="text-xl text-white opacity-90 mb-8">Selecciona tu tipo de usuario para continuar</p>
-            </div>
-
-            <!-- User Type Selection -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <!-- Parents Card -->
-                <div class="user-type-card p-8 text-center animate-slide-up" onclick="showLoginForm('parent')" style="animation-delay: 0.1s;">
-                    <div class="card-content">
-                        <div class="text-6xl mb-6">👨‍👩‍👧‍👦</div>
-                        <h3 class="text-2xl font-bold gradient-text mb-4">Padres de Familia</h3>
-                        <p class="text-gray-600 text-lg mb-6">Consulta las notas, asistencia y cronograma de actividades de tu hijo</p>
-                        <div class="bg-blue-50 rounded-xl p-4 border-l-4 border-blue-500">
-                            <p class="text-sm text-blue-700 font-medium">
-                                ✅ Ver notas en tiempo real<br>
-                                ✅ Consultar asistencia<br>
-                                ✅ Cronograma de eventos
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Teachers Card -->
-                <div class="user-type-card p-8 text-center animate-slide-up" onclick="showLoginForm('teacher')" style="animation-delay: 0.2s;">
-                    <div class="card-content">
-                        <div class="text-6xl mb-6">👨‍🏫</div>
-                        <h3 class="text-2xl font-bold gradient-text mb-4">Profesores</h3>
-                        <p class="text-gray-600 text-lg mb-6">Ingresa notas, registra asistencia y gestiona tus clases</p>
-                        <div class="bg-green-50 rounded-xl p-4 border-l-4 border-green-500">
-                            <p class="text-sm text-green-700 font-medium">
-                                ✅ Ingresar calificaciones<br>
-                                ✅ Registrar asistencia<br>
-                                ✅ Ver cronograma
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Admin Card -->
-                <div class="user-type-card p-8 text-center animate-slide-up" onclick="showLoginForm('admin')" style="animation-delay: 0.3s;">
-                    <div class="card-content">
-                        <div class="text-6xl mb-6">👨‍💼</div>
-                        <h3 class="text-2xl font-bold gradient-text mb-4">Administrador</h3>
-                        <p class="text-gray-600 text-lg mb-6">Gestiona estudiantes, profesores y todo el sistema académico</p>
-                        <div class="bg-purple-50 rounded-xl p-4 border-l-4 border-purple-500">
-                            <p class="text-sm text-purple-700 font-medium">
-                                ✅ Gestionar estudiantes<br>
-                                ✅ Administrar profesores<br>
-                                ✅ Control total del sistema
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact Info -->
-            <div class="modern-card p-6 max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.4s;">
-                <h3 class="font-semibold text-gray-800 mb-4 text-center text-xl">📞 Información de Contacto</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                        <span class="font-medium text-gray-700">📱 WhatsApp:</span>
-                        <a href="https://wa.me/573135649661" target="_blank" class="btn-3d text-white px-4 py-2 rounded-full text-sm">
-                            313-564-96-61
-                        </a>
-                    </div>
-                    <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                        <span class="font-medium text-gray-700">📍 Ubicación:</span>
-                        <button onclick="openLocation()" class="btn-3d text-white px-4 py-2 rounded-full text-sm">
-                            Ver en Maps
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Form Modal -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50">
-        <div class="modern-card p-8 max-w-md w-full animate-bounce-in">
-            <div class="text-center mb-8">
-                <div id="loginIcon" class="text-6xl mb-4">👤</div>
-                <h2 id="loginTitle" class="text-2xl font-bold gradient-text mb-2">Iniciar Sesión</h2>
-                <p id="loginSubtitle" class="text-gray-600">Ingresa tus credenciales</p>
-            </div>
-
-            <form id="loginForm" class="space-y-6">
-                <div class="relative">
-                    <label class="block text-sm font-semibold text-gray-700 mb-3">👤 Usuario</label>
-                    <input type="text" id="username" class="w-full px-6 py-4 neon-border rounded-2xl focus:ring-4 focus:ring-neon-blue focus:ring-opacity-30 focus:border-transparent transition-all duration-300 text-lg" placeholder="Ingresa tu usuario" required>
-                </div>
-                <div class="relative">
-                    <label class="block text-sm font-semibold text-gray-700 mb-3">🔒 Contraseña</label>
-                    <input type="password" id="password" class="w-full px-6 py-4 neon-border rounded-2xl focus:ring-4 focus:ring-neon-blue focus:ring-opacity-30 focus:border-transparent transition-all duration-300 text-lg" placeholder="Ingresa tu contraseña" required>
-                </div>
-                <button type="submit" class="w-full btn-3d text-white py-4 rounded-2xl font-semibold text-lg">
-                    ✨ Ingresar
-                </button>
-            </form>
-
-            <div id="loginError" class="hidden mt-6 p-4 bg-red-100 border-2 border-red-400 text-red-700 rounded-2xl text-center animate-bounce-in">
-                ❌ Usuario o contraseña incorrecta
-            </div>
-
-            <!-- Demo Credentials - Hidden for security -->
-            <div id="credentialsInfo" class="hidden mt-8 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
-                <h4 class="font-bold text-blue-800 mb-2">🔑 Información de Acceso:</h4>
-                <div id="credentialsList" class="text-sm text-blue-700 space-y-1">
-                    <p>Contacta al administrador para obtener tus credenciales de acceso</p>
-                </div>
-            </div>
-
-            <div class="mt-6 text-center">
-                <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700 font-medium">
-                    ← Volver al menú principal
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Dashboard -->
-    <div id="dashboard" class="hidden">
-        <!-- Navigation -->
-        <nav class="bg-white bg-opacity-95 backdrop-blur-20 shadow-2xl sticky top-0 z-40">
-            <div class="container mx-auto px-4">
-                <!-- Admin Navigation -->
-                <div id="adminNav" class="hidden flex space-x-2 overflow-x-auto py-4">
-                    <button onclick="showSection('home')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        🏠 Inicio
-                    </button>
-                    <button onclick="showSection('students')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        👥 Estudiantes
-                    </button>
-                    <button onclick="showSection('teachers')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        👨‍🏫 Profesores
-                    </button>
-                    <button onclick="showSection('grades')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📊 Notas
-                    </button>
-                    <button onclick="showSection('attendance')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📅 Asistencia
-                    </button>
-                    <button onclick="showSection('schedule')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📋 Cronograma
-                    </button>
-                    <button onclick="showSection('reports')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📄 Boletines
-                    </button>
-                </div>
-                
-                <!-- Teacher Navigation -->
-                <div id="teacherNav" class="hidden flex space-x-2 overflow-x-auto py-4">
-                    <button onclick="showSection('home')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        🏠 Inicio
-                    </button>
-                    <button onclick="showSection('grades')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📊 Notas
-                    </button>
-                    <button onclick="showSection('attendance')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📅 Asistencia
-                    </button>
-                    <button onclick="showSection('schedule')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📋 Cronograma
-                    </button>
-                    <button id="teacherReportsBtn" onclick="showSection('reports')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📄 Boletines
-                    </button>
-                </div>
-                
-                <!-- Parent Navigation -->
-                <div id="parentNav" class="hidden flex space-x-2 overflow-x-auto py-4">
-                    <button onclick="showSection('home')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        🏠 Inicio
-                    </button>
-                    <button onclick="showSection('grades')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📊 Notas de mi Hijo
-                    </button>
-                    <button onclick="showSection('attendance')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📅 Asistencia
-                    </button>
-                    <button onclick="showSection('schedule')" class="nav-btn btn-3d text-white px-6 py-3 rounded-2xl whitespace-nowrap font-medium transition-all duration-300 hover:scale-105">
-                        📋 Cronograma
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Home Section -->
-        <div id="homeSection" class="section container mx-auto px-4 py-12">
-            <div class="modern-card p-8 mb-12 text-center animate-slide-up">
-                <h2 class="text-4xl font-bold gradient-text mb-4">¡Sistema con Sincronización Automática!</h2>
-                <p class="text-xl text-gray-600 mb-6">Datos actualizados en tiempo real en todos los dispositivos</p>
-                <div class="flex justify-center space-x-4 flex-wrap gap-2">
-                    <div class="glass-card px-6 py-3 rounded-full">
-                        <span class="text-2xl">📱</span>
-                        <span class="ml-2 font-semibold">Multi-dispositivo</span>
-                    </div>
-                    <div class="glass-card px-6 py-3 rounded-full">
-                        <span class="text-2xl">🔄</span>
-                        <span class="ml-2 font-semibold">Sincronización Automática</span>
-                    </div>
-                    <div class="glass-card px-6 py-3 rounded-full">
-                        <span class="text-2xl">☁️</span>
-                        <span class="ml-2 font-semibold">En la Nube</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="modern-card p-8 animate-slide-up">
-                    <div class="flex items-center mb-6">
-                        <div class="glass-card rounded-full p-4 mr-4 animate-float">
-                            <span class="text-3xl">🏫</span>
-                        </div>
-                        <h3 class="text-2xl font-bold gradient-text">Nuestra Trayectoria</h3>
-                    </div>
-                    <p class="text-gray-600 text-lg leading-relaxed">Somos una institución educativa que ha estado al servicio de la comunidad de Villa Gorgona durante 17 años, brindando educación de calidad desde jardín hasta 5° primaria con compromiso y dedicación.</p>
-                </div>
-
-                <div class="modern-card p-8 animate-slide-up" style="animation-delay: 0.1s;">
-                    <div class="flex items-center mb-6">
-                        <div class="glass-card rounded-full p-4 mr-4 animate-float" style="animation-delay: 1s;">
-                            <span class="text-3xl">📚</span>
-                        </div>
-                        <h3 class="text-2xl font-bold gradient-text">Áreas de Estudio</h3>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">📝 Español</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🔢 Matemáticas</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🧬 Biología</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🌍 Sociales</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🎨 Artística</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">✝️ Religión</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">💃 Danzas</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🎵 Música</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">💻 Tecnología</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🇺🇸 Inglés</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">⚽ Ed. Física</span>
-                        <span class="glass-card px-3 py-2 rounded-xl font-medium hover:scale-105 transition-transform">🏛️ Cátedra</span>
-                    </div>
-                </div>
-
-                <div class="modern-card p-8 animate-slide-up" style="animation-delay: 0.2s;">
-                    <div class="flex items-center mb-6">
-                        <div class="glass-card rounded-full p-4 mr-4 animate-float" style="animation-delay: 2s;">
-                            <span class="text-3xl">🌐</span>
-                        </div>
-                        <h3 class="text-2xl font-bold gradient-text">Estado del Sistema</h3>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                            <span class="text-sm font-medium">📱 Acceso Móvil</span>
-                            <span class="text-green-600 font-bold" id="mobileStatus">✅ Activo</span>
-                        </div>
-                        <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                            <span class="text-sm font-medium">🔄 Sincronización</span>
-                            <span class="text-green-600 font-bold" id="syncStatusText">✅ Automática</span>
-                        </div>
-                        <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                            <span class="text-sm font-medium">☁️ Base de Datos</span>
-                            <span class="text-green-600 font-bold" id="dbStatus">✅ Conectada</span>
-                        </div>
-                        <div class="flex items-center justify-between glass-card p-4 rounded-xl">
-                            <span class="text-sm font-medium">👥 Usuarios Activos</span>
-                            <span class="text-blue-600 font-bold" id="activeUsers">1</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Section -->
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.3s;">
-                    <div class="text-4xl mb-2">👥</div>
-                    <div class="text-2xl font-bold gradient-text" id="studentCount">25</div>
-                    <div class="text-sm text-gray-600">Estudiantes</div>
-                </div>
-                <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.4s;">
-                    <div class="text-4xl mb-2">👨‍🏫</div>
-                    <div class="text-2xl font-bold gradient-text" id="teacherCount">8</div>
-                    <div class="text-sm text-gray-600">Profesores</div>
-                </div>
-                <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.5s;">
-                    <div class="text-4xl mb-2">📊</div>
-                    <div class="text-2xl font-bold gradient-text" id="gradeCount">150</div>
-                    <div class="text-sm text-gray-600">Calificaciones</div>
-                </div>
-                <div class="modern-card p-6 text-center animate-bounce-in" style="animation-delay: 0.6s;">
-                    <div class="text-4xl mb-2">📅</div>
-                    <div class="text-2xl font-bold gradient-text" id="eventCount">12</div>
-                    <div class="text-sm text-gray-600">Eventos</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Students Section -->
-        <div id="studentsSection" class="section hidden container mx-auto px-4 py-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-school-blue">👥 Gestión de Estudiantes</h2>
-                <button onclick="showAddStudentForm()" class="btn-3d text-white px-4 py-2 rounded-lg">➕ Agregar Estudiante</button>
-            </div>
-
-            <!-- Add Student Form -->
-            <div id="addStudentForm" class="hidden modern-card p-6 mb-6">
-                <h3 class="text-lg font-bold mb-4">Agregar Nuevo Estudiante</h3>
-                <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="studentName" placeholder="👤 Nombre completo" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="text" id="studentDocument" placeholder="🆔 Documento" class="px-4 py-2 neon-border rounded-lg" required>
-                    <select id="studentGrade" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">📚 Seleccionar grado</option>
-                        <option value="Jardín">Jardín</option>
-                        <option value="Transición">Transición</option>
-                        <option value="1°">1° Primaria</option>
-                        <option value="2°">2° Primaria</option>
-                        <option value="3°">3° Primaria</option>
-                        <option value="4°">4° Primaria</option>
-                        <option value="5°">5° Primaria</option>
-                    </select>
-                    <input type="text" id="parentName" placeholder="👨‍👩‍👧‍👦 Nombre del padre/madre" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="tel" id="parentPhone" placeholder="📱 Teléfono del padre/madre" class="px-4 py-2 neon-border rounded-lg">
-                    <input type="text" id="groupCoordinator" placeholder="👨‍🏫 Coordinador de grupo (opcional)" class="px-4 py-2 neon-border rounded-lg">
-                    <div class="md:col-span-2 flex space-x-4">
-                        <button type="submit" class="btn-3d text-white px-6 py-2 rounded-lg">💾 Guardar</button>
-                        <button type="button" onclick="hideAddStudentForm()" class="glass-card px-6 py-2 rounded-lg hover:bg-gray-100">❌ Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Students List -->
-            <div class="modern-card overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gradient-to-r from-school-blue to-neon-purple text-white">
-                            <tr>
-                                <th class="px-4 py-3 text-left">Nombre</th>
-                                <th class="px-4 py-3 text-left">Documento</th>
-                                <th class="px-4 py-3 text-left">Grado</th>
-                                <th class="px-4 py-3 text-left">Padre/Madre</th>
-                                <th class="px-4 py-3 text-left">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentsTableBody">
-                            <!-- Students will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Teachers Section -->
-        <div id="teachersSection" class="section hidden container mx-auto px-4 py-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-school-blue">👨‍🏫 Gestión de Profesores</h2>
-                <button onclick="showAddTeacherForm()" class="btn-3d text-white px-4 py-2 rounded-lg">➕ Agregar Profesor</button>
-            </div>
-
-            <!-- Add Teacher Form -->
-            <div id="addTeacherForm" class="hidden modern-card p-6 mb-6">
-                <h3 class="text-lg font-bold mb-4">Agregar Nuevo Profesor</h3>
-                <form id="teacherForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="teacherName" placeholder="👤 Nombre completo" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="text" id="teacherDocument" placeholder="🆔 Documento" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="text" id="teacherUsername" placeholder="👤 Usuario" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="password" id="teacherPassword" placeholder="🔒 Contraseña" class="px-4 py-2 neon-border rounded-lg" required>
-                    <select id="teacherSubject" class="px-4 py-2 neon-border rounded-lg">
-                        <option value="">📚 Área principal (opcional)</option>
-                        <option value="Español">Español</option>
-                        <option value="Matemáticas">Matemáticas</option>
-                        <option value="Biología">Biología</option>
-                        <option value="Sociales">Sociales</option>
-                        <option value="Artística">Artística</option>
-                        <option value="Religión">Religión</option>
-                        <option value="Danzas">Danzas</option>
-                        <option value="Música">Música</option>
-                        <option value="Tecnología">Tecnología</option>
-                        <option value="Inglés">Inglés</option>
-                        <option value="Educación Física">Educación Física</option>
-                        <option value="Cátedra">Cátedra</option>
-                    </select>
-                    <input type="tel" id="teacherPhone" placeholder="📱 Teléfono" class="px-4 py-2 neon-border rounded-lg">
-                    <div class="md:col-span-2 flex space-x-4">
-                        <button type="submit" class="btn-3d text-white px-6 py-2 rounded-lg">💾 Guardar</button>
-                        <button type="button" onclick="hideAddTeacherForm()" class="glass-card px-6 py-2 rounded-lg hover:bg-gray-100">❌ Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Teachers List -->
-            <div class="modern-card overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gradient-to-r from-school-blue to-neon-purple text-white">
-                            <tr>
-                                <th class="px-4 py-3 text-left">Nombre</th>
-                                <th class="px-4 py-3 text-left">Usuario</th>
-                                <th class="px-4 py-3 text-left">Área</th>
-                                <th class="px-4 py-3 text-left">Teléfono</th>
-                                <th class="px-4 py-3 text-left">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="teachersTableBody">
-                            <!-- Teachers will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Grades Section -->
-        <div id="gradesSection" class="section hidden container mx-auto px-4 py-8">
-            <h2 class="text-2xl font-bold text-school-blue mb-6">📊 Gestión de Notas</h2>
-            
-            <!-- Grade Entry Form (Teachers/Admin) -->
-            <div id="gradeEntryForm" class="modern-card p-6 mb-6 teacher-admin-only">
-                <h3 class="text-lg font-bold mb-4">Ingresar Notas</h3>
-                <form id="gradeForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <select id="gradeStudent" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">👤 Seleccionar estudiante</option>
-                    </select>
-                    <select id="gradeSubject" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">📚 Seleccionar área</option>
-                        <option value="Español">Español</option>
-                        <option value="Matemáticas">Matemáticas</option>
-                        <option value="Biología">Biología</option>
-                        <option value="Sociales">Sociales</option>
-                        <option value="Artística">Artística</option>
-                        <option value="Religión">Religión</option>
-                        <option value="Danzas">Danzas</option>
-                        <option value="Música">Música</option>
-                        <option value="Tecnología">Tecnología</option>
-                        <option value="Inglés">Inglés</option>
-                        <option value="Educación Física">Educación Física</option>
-                        <option value="Cátedra">Cátedra</option>
-                    </select>
-                    <select id="gradePeriod" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">📅 Período</option>
-                        <option value="1">Primer Período</option>
-                        <option value="2">Segundo Período</option>
-                        <option value="3">Tercer Período</option>
-                        <option value="4">Cuarto Período</option>
-                    </select>
-                    <input type="number" id="gradeAttendance" placeholder="📅 Asistencia (1-5)" min="1" max="5" step="0.1" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="number" id="gradeNotebook" placeholder="📓 Cuaderno (1-5)" min="1" max="5" step="0.1" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="number" id="gradeWork" placeholder="📝 Trabajo (1-5)" min="1" max="5" step="0.1" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="number" id="gradeEvaluation" placeholder="📋 Evaluación (1-5)" min="1" max="5" step="0.1" class="px-4 py-2 neon-border rounded-lg" required>
-                    <div class="lg:col-span-3">
-                        <button type="submit" class="btn-3d text-white px-6 py-2 rounded-lg">💾 Guardar Nota</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Grades Display -->
-            <div class="modern-card p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold">📊 Consultar Notas</h3>
-                    <div class="flex space-x-2">
-                        <select id="filterStudent" class="px-3 py-2 neon-border rounded-lg text-sm">
-                            <option value="">Todos los estudiantes</option>
-                        </select>
-                        <select id="filterSubject" class="px-3 py-2 neon-border rounded-lg text-sm">
-                            <option value="">Todas las áreas</option>
-                            <option value="Español">Español</option>
-                            <option value="Matemáticas">Matemáticas</option>
-                            <option value="Biología">Biología</option>
-                            <option value="Sociales">Sociales</option>
-                            <option value="Artística">Artística</option>
-                            <option value="Religión">Religión</option>
-                            <option value="Danzas">Danzas</option>
-                            <option value="Música">Música</option>
-                            <option value="Tecnología">Tecnología</option>
-                            <option value="Inglés">Inglés</option>
-                            <option value="Educación Física">Educación Física</option>
-                            <option value="Cátedra">Cátedra</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gradient-to-r from-school-blue to-neon-purple text-white">
-                            <tr>
-                                <th class="px-4 py-3 text-left">Estudiante</th>
-                                <th class="px-4 py-3 text-left">Área</th>
-                                <th class="px-4 py-3 text-left">Período</th>
-                                <th class="px-4 py-3 text-left">Asistencia</th>
-                                <th class="px-4 py-3 text-left">Cuaderno</th>
-                                <th class="px-4 py-3 text-left">Trabajo</th>
-                                <th class="px-4 py-3 text-left">Evaluación</th>
-                                <th class="px-4 py-3 text-left">Definitiva</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gradesTableBody">
-                            <!-- Grades will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Attendance Section -->
-        <div id="attendanceSection" class="section hidden container mx-auto px-4 py-8">
-            <h2 class="text-2xl font-bold text-school-blue mb-6">📅 Control de Asistencia</h2>
-            
-            <!-- Attendance Entry (Teachers/Admin) -->
-            <div id="attendanceEntryForm" class="modern-card p-6 mb-6 teacher-admin-only">
-                <h3 class="text-lg font-bold mb-4">Registrar Asistencia</h3>
-                <form id="attendanceForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <select id="attendanceStudent" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">👤 Seleccionar estudiante</option>
-                    </select>
-                    <input type="date" id="attendanceDate" class="px-4 py-2 neon-border rounded-lg" required>
-                    <select id="attendanceStatus" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">Estado</option>
-                        <option value="Presente">✅ Presente</option>
-                        <option value="Ausente">❌ Ausente</option>
-                        <option value="Tardanza">⏰ Tardanza</option>
-                        <option value="Excusa">📋 Excusa</option>
-                    </select>
-                    <div class="md:col-span-3">
-                        <button type="submit" class="btn-3d text-white px-6 py-2 rounded-lg">💾 Registrar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Attendance Display -->
-            <div class="modern-card p-6">
-                <h3 class="text-lg font-bold mb-4">📊 Consultar Asistencia</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gradient-to-r from-school-blue to-neon-purple text-white">
-                            <tr>
-                                <th class="px-4 py-3 text-left">Estudiante</th>
-                                <th class="px-4 py-3 text-left">Fecha</th>
-                                <th class="px-4 py-3 text-left">Estado</th>
-                                <th class="px-4 py-3 text-left">Observaciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="attendanceTableBody">
-                            <!-- Attendance records will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Schedule Section -->
-        <div id="scheduleSection" class="section hidden container mx-auto px-4 py-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-school-blue">📋 Cronograma de Actividades</h2>
-                <button onclick="showAddEventForm()" class="btn-3d text-white px-4 py-2 rounded-lg admin-only">➕ Agregar Evento</button>
-            </div>
-
-            <!-- Add Event Form -->
-            <div id="addEventForm" class="hidden modern-card p-6 mb-6">
-                <h3 class="text-lg font-bold mb-4">Agregar Nueva Actividad</h3>
-                <form id="eventForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="eventTitle" placeholder="📝 Título del evento" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="date" id="eventDate" class="px-4 py-2 neon-border rounded-lg" required>
-                    <input type="time" id="eventTime" class="px-4 py-2 neon-border rounded-lg" required>
-                    <select id="eventType" class="px-4 py-2 neon-border rounded-lg" required>
-                        <option value="">🎯 Tipo de evento</option>
-                        <option value="Reunión de Padres">👨‍👩‍👧‍👦 Reunión de Padres</option>
-                        <option value="Actividad Académica">📚 Actividad Académica</option>
-                        <option value="Evento Cultural">🎭 Evento Cultural</option>
-                        <option value="Actividad Deportiva">⚽ Actividad Deportiva</option>
-                        <option value="Celebración">🎉 Celebración</option>
-                        <option value="Otro">📌 Otro</option>
-                    </select>
-                    <textarea id="eventDescription" placeholder="📄 Descripción del evento" class="md:col-span-2 px-4 py-2 neon-border rounded-lg" rows="3"></textarea>
-                    <div class="md:col-span-2 flex space-x-4">
-                        <button type="submit" class="btn-3d text-white px-6 py-2 rounded-lg">💾 Guardar</button>
-                        <button type="button" onclick="hideAddEventForm()" class="glass-card px-6 py-2 rounded-lg hover:bg-gray-100">❌ Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Events List -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eventsContainer">
-                <!-- Events will be populated here -->
-            </div>
-        </div>
-
-        <!-- Reports Section -->
-        <div id="reportsSection" class="section hidden container mx-auto px-4 py-8">
-            <h2 class="text-2xl font-bold text-school-blue mb-6">📄 Boletines de Calificaciones</h2>
-            
-            <div class="modern-card p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold">Generar Boletín</h3>
-                    <div class="flex space-x-2">
-                        <select id="reportStudent" class="px-3 py-2 neon-border rounded-lg">
-                            <option value="">Seleccionar estudiante</option>
-                        </select>
-                        <select id="reportPeriod" class="px-3 py-2 neon-border rounded-lg">
-                            <option value="">Seleccionar período</option>
-                            <option value="1">Primer Período</option>
-                            <option value="2">Segundo Período</option>
-                            <option value="3">Tercer Período</option>
-                            <option value="4">Cuarto Período</option>
-                        </select>
-                        <button onclick="generateReport()" class="btn-3d text-white px-4 py-2 rounded-lg">📄 Generar</button>
-                    </div>
-                </div>
-                
-                <div id="reportContent" class="hidden">
-                    <div class="border-2 border-school-blue rounded-lg p-6 bg-white">
-                        <div class="text-center mb-6">
-                            <h2 class="text-2xl font-bold text-school-blue">🏫 Liceo Exploradores de Sueños</h2>
-                            <p class="text-gray-600">Villa Gorgona - Candelaria</p>
-                            <h3 class="text-xl font-bold mt-4 text-school-blue">📄 BOLETÍN DE CALIFICACIONES</h3>
-                        </div>
-                        
-                        <div id="reportDetails" class="mb-6">
-                            <!-- Report details will be populated here -->
-                        </div>
-                        
-                        <div class="text-center mt-6">
-                            <button onclick="printReport()" class="btn-3d text-white px-6 py-2 rounded-lg">🖨️ Imprimir</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Action Buttons -->
-    <div class="fixed bottom-6 right-6 z-50">
-        <!-- Download App Button -->
-        <div id="installButton">
-            <button onclick="installApp()" class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 animate-bounce-in">
-                <span class="text-2xl">📱</span>
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // Global variables
-        let currentUser = null;
-        let currentUserType = null;
-        let students = [];
-        let teachers = [];
-        let grades = [];
-        let attendance = [];
-        let events = [];
-        let syncInterval = null;
-        let lastSyncTime = 0;
-
-        // Default credentials
-        const adminCredentials = {
-            username: 'admin2025',
-            password: 'LiceoExploradores2025!'
-        };
-
-        // Cloud Storage Simulation (using localStorage with sync mechanism)
-        const CloudStorage = {
-            // Simulated cloud database
-            cloudData: {
-                students: 'liceo_students_cloud',
-                teachers: 'liceo_teachers_cloud',
-                grades: 'liceo_grades_cloud',
-                attendance: 'liceo_attendance_cloud',
-                events: 'liceo_events_cloud',
-                lastUpdate: 'liceo_last_update'
-            },
-
-            // Save data to cloud
-            saveToCloud: function(dataType, data) {
-                try {
-                    const timestamp = Date.now();
-                    localStorage.setItem(this.cloudData[dataType], JSON.stringify(data));
-                    localStorage.setItem(this.cloudData.lastUpdate, timestamp.toString());
-                    this.updateSyncStatus('syncing');
-                    
-                    // Simulate network delay
-                    setTimeout(() => {
-                        this.updateSyncStatus('online');
-                        showNotification('☁️ Datos sincronizados automáticamente', 'success');
-                    }, 500);
-                    
-                    return true;
-                } catch (error) {
-                    console.error('Error saving to cloud:', error);
-                    this.updateSyncStatus('offline');
-                    return false;
-                }
-            },
-
-            // Load data from cloud
-            loadFromCloud: function(dataType) {
-                try {
-                    const data = localStorage.getItem(this.cloudData[dataType]);
-                    return data ? JSON.parse(data) : [];
-                } catch (error) {
-                    console.error('Error loading from cloud:', error);
-                    return [];
-                }
-            },
-
-            // Check if cloud has newer data
-            hasNewerData: function() {
-                const cloudTimestamp = parseInt(localStorage.getItem(this.cloudData.lastUpdate) || '0');
-                return cloudTimestamp > lastSyncTime;
-            },
-
-            // Sync all data from cloud
-            syncFromCloud: function() {
-                if (this.hasNewerData()) {
-                    students = this.loadFromCloud('students');
-                    teachers = this.loadFromCloud('teachers');
-                    grades = this.loadFromCloud('grades');
-                    attendance = this.loadFromCloud('attendance');
-                    events = this.loadFromCloud('events');
-                    
-                    lastSyncTime = parseInt(localStorage.getItem(this.cloudData.lastUpdate) || '0');
-                    
-                    // Update UI
-                    this.refreshAllDisplays();
-                    return true;
-                }
-                return false;
-            },
-
-            // Refresh all displays after sync
-            refreshAllDisplays: function() {
-                displayStudents();
-                displayTeachers();
-                displayGrades();
-                displayAttendance();
-                displayEvents();
-                updateStudentSelects();
-                updateStats();
-            },
-
-            // Update sync status indicator
-            updateSyncStatus: function(status) {
-                const syncIndicator = document.getElementById('syncStatus');
-                const syncStatusText = document.getElementById('syncStatusText');
-                const connectionInfo = document.getElementById('connectionInfo');
-                
-                if (syncIndicator) {
-                    syncIndicator.className = 'sync-indicator';
-                    
-                    switch(status) {
-                        case 'online':
-                            syncIndicator.classList.add('sync-online');
-                            syncIndicator.innerHTML = '<div class="w-2 h-2 rounded-full bg-current"></div><span>En Línea</span>';
-                            if (syncStatusText) syncStatusText.textContent = '✅ Automática';
-                            if (connectionInfo) connectionInfo.textContent = '🌐 Sincronización automática activa';
-                            break;
-                        case 'syncing':
-                            syncIndicator.classList.add('sync-syncing');
-                            syncIndicator.innerHTML = '<div class="loading-spinner"></div><span>Sincronizando</span>';
-                            if (syncStatusText) syncStatusText.textContent = '🔄 Sincronizando';
-                            if (connectionInfo) connectionInfo.textContent = '🔄 Guardando datos en la nube...';
-                            break;
-                        case 'offline':
-                            syncIndicator.classList.add('sync-offline');
-                            syncIndicator.innerHTML = '<div class="w-2 h-2 rounded-full bg-current"></div><span>Sin Conexión</span>';
-                            if (syncStatusText) syncStatusText.textContent = '❌ Desconectado';
-                            if (connectionInfo) connectionInfo.textContent = '❌ Error de sincronización';
-                            break;
-                    }
-                }
-            },
-
-            // Start automatic sync
-            startAutoSync: function() {
-                this.updateSyncStatus('online');
-                
-                // Sync every 3 seconds
-                syncInterval = setInterval(() => {
-                    if (this.syncFromCloud()) {
-                        console.log('Data synced from cloud');
-                    }
-                }, 3000);
-            },
-
-            // Stop automatic sync
-            stopAutoSync: function() {
-                if (syncInterval) {
-                    clearInterval(syncInterval);
-                    syncInterval = null;
-                }
-            }
-        };
-
-        // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
-        });
-
-        function initializeApp() {
-            setupEventListeners();
-            
-            // Load data from cloud first
-            CloudStorage.syncFromCloud();
-            
-            // If no cloud data, load sample data
-            if (students.length === 0) {
-                loadSampleData();
-                // Save initial data to cloud
-                CloudStorage.saveToCloud('students', students);
-                CloudStorage.saveToCloud('teachers', teachers);
-                CloudStorage.saveToCloud('grades', grades);
-                CloudStorage.saveToCloud('attendance', attendance);
-                CloudStorage.saveToCloud('events', events);
-            }
-            
-            updateStudentSelects();
-            displayStudents();
-            displayTeachers();
-            displayGrades();
-            displayAttendance();
-            displayEvents();
-            updateStats();
-            
-            // Start automatic synchronization
-            CloudStorage.startAutoSync();
-            
-            // Set today's date for attendance
-            const today = new Date().toISOString().split('T')[0];
-            const attendanceDateInput = document.getElementById('attendanceDate');
-            if (attendanceDateInput) {
-                attendanceDateInput.value = today;
-            }
-        }
-
-        // Event listeners setup
-        function setupEventListeners() {
-            // Login form
-            const loginForm = document.getElementById('loginForm');
-            if (loginForm) {
-                loginForm.addEventListener('submit', handleLogin);
-            }
-
-            // Student form
-            const studentForm = document.getElementById('studentForm');
-            if (studentForm) {
-                studentForm.addEventListener('submit', handleAddStudent);
-            }
-
-            // Teacher form
-            const teacherForm = document.getElementById('teacherForm');
-            if (teacherForm) {
-                teacherForm.addEventListener('submit', handleAddTeacher);
-            }
-
-            // Grade form
-            const gradeForm = document.getElementById('gradeForm');
-            if (gradeForm) {
-                gradeForm.addEventListener('submit', handleAddGrade);
-            }
-
-            // Attendance form
-            const attendanceForm = document.getElementById('attendanceForm');
-            if (attendanceForm) {
-                attendanceForm.addEventListener('submit', handleAddAttendance);
-            }
-
-            // Event form
-            const eventForm = document.getElementById('eventForm');
-            if (eventForm) {
-                eventForm.addEventListener('submit', handleAddEvent);
-            }
-
-            // Filter listeners
-            const filterStudent = document.getElementById('filterStudent');
-            if (filterStudent) {
-                filterStudent.addEventListener('change', displayGrades);
-            }
-
-            const filterSubject = document.getElementById('filterSubject');
-            if (filterSubject) {
-                filterSubject.addEventListener('change', displayGrades);
-            }
-        }
-
-        // Location function - opens Google Maps
-        function openLocation() {
-            const address = "Carrera 13# 8-48, Villa Gorgona, Candelaria, Valle del Cauca, Colombia";
-            const encodedAddress = encodeURIComponent(address);
-            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-            window.open(mapsUrl, '_blank');
-            showNotification('📍 Abriendo ubicación en Google Maps...', 'info');
-        }
-
-        // Login Form Management
-        function showLoginForm(userType) {
-            currentUserType = userType;
-            
-            const modal = document.getElementById('loginModal');
-            const icon = document.getElementById('loginIcon');
-            const title = document.getElementById('loginTitle');
-            const subtitle = document.getElementById('loginSubtitle');
-            const credentialsList = document.getElementById('credentialsList');
-            
-            // Update modal content based on user type
-            switch(userType) {
-                case 'parent':
-                    icon.textContent = '👨‍👩‍👧‍👦';
-                    title.textContent = 'Acceso para Padres';
-                    subtitle.textContent = 'Consulta la información académica de tu hijo';
-                    credentialsList.innerHTML = '<p class="text-xs">Usa el documento de tu hijo como usuario y contraseña</p>';
-                    break;
-                case 'teacher':
-                    icon.textContent = '👨‍🏫';
-                    title.textContent = 'Acceso para Profesores';
-                    subtitle.textContent = 'Gestiona notas y asistencia de tus estudiantes';
-                    credentialsList.innerHTML = '<p class="text-xs">Usa tu usuario y contraseña asignados por el administrador</p>';
-                    break;
-                case 'admin':
-                    icon.textContent = '👨‍💼';
-                    title.textContent = 'Acceso Administrativo';
-                    subtitle.textContent = 'Control total del sistema académico';
-                    credentialsList.innerHTML = '<p class="text-xs">Ingresa tus credenciales de administrador</p>';
-                    break;
-            }
-            
-            modal.classList.remove('hidden');
-            document.getElementById('username').focus();
-        }
-
-        function closeLoginModal() {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('loginForm').reset();
-            document.getElementById('loginError').classList.add('hidden');
-            currentUserType = null;
-        }
-
-        // Login handling
-        function handleLogin(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Check admin credentials
-            if (currentUserType === 'admin' && username === adminCredentials.username && password === adminCredentials.password) {
-                currentUser = { type: 'admin', name: 'Administrador', username: username };
-                showDashboard();
-                return;
-            }
-            
-            // Check teacher credentials
-            if (currentUserType === 'teacher') {
-                const teacher = teachers.find(t => t.username === username && t.password === password);
-                if (teacher) {
-                    currentUser = { type: 'teacher', name: teacher.name, username: username, id: teacher.id };
-                    showDashboard();
-                    return;
-                }
-            }
-            
-            // Check parent credentials (document as both username and password)
-            if (currentUserType === 'parent') {
-                const student = students.find(s => s.document === username && s.document === password);
-                if (student) {
-                    currentUser = { type: 'parent', name: student.parentName, studentId: student.id, studentName: student.name };
-                    showDashboard();
-                    return;
-                }
-            }
-            
-            // Show error
-            document.getElementById('loginError').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('loginError').classList.add('hidden');
-            }, 3000);
-        }
-
-        function showDashboard() {
-            document.getElementById('mainMenuScreen').classList.add('hidden');
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            
-            // Update welcome text
-            document.getElementById('welcomeText').textContent = `Bienvenido, ${currentUser.name}`;
-            document.getElementById('userInfo').classList.remove('hidden');
-            
-            // Hide all navigation menus first
-            document.getElementById('adminNav').classList.add('hidden');
-            document.getElementById('teacherNav').classList.add('hidden');
-            document.getElementById('parentNav').classList.add('hidden');
-            
-            // Show appropriate navigation based on user type
-            if (currentUser.type === 'admin') {
-                document.getElementById('adminNav').classList.remove('hidden');
-            } else if (currentUser.type === 'teacher') {
-                document.getElementById('teacherNav').classList.remove('hidden');
-                // Hide admin-only elements
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
-                
-                // Check if teacher is a group coordinator
-                const teacherName = currentUser.name;
-                const isCoordinator = students.some(student => 
-                    student.groupCoordinator && 
-                    (student.groupCoordinator.toLowerCase().includes(teacherName.toLowerCase()) ||
-                     teacherName.toLowerCase().includes(student.groupCoordinator.toLowerCase().replace(/prof\.|profesor|profesora/gi, '').trim()))
-                );
-                
-                // Hide reports button if not coordinator
-                const reportsBtn = document.getElementById('teacherReportsBtn');
-                if (reportsBtn) {
-                    reportsBtn.style.display = isCoordinator ? 'block' : 'none';
-                }
-            } else if (currentUser.type === 'parent') {
-                document.getElementById('parentNav').classList.remove('hidden');
-                // Hide admin and teacher elements
-                document.querySelectorAll('.admin-only, .teacher-admin-only').forEach(el => el.style.display = 'none');
-                filterDataForParent();
-            }
-            
-            showSection('home');
-            showNotification(`¡Bienvenido ${currentUser.name}!`, 'success');
-        }
-
-        function filterDataForParent() {
-            const studentId = currentUser.studentId;
-            
-            // Update filter selects to show only their child
-            const studentSelects = document.querySelectorAll('#filterStudent, #reportStudent');
-            studentSelects.forEach(select => {
-                select.innerHTML = '';
-                const student = students.find(s => s.id === studentId);
-                if (student) {
-                    const option = document.createElement('option');
-                    option.value = student.id;
-                    option.textContent = student.name;
-                    option.selected = true;
-                    select.appendChild(option);
-                }
-            });
-            
-            displayGrades();
-            displayAttendance();
-        }
-
-        function logout() {
-            currentUser = null;
-            currentUserType = null;
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('mainMenuScreen').classList.remove('hidden');
-            document.getElementById('userInfo').classList.add('hidden');
-            document.getElementById('loginForm').reset();
-            
-            showNotification('Sesión cerrada exitosamente', 'info');
-        }
-
-        function showSection(sectionName) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.add('hidden');
-            });
-            
-            // Show selected section
-            const targetSection = document.getElementById(sectionName + 'Section');
-            if (targetSection) {
-                targetSection.classList.remove('hidden');
-            }
-            
-            // Update navigation
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-neon-blue', 'shadow-lg');
-                btn.style.transform = 'scale(1)';
-            });
-            
-            if (event && event.target) {
-                event.target.classList.add('bg-neon-blue', 'shadow-lg');
-                event.target.style.transform = 'scale(1.05)';
-            }
-            
-            if (sectionName === 'home') {
-                updateStats();
-            }
-        }
-
-        // Sample data for demonstration
-        function loadSampleData() {
-            if (students.length === 0) {
-                students = [
-                    {
-                        id: 'student1',
-                        name: 'Ana María González',
-                        document: '1234567890',
-                        grade: '3°',
-                        parentName: 'Carlos González',
-                        parentPhone: '3001234567',
-                        groupCoordinator: 'Prof. María López'
-                    },
-                    {
-                        id: 'student2',
-                        name: 'Juan David Rodríguez',
-                        document: '0987654321',
-                        grade: '5°',
-                        parentName: 'Laura Rodríguez',
-                        parentPhone: '3109876543',
-                        groupCoordinator: 'Prof. Pedro Martínez'
-                    },
-                    {
-                        id: 'student3',
-                        name: 'Sofia Isabella Martín',
-                        document: '1122334455',
-                        grade: '2°',
-                        parentName: 'Andrea Martín',
-                        parentPhone: '3157890123',
-                        groupCoordinator: 'Prof. Carmen López'
-                    }
-                ];
-            }
-            
-            if (teachers.length === 0) {
-                teachers = [
-                    {
-                        id: 'teacher1',
-                        name: 'María López',
-                        document: '12345678',
-                        username: 'mlopez',
-                        password: 'profesor123',
-                        subject: 'Español',
-                        phone: '3201234567'
-                    },
-                    {
-                        id: 'teacher2',
-                        name: 'Pedro Martínez',
-                        document: '87654321',
-                        username: 'pmartinez',
-                        password: 'profesor456',
-                        subject: 'Matemáticas',
-                        phone: '3109876543'
-                    }
-                ];
-            }
-
-            if (grades.length === 0) {
-                grades = [
-                    {
-                        id: 'grade1',
-                        studentId: 'student1',
-                        subject: 'Español',
-                        period: '1',
-                        attendance: 4.5,
-                        notebook: 4.2,
-                        work: 4.8,
-                        evaluation: 4.3,
-                        finalGrade: 4.4
-                    },
-                    {
-                        id: 'grade2',
-                        studentId: 'student1',
-                        subject: 'Matemáticas',
-                        period: '1',
-                        attendance: 4.0,
-                        notebook: 3.8,
-                        work: 4.2,
-                        evaluation: 4.1,
-                        finalGrade: 4.0
-                    }
-                ];
-            }
-
-            if (attendance.length === 0) {
-                attendance = [
-                    {
-                        id: 'att1',
-                        studentId: 'student1',
-                        date: '2025-01-15',
-                        status: 'Presente'
-                    },
-                    {
-                        id: 'att2',
-                        studentId: 'student2',
-                        date: '2025-01-15',
-                        status: 'Presente'
-                    }
-                ];
-            }
-
-            if (events.length === 0) {
-                events = [
-                    {
-                        id: 'event1',
-                        title: 'Reunión de Padres de Familia',
-                        date: '2025-02-15',
-                        time: '14:00',
-                        type: 'Reunión de Padres',
-                        description: 'Reunión informativa sobre el progreso académico del primer período'
-                    },
-                    {
-                        id: 'event2',
-                        title: 'Festival de Talentos',
-                        date: '2025-03-10',
-                        time: '09:00',
-                        type: 'Evento Cultural',
-                        description: 'Presentación de talentos artísticos de los estudiantes'
-                    }
-                ];
-            }
-        }
-
-        // Student Management
-        function showAddStudentForm() {
-            document.getElementById('addStudentForm').classList.remove('hidden');
-        }
-
-        function hideAddStudentForm() {
-            document.getElementById('addStudentForm').classList.add('hidden');
-            document.getElementById('studentForm').reset();
-        }
-
-        function handleAddStudent(e) {
-            e.preventDefault();
-            
-            const student = {
-                id: Date.now().toString(),
-                name: document.getElementById('studentName').value,
-                document: document.getElementById('studentDocument').value,
-                grade: document.getElementById('studentGrade').value,
-                parentName: document.getElementById('parentName').value,
-                parentPhone: document.getElementById('parentPhone').value,
-                groupCoordinator: document.getElementById('groupCoordinator').value
-            };
-            
-            students.push(student);
-            
-            // Save to cloud automatically
-            CloudStorage.saveToCloud('students', students);
-            
-            displayStudents();
-            updateStudentSelects();
-            hideAddStudentForm();
-            showNotification(`✅ Estudiante ${student.name} agregado y sincronizado`, 'success');
-        }
-
-        function displayStudents() {
-            const tbody = document.getElementById('studentsTableBody');
-            if (!tbody) return;
-            
-            tbody.innerHTML = '';
-            
-            students.forEach(student => {
-                const row = document.createElement('tr');
-                row.className = 'border-b hover:bg-gray-50 transition-colors';
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${student.name}</td>
-                    <td class="px-4 py-3">${student.document}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                            ${student.grade}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">${student.parentName}</td>
-                    <td class="px-4 py-3">
-                        <div class="flex space-x-2">
-                            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">✏️</button>
-                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 transition-colors" title="Eliminar">🗑️</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function editStudent(id) {
-            const student = students.find(s => s.id === id);
-            if (!student) return;
-            
-            document.getElementById('studentName').value = student.name;
-            document.getElementById('studentDocument').value = student.document;
-            document.getElementById('studentGrade').value = student.grade;
-            document.getElementById('parentName').value = student.parentName;
-            document.getElementById('parentPhone').value = student.parentPhone || '';
-            document.getElementById('groupCoordinator').value = student.groupCoordinator || '';
-            
-            showAddStudentForm();
-        }
-
-        function deleteStudent(id) {
-            if (confirm('¿Estás seguro de eliminar este estudiante?')) {
-                students = students.filter(s => s.id !== id);
-                
-                // Save to cloud automatically
-                CloudStorage.saveToCloud('students', students);
-                
-                displayStudents();
-                updateStudentSelects();
-                showNotification('✅ Estudiante eliminado y sincronizado', 'success');
-            }
-        }
-
-        // Teacher Management
-        function showAddTeacherForm() {
-            document.getElementById('addTeacherForm').classList.remove('hidden');
-        }
-
-        function hideAddTeacherForm() {
-            document.getElementById('addTeacherForm').classList.add('hidden');
-            document.getElementById('teacherForm').reset();
-        }
-
-        function handleAddTeacher(e) {
-            e.preventDefault();
-            
-            const teacher = {
-                id: Date.now().toString(),
-                name: document.getElementById('teacherName').value,
-                document: document.getElementById('teacherDocument').value,
-                username: document.getElementById('teacherUsername').value,
-                password: document.getElementById('teacherPassword').value,
-                subject: document.getElementById('teacherSubject').value,
-                phone: document.getElementById('teacherPhone').value
-            };
-            
-            teachers.push(teacher);
-            
-            // Save to cloud automatically
-            CloudStorage.saveToCloud('teachers', teachers);
-            
-            displayTeachers();
-            hideAddTeacherForm();
-            showNotification(`✅ Profesor ${teacher.name} agregado y sincronizado`, 'success');
-        }
-
-        function displayTeachers() {
-            const tbody = document.getElementById('teachersTableBody');
-            if (!tbody) return;
-            
-            tbody.innerHTML = '';
-            
-            teachers.forEach(teacher => {
-                const row = document.createElement('tr');
-                row.className = 'border-b hover:bg-gray-50 transition-colors';
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${teacher.name}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                            ${teacher.username}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">${teacher.subject || 'No asignada'}</td>
-                    <td class="px-4 py-3">${teacher.phone || 'No registrado'}</td>
-                    <td class="px-4 py-3">
-                        <div class="flex space-x-2">
-                            <button onclick="editTeacher('${teacher.id}')" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">✏️</button>
-                            <button onclick="deleteTeacher('${teacher.id}')" class="text-red-600 hover:text-red-800 transition-colors" title="Eliminar">🗑️</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function editTeacher(id) {
-            const teacher = teachers.find(t => t.id === id);
-            if (!teacher) return;
-            
-            document.getElementById('teacherName').value = teacher.name;
-            document.getElementById('teacherDocument').value = teacher.document;
-            document.getElementById('teacherUsername').value = teacher.username;
-            document.getElementById('teacherPassword').value = teacher.password;
-            document.getElementById('teacherSubject').value = teacher.subject || '';
-            document.getElementById('teacherPhone').value = teacher.phone || '';
-            
-            showAddTeacherForm();
-        }
-
-        function deleteTeacher(id) {
-            if (confirm('¿Estás seguro de eliminar este profesor?')) {
-                teachers = teachers.filter(t => t.id !== id);
-                
-                // Save to cloud automatically
-                CloudStorage.saveToCloud('teachers', teachers);
-                
-                displayTeachers();
-                showNotification('✅ Profesor eliminado y sincronizado', 'success');
-            }
-        }
-
-        // Grade Management
-        function handleAddGrade(e) {
-            e.preventDefault();
-            
-            const attendance = parseFloat(document.getElementById('gradeAttendance').value);
-            const notebook = parseFloat(document.getElementById('gradeNotebook').value);
-            const work = parseFloat(document.getElementById('gradeWork').value);
-            const evaluation = parseFloat(document.getElementById('gradeEvaluation').value);
-            
-            const finalGrade = ((attendance * 0.2) + (notebook * 0.2) + (work * 0.3) + (evaluation * 0.3)).toFixed(1);
-            
-            const grade = {
-                id: Date.now().toString(),
-                studentId: document.getElementById('gradeStudent').value,
-                subject: document.getElementById('gradeSubject').value,
-                period: document.getElementById('gradePeriod').value,
-                attendance: attendance,
-                notebook: notebook,
-                work: work,
-                evaluation: evaluation,
-                finalGrade: parseFloat(finalGrade)
-            };
-            
-            grades.push(grade);
-            
-            // Save to cloud automatically
-            CloudStorage.saveToCloud('grades', grades);
-            
-            displayGrades();
-            document.getElementById('gradeForm').reset();
-            
-            const student = students.find(s => s.id === grade.studentId);
-            showNotification(`✅ Nota registrada y sincronizada para ${student.name}`, 'success');
-        }
-
-        function displayGrades() {
-            const tbody = document.getElementById('gradesTableBody');
-            if (!tbody) return;
-            
-            tbody.innerHTML = '';
-            
-            let filteredGrades = grades;
-            
-            const studentFilter = document.getElementById('filterStudent');
-            const subjectFilter = document.getElementById('filterSubject');
-            
-            if (studentFilter && studentFilter.value) {
-                filteredGrades = filteredGrades.filter(g => g.studentId == studentFilter.value);
-            }
-            
-            if (subjectFilter && subjectFilter.value) {
-                filteredGrades = filteredGrades.filter(g => g.subject === subjectFilter.value);
-            }
-            
-            if (currentUser && currentUser.type === 'parent') {
-                filteredGrades = filteredGrades.filter(g => g.studentId === currentUser.studentId);
-            }
-            
-            filteredGrades.forEach((grade, index) => {
-                const student = students.find(s => s.id === grade.studentId);
-                const row = document.createElement('tr');
-                row.className = `${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`;
-                
-                let gradeColor = '';
-                let gradeBg = '';
-                if (grade.finalGrade >= 4.5) {
-                    gradeColor = 'text-green-700';
-                    gradeBg = 'bg-green-100';
-                } else if (grade.finalGrade >= 4.0) {
-                    gradeColor = 'text-blue-700';
-                    gradeBg = 'bg-blue-100';
-                } else if (grade.finalGrade >= 3.0) {
-                    gradeColor = 'text-yellow-700';
-                    gradeBg = 'bg-yellow-100';
-                } else {
-                    gradeColor = 'text-red-700';
-                    gradeBg = 'bg-red-100';
-                }
-                
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${student ? student.name : 'N/A'}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-                            ${grade.subject}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">Período ${grade.period}</td>
-                    <td class="px-4 py-3 text-center">${grade.attendance}</td>
-                    <td class="px-4 py-3 text-center">${grade.notebook}</td>
-                    <td class="px-4 py-3 text-center">${grade.work}</td>
-                    <td class="px-4 py-3 text-center">${grade.evaluation}</td>
-                    <td class="px-4 py-3 text-center">
-                        <span class="px-3 py-1 rounded-full text-sm font-bold ${gradeBg} ${gradeColor}">
-                            ${grade.finalGrade}
-                        </span>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Attendance Management
-        function handleAddAttendance(e) {
-            e.preventDefault();
-            
-            const attendanceRecord = {
-                id: Date.now().toString(),
-                studentId: document.getElementById('attendanceStudent').value,
-                date: document.getElementById('attendanceDate').value,
-                status: document.getElementById('attendanceStatus').value
-            };
-            
-            attendance.push(attendanceRecord);
-            
-            // Save to cloud automatically
-            CloudStorage.saveToCloud('attendance', attendance);
-            
-            displayAttendance();
-            document.getElementById('attendanceForm').reset();
-            
-            // Reset date to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('attendanceDate').value = today;
-            
-            showNotification('✅ Asistencia registrada y sincronizada', 'success');
-        }
-
-        function displayAttendance() {
-            const tbody = document.getElementById('attendanceTableBody');
-            if (!tbody) return;
-            
-            tbody.innerHTML = '';
-            
-            let filteredAttendance = attendance;
-            
-            if (currentUser && currentUser.type === 'parent') {
-                filteredAttendance = filteredAttendance.filter(a => a.studentId === currentUser.studentId);
-            }
-            
-            filteredAttendance.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            filteredAttendance.forEach((record, index) => {
-                const student = students.find(s => s.id === record.studentId);
-                const row = document.createElement('tr');
-                row.className = `${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`;
-                
-                let statusColor = '';
-                let statusBg = '';
-                switch(record.status) {
-                    case 'Presente':
-                        statusColor = 'text-green-700';
-                        statusBg = 'bg-green-100';
-                        break;
-                    case 'Tardanza':
-                        statusColor = 'text-yellow-700';
-                        statusBg = 'bg-yellow-100';
-                        break;
-                    case 'Excusa':
-                        statusColor = 'text-blue-700';
-                        statusBg = 'bg-blue-100';
-                        break;
-                    default:
-                        statusColor = 'text-red-700';
-                        statusBg = 'bg-red-100';
-                }
-                
-                row.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${student ? student.name : 'N/A'}</td>
-                    <td class="px-4 py-3">${new Date(record.date).toLocaleDateString('es-CO')}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 rounded-full text-sm font-medium ${statusBg} ${statusColor}">
-                            ${record.status}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">-</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Event Management
-        function showAddEventForm() {
-            document.getElementById('addEventForm').classList.remove('hidden');
-        }
-
-        function hideAddEventForm() {
-            document.getElementById('addEventForm').classList.add('hidden');
-            document.getElementById('eventForm').reset();
-        }
-
-        function handleAddEvent(e) {
-            e.preventDefault();
-            
-            const event = {
-                id: Date.now().toString(),
-                title: document.getElementById('eventTitle').value,
-                date: document.getElementById('eventDate').value,
-                time: document.getElementById('eventTime').value,
-                type: document.getElementById('eventType').value,
-                description: document.getElementById('eventDescription').value
-            };
-            
-            events.push(event);
-            
-            // Save to cloud automatically
-            CloudStorage.saveToCloud('events', events);
-            
-            displayEvents();
-            hideAddEventForm();
-            showNotification(`✅ Evento "${event.title}" agregado y sincronizado`, 'success');
-        }
-
-        function displayEvents() {
-            const container = document.getElementById('eventsContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            events.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            events.forEach(event => {
-                const eventCard = document.createElement('div');
-                eventCard.className = 'modern-card p-6 animate-slide-up';
-                
-                const eventDate = new Date(event.date);
-                const isUpcoming = eventDate >= new Date();
-                const cardColor = isUpcoming ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-gray-400';
-                
-                eventCard.innerHTML = `
-                    <div class="${cardColor} pl-4">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-lg font-bold text-gray-800">${event.title}</h3>
-                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                                ${event.type}
-                            </span>
-                        </div>
-                        <div class="space-y-2 text-sm text-gray-600 mb-4">
-                            <div class="flex items-center">
-                                <span class="mr-2">📅</span>
-                                <span>${eventDate.toLocaleDateString('es-CO')}</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="mr-2">⏰</span>
-                                <span>${event.time}</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 text-sm">${event.description}</p>
-                        ${isUpcoming ? '<div class="mt-4 text-green-600 font-medium text-sm">📍 Próximo evento</div>' : '<div class="mt-4 text-gray-500 font-medium text-sm">✅ Evento pasado</div>'}
-                    </div>
-                `;
-                container.appendChild(eventCard);
-            });
-        }
-
-        // Report Generation
-        function generateReport() {
-            const studentId = document.getElementById('reportStudent').value;
-            const period = document.getElementById('reportPeriod').value;
-            
-            if (!studentId || !period) {
-                showNotification('❌ Selecciona estudiante y período', 'error');
-                return;
-            }
-            
-            const student = students.find(s => s.id === studentId);
-            const studentGrades = grades.filter(g => g.studentId === studentId && g.period === period);
-            
-            if (studentGrades.length === 0) {
-                showNotification('❌ No hay notas registradas para este período', 'error');
-                return;
-            }
-            
-            const reportDetails = document.getElementById('reportDetails');
-            reportDetails.innerHTML = `
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <strong>Estudiante:</strong> ${student.name}<br>
-                        <strong>Documento:</strong> ${student.document}<br>
-                        <strong>Grado:</strong> ${student.grade}
-                    </div>
-                    <div>
-                        <strong>Período:</strong> ${period}<br>
-                        <strong>Padre/Madre:</strong> ${student.parentName}<br>
-                        <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CO')}
-                    </div>
-                </div>
-                
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Área</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">Asistencia</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">Cuaderno</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">Trabajo</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">Evaluación</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">Definitiva</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${studentGrades.map(grade => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${grade.subject}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.attendance}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.notebook}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.work}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">${grade.evaluation}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center font-bold">${grade.finalGrade}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                
-                <div class="mt-6 text-center">
-                    <p class="text-sm text-gray-600">
-                        Promedio General: <strong>${(studentGrades.reduce((sum, g) => sum + g.finalGrade, 0) / studentGrades.length).toFixed(1)}</strong>
-                    </p>
-                </div>
-            `;
-            
-            document.getElementById('reportContent').classList.remove('hidden');
-            showNotification('✅ Boletín generado exitosamente', 'success');
-        }
-
-        function printReport() {
-            const reportContent = document.getElementById('reportContent').innerHTML;
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>Boletín de Calificaciones</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; margin: 20px; }
-                            table { width: 100%; border-collapse: collapse; }
-                            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-                            th { background-color: #f0f0f0; }
-                            .text-center { text-align: center; }
-                            @media print { body { margin: 0; } }
-                        </style>
-                    </head>
-                    <body>
-                        ${reportContent}
-                    </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
-        }
-
-        // Utility functions
-        function updateStudentSelects() {
-            const selects = document.querySelectorAll('#gradeStudent, #attendanceStudent, #filterStudent, #reportStudent');
-            selects.forEach(select => {
-                if (currentUser && currentUser.type === 'parent') return; // Skip for parents
-                
-                const currentValue = select.value;
-                select.innerHTML = '<option value="">Seleccionar estudiante</option>';
-                
-                students.forEach(student => {
-                    const option = document.createElement('option');
-                    option.value = student.id;
-                    option.textContent = `${student.name} (${student.grade})`;
-                    if (option.value === currentValue) option.selected = true;
-                    select.appendChild(option);
-                });
-            });
-        }
-
-        function updateStats() {
-            document.getElementById('studentCount').textContent = students.length;
-            document.getElementById('teacherCount').textContent = teachers.length;
-            document.getElementById('gradeCount').textContent = grades.length;
-            document.getElementById('eventCount').textContent = events.length;
-        }
-
-        // Notification system
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // App installation
-        function installApp() {
-            showNotification('📱 Iniciando descarga de la aplicación...', 'info');
-            
-            const appContent = `<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liceo Exploradores de Sueños - Acceso Directo</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/background-2695569_1280.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
         }
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #006400 0%, #008000 100%);
+            color: #ffd700;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-bottom: 5px solid #ffd700;
         }
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        header h1 {
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
         }
-        h1 {
-            color: #1e3a8a;
-            margin-bottom: 10px;
-            font-size: 2rem;
+        header p {
+            font-size: 16px;
+            margin-top: 8px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
-        p {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+        nav {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        nav a {
+            color: #fff;
+            margin: 0 12px;
+            text-decoration: none;
+            font-size: 15px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        nav a:hover {
+            background: #008000;
+            color: #ffd700;
+        }
+        .botones-accion {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 25px;
+            flex-wrap: wrap;
         }
         .btn {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px 30px;
+            padding: 14px 22px;
             border: none;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
-        }
-        .info {
-            background: #e8f4fd;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            margin-top: 30px;
             border-radius: 8px;
-            text-align: left;
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 8px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+            position: relative;
+            top: 0;
         }
-        .info h3 {
-            color: #1e40af;
-            margin: 0 0 10px 0;
+        .btn:active {
+            top: 4px;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.3);
         }
-        .info p {
-            color: #1e40af;
-            margin: 5px 0;
-            font-size: 0.9rem;
+        .btn-maps {
+            background: linear-gradient(135deg, #ffd700 0%, #ffeb3b 100%);
+            color: #006400;
+            font-weight: bold;
+        }
+        .btn-maps:hover {
+            background: linear-gradient(135deg, #ffeb3b 0%, #fff9c4 100%);
+        }
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #008000 0%, #00c853 100%);
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn-whatsapp:hover {
+            background: linear-gradient(135deg, #00c853 0%, #b2ff59 100%);
+            color: #006400;
+        }
+        .btn-admin {
+            background: linear-gradient(135deg, #006400 0%, #008000 100%);
+            color: #ffd700;
+            font-weight: bold;
+            border: 2px solid #ffd700;
+        }
+        .btn-admin:hover {
+            background: linear-gradient(135deg, #008000 0%, #00c853 100%);
+            color: #fff;
+            border: 2px solid #fff;
+        }
+        section {
+            background: rgba(0,0,0,0.8);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            margin: 25px auto;
+            border-top: 5px solid #ffd700;
+            border-bottom: 5px solid #008000;
+        }
+        h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            border-bottom: 2px solid #008000;
+            padding-bottom: 8px;
+        }
+        .rol-section {
+            margin-bottom: 25px;
+            padding: 18px;
+            border-left: 5px solid #ffd700;
+            background: rgba(0,64,0,0.3);
+            border-radius: 5px;
+        }
+        .rol-section h3 {
+            font-size: 17px;
+            color: #ffd700;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .rol-section p {
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: #ffd700;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #008000;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.9);
+            color: #006400;
+            font-size: 14px;
+        }
+        .calificacion-app {
+            margin-top: 25px;
+            padding: 18px;
+            background: rgba(0,64,0,0.3);
+            border-radius: 8px;
+            border-left: 5px solid #ffd700;
+        }
+        .calificacion-app input[type="number"] {
+            width: 70px;
+            padding: 10px;
+            margin: 12px 0;
+            border: 2px solid #008000;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.9);
+            color: #006400;
+        }
+        .calificacion-app button {
+            background: linear-gradient(135deg, #ffd700 0%, #ffeb3b 100%);
+            color: #006400;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        #admin-login, #admin-panel, #profesor-login, #profesor-panel {
+            display: none;
+        }
+        .lista-datos {
+            margin-top: 18px;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid #008000;
+        }
+        .lista-datos div {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            margin-bottom: 5px;
+        }
+        .inventario-uniforme {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 18px;
+        }
+        .uniforme-niños, .uniforme-niñas {
+            background: rgba(0,64,0,0.3);
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 5px solid #ffd700;
+        }
+        .uniforme-niños h4, .uniforme-niñas h4 {
+            color: #ffd700;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        footer {
+            background: linear-gradient(135deg, #006400 0%, #008000 100%);
+            color: #ffd700;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-top: 5px solid #ffd700;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🏫</div>
-        <h1>Liceo Exploradores de Sueños</h1>
-        <p>Sistema Académico con Sincronización Automática</p>
-        
-        <a href="${window.location.href}" class="btn" target="_blank">
-            🚀 Acceder al Sistema
-        </a>
-        
-        <div class="info">
-            <h3>📱 Instrucciones de Uso:</h3>
-            <p>• Haz clic en "Acceder al Sistema" para abrir la aplicación</p>
-            <p>• Guarda este archivo en tu escritorio para acceso rápido</p>
-            <p>• Funciona en cualquier dispositivo con navegador</p>
-            <p>• Datos sincronizados automáticamente en tiempo real</p>
+        <header>
+            <h1>Liceo Exploradores de Sueños</h1>
+            <p>Educación desde Párvulos hasta 5° de Primaria | Gorgona, Valle del Cauca</p>
+        </header>
+
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#roles">Roles y Accesos</a>
+            <a href="#notas">Boletines</a>
+            <a href="#calificar">Calificar App</a>
+            <a href="#uniformes">Inventario de Uniformes</a>
+            <a href="#" onclick="mostrarLoginProfesor()">Acceso Profesor</a>
+        </nav>
+
+        <div class="botones-accion">
+            <a href="https://www.google.com/maps/place/Gorgona,+Valle+del+Cauca" target="_blank" class="btn btn-maps">Ver en Google Maps</a>
+            <a href="https://wa.me/573123456789" target="_blank" class="btn btn-whatsapp">Contactar por WhatsApp</a>
+            <button class="btn btn-admin" onclick="mostrarLoginAdmin()">Acceso Administrador</button>
         </div>
-        
-        <div class="info" style="background: #f0fdf4; border-color: #22c55e;">
-            <h3 style="color: #15803d;">🔐 Acceso Seguro:</h3>
-            <p style="color: #15803d;">• Las credenciales son proporcionadas por el administrador</p>
-            <p style="color: #15803d;">• Cada usuario tiene acceso personalizado y seguro</p>
-            <p style="color: #15803d;">• Sistema protegido con autenticación avanzada</p>
-        </div>
-    </div>
-</body>
-</html>`;
-            
-            const blob = new Blob([appContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Liceo_Exploradores_App_Sincronizado.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            setTimeout(() => {
-                showNotification('✅ ¡Descarga completada exitosamente!', 'success');
-                setTimeout(() => {
-                    showNotification('📁 Archivo guardado con sincronización automática', 'info');
-                    setTimeout(() => {
-                        showNotification('🔄 Los datos se sincronizan automáticamente entre dispositivos', 'info');
-                    }, 2000);
-                }, 1500);
-            }, 1000);
-        }
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980b92a3075df7b0',t:'MTc1ODE0MzI0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+
+        <!-- Login Administrador -->
+        <section id="admin-login">
+            <h2>Login Administrador</h2>
+            <div class="form-group">
+                <label>Usuario:</label>
+                <input type="text" id="admin-user" placeholder="Usuario inicial: admin">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="admin-pass" placeholder="Contraseña inicial: admin123">
+            </div>
+            <button class="btn btn-admin" onclick="ingresarAdmin()">Ingresar</button>
+        </section>
+
+        <!-- Panel Administrador -->
+        <section id="admin-panel">
+            <h2>Panel de Administración</h2>
+
+            <!-- Cambiar Credenciales -->
+            <div class="rol-section">
+                <h3>Cambiar Usuario/Contraseña de Administrador</h3>
+                <div class="form-group">
+                    <label>Nuevo Usuario:</label>
+                    <input type="text" id="nuevo-user" placeholder="Nuevo usuario">
+                </div>
+                <div class="form-group">
+                    <label>Nueva Contraseña:</label>
+                    <input type="password" id="nuevo-pass" placeholder="Nueva contraseña">
+                </div>
+                <button class="btn btn-admin" onclick="cambiarCredenciales()">Guardar Cambios</button>
+            </div>
+
+            <!-- Gestionar Estudiantes -->
+            <div class="rol-section">
+                <h3>Gestionar Estudiantes</h3>
+                <div class="form-group">
+                    <label>Nombre Estudiante:</label>
+                    <input type="text" id="nombre-estudiante" placeholder="Nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>Grado:</label>
+                    <select id="grado-estudiante">
+                        <option>Párvulos</option>
+                        <option>1° Primaria</option>
+                        <option>2° Primaria</option>
+                        <option>3° Primaria</option>
+                        <option>4° Primaria</option>
+                        <option>5° Primaria</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Código de Acceso (Padres):</label>
+                    <input type="text" id="codigo-estudiante" placeholder="Código único">
+                </div>
+                <button class="btn btn-admin" onclick="agregarEstudiante()">Agregar Estudiante</button>
+                <button class="btn btn-admin" onclick="eliminarEstudiante()">Eliminar Estudiante</button>
+                <div class="lista-datos" id="lista-estudiantes">Cargando estudiantes...</div>
+            </div>
+
+            <!-- Gestionar Profesores -->
+            <div class="rol-section">
+                <h3>Gestionar Profesores</h3>
+                <div class="form-group">
+                    <label>ID Profesor:</label>
+                    <input type="text" id="id-profesor" placeholder="ID personal">
+                </div>
+                <div class="form-group">
